@@ -171,7 +171,7 @@ export default function SearchHero() {
         <div className="text-center mb-10">
           <h2 className="text-5xl font-light tracking-tight mb-4 leading-[1.1]">
             Sing what you{" "}
-            <span className="text-accent font-normal italic">speak.</span>
+            <span className="text-[var(--color-accent)] font-normal italic">speak.</span>
           </h2>
           <p className="text-text-secondary text-sm max-w-xs mx-auto leading-relaxed font-light">
             Search any Chinese song — instant Jyutping annotations, tone colours, PDF export.

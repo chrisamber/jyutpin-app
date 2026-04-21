@@ -1,10 +1,8 @@
-import { useSong } from "../../context/SongContext.jsx";
 import { useApp } from "../../context/AppContext.jsx";
 import { useSongAnalysis } from "../../hooks/useSongAnalysis.js";
 import ThemeToggle from "./ThemeToggle.jsx";
 
 export default function Header() {
-  const { song } = useSong();
   const { currentView } = useApp();
   const { clearSong } = useSongAnalysis();
 

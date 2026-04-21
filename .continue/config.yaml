@@ -2,24 +2,26 @@ name: WaaPou Dev
 version: 0.1.0
 
 models:
-  # MiniMax M2.7 — chat, edit, agent (all cloud reasoning)
-  - name: MiniMax M2.7
-    provider: openrouter
-    model: minimax/minimax-m2.7
-    apiKey: ${OPENROUTER_API_KEY}
+  # Qwen3.5 9B local — chat, edit, agent (replaces MiniMax while OpenRouter is out)
+  - name: Gemma 4 4B (local)
+    provider: openai
+    model: gemma-4-e4b-it
+    apiBase: http://localhost:1234/v1/
+    apiKey: "sk-lm-bgzmPXvK:mVwxKpfweCTXp2zko5lF"
     roles:
       - chat
       - edit
       - apply
     defaultCompletionOptions:
-      contextLength: 200000
+      contextLength: 32000
       maxTokens: 8192
 
   # Qwen Coder 3B — local FIM autocomplete only (zero latency, zero cost)
   - name: Qwen Coder 3B (FIM)
-    provider: lmstudio
+    provider: openai
     model: qwen2.5-coder-3b-instruct-mlx
     apiBase: http://localhost:1234/v1/
+    apiKey: "sk-lm-bgzmPXvK:mVwxKpfweCTXp2zko5lF"
     roles:
       - autocomplete
     promptTemplates:

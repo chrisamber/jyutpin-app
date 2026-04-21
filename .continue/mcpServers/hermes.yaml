@@ -3,7 +3,7 @@ version: 0.1.0
 schema: v1
 mcpServers:
   - name: hermes
-    command: hermes
+    command: /Users/chrisamber/.local/bin/hermes
     args:
       - mcp
       - serve

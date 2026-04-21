@@ -32,7 +32,7 @@ Read it before touching any UI code.
 |---|---|---|
 | 3 | Layout & Spacing (AppShell, Header, SearchHero) | 🔜 Next |
 | 4 | Component Library (Button, Input, Card, ToneBadge) | ⏳ Pending |
-| 5 | Dark Mode + ThemeToggle component | ⏳ Pending |
+| 5 | Dark Mode + ThemeToggle component | ✅ Done |
 | 6 | Motion & Polish | ⏳ Pending |
 | 7 | QA & Verification | ⏳ Pending |
 

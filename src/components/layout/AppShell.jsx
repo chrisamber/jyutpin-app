@@ -12,7 +12,7 @@ export default function AppShell({ searchView, studyView, artistView, teleprompt
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary">
+    <div className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
       <Header />
       {currentView === "study" && song && <TabNav />}
       <main className="max-w-6xl mx-auto px-5 py-6 pb-16">

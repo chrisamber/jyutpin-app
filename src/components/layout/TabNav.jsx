@@ -4,6 +4,7 @@ import { useSong } from "../../context/SongContext.jsx";
 const ENHARMONIC = { "C#": "Db", "D#": "Eb", "G#": "Ab", "A#": "Bb" };
 const normalizeKey = (k) => k ? (ENHARMONIC[k] || ENHARMONIC[k.replace("m","")] ? (ENHARMONIC[k] || ENHARMONIC[k.replace("m","")]+(k.endsWith("m")?"m":"")) : k) : k;
 const CAPOS = Array.from({ length: 13 }, (_, i) => i);
+const KEYS = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 const STORAGE_KEY = (id) => `songmeta:${id}`;
 const DEFAULT_META = { bpm: "", key: "", capo: "", genre: "", description: "", beatsPerBar: "4" };
 
