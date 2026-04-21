@@ -7,7 +7,7 @@ function PlayButton({ isPlaying, isLoading, onClick }) {
   return (
     <button
       onClick={(e) => { e.stopPropagation(); onClick(); }}
-      className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity text-slate-400 hover:text-accent hover:bg-accent/10"
+      className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity text-text-muted hover:text-accent hover:bg-accent/10"
       aria-label={isPlaying ? "Stop" : "Play line"}
     >
       {isLoading ? (
@@ -94,7 +94,7 @@ function ChordBarsLine({ barGrid, beatsPerBar = 4, transpose = 0, chordEditMode,
                 {isEmpty ? (
                   chordEditMode
                     ? <span className="text-accent/25 text-[11px]">·</span>
-                    : <span className="text-slate-300">{beat === "-" ? "–" : "·"}</span>
+                    : <span className="text-text-muted">{beat === "-" ? "–" : "·"}</span>
                 ) : (
                   <span className={`font-bold text-accent ${chordEditMode ? "hover:text-accent/70" : ""}`}>
                     {displayChord}
@@ -156,14 +156,14 @@ export default function LyricsLine({ line, index, isActive, onClick, onPlay, pla
       onClick={onClick}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
       data-line-index={index}
-      className={`w-full text-left py-3.5 border-b border-slate-100 last:border-0 transition-all select-none print:select-auto print:cursor-auto group ${
+      className={`w-full text-left py-3.5 border-b border-border-subtle last:border-0 transition-all select-none print:select-auto print:cursor-auto group ${
         isActive
           ? "bg-accent/8 border-l-[3px] border-l-accent/50 pl-3 -ml-3 rounded-r-lg"
           : "hover:bg-slate-50/60"
       }`}
     >
       <div className="flex items-start gap-4">
-        <span className="font-mono text-[10px] text-slate-300 min-w-5 pt-3 select-none leading-none">
+        <span className="font-mono text-[10px] text-text-muted min-w-5 pt-3 select-none leading-none">
           {String(index + 1).padStart(2, "0")}
         </span>
         <div className="flex-1">
@@ -218,7 +218,7 @@ export default function LyricsLine({ line, index, isActive, onClick, onPlay, pla
             )}
           </div>
           {line.translation && (
-            <div className="text-xs text-slate-400 italic mt-1.5 pl-1">
+            <div className="text-xs text-text-muted italic mt-1.5 pl-1">
               {line.translation}
             </div>
           )}

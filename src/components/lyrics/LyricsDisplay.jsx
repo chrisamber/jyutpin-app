@@ -325,7 +325,7 @@ export default function LyricsDisplay() {
           })}
 
           {/* Tone tools fallback: shown below lyrics on small screens (<md) */}
-          <div className="md:hidden mt-6 pt-5 border-t border-slate-100 space-y-4">
+          <div className="md:hidden mt-6 pt-5 border-t border-border-subtle space-y-4">
             <ToneAnalytics />
             <PronunciationNotes />
           </div>
@@ -338,7 +338,7 @@ export default function LyricsDisplay() {
       </div>
 
       {/* Print-only footer for leadsheet */}
-      <div className="hidden print:block mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 font-mono">
+      <div className="hidden print:block mt-12 pt-6 border-t border-border-default text-center text-xs text-slate-500 font-mono">
         華譜 WaaPou — waapou.app. An Amber Audio product.
       </div>
     </div>

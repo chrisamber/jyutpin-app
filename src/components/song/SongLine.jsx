@@ -9,7 +9,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
       className={`mb-3 rounded-xl overflow-hidden transition-all border ${
         expanded
           ? "bg-slate-50 border-accent/20"
-          : "bg-white border-slate-200 hover:border-slate-300"
+          : "bg-bg-base border-border-default hover:border-border-strong"
       }`}
     >
       <button

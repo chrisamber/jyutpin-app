@@ -84,13 +84,34 @@ prompts:
       Keep Noto Serif SC for CJK via .cjk class.
       Update type scale (§1.3) across all components.
 
+  - name: /checkin
+    description: Orchestration handshake — run before any phase
+    prompt: |
+      You are a coding agent in a multi-agent orchestration. Claude Code is PM.
+      Before you touch any code:
+      1. Run `git status` and report the working tree state.
+      2. Run `npm run build` and confirm it exits clean (or paste the error).
+      3. Read AGENTS.md and confirm the "Phases Remaining" table.
+      4. Send a checkin message via hermes to telegram:2131066031:
+         📍 Checkin — branch: [name], build: [clean/error], next phase: [N]
+      Do NOT proceed to a phase until Claude Code acknowledges on telegram.
+
   - name: /phase3
     description: Execute Phase 3 — Layout & Spacing
     prompt: |
-      Read the plan §4 Phase 3.
+      Prerequisite: run /checkin first. Then read AGENTS.md + plan §4 Phase 3.
       Apply 8pt grid tokens across: AppShell.jsx, Header.jsx, SearchHero.jsx.
       Replace ad-hoc p-4/p-5 with --space-* semantic values.
-      Screenshot hero before + after.
+
+      Known bugs to fix as part of this phase (reported by Claude Code 2026-04-21):
+      - SearchHero.jsx:43-85 RecentSongs rows drift horizontally because
+        title (variable-width CJK) and artist (truncated) share a flex row
+        with no deterministic column widths. Introduce a 2-column layout:
+        title column min-w-0 flex-1, artist column fixed max-w with text-right.
+      - Recent row song.title may be empty for older localStorage entries;
+        fall back to artist as primary when title is missing.
+
+      When done, run /report.
 
   - name: /phase4
     description: Execute Phase 4 — Component Library
@@ -148,3 +169,21 @@ prompts:
       4. dark: prefix classes (should be .dark root swap instead)
       5. Inline style={{ color: '...' }} with non-token values
       Report as table: file | line | violation | recommended fix
+
+  - name: /report
+    description: Send phase completion report to Claude Code via Telegram
+    prompt: |
+      You have just completed a phase of the WaaPou design overhaul.
+      Using the hermes MCP tool, send a message to telegram:2131066031 with this format:
+
+      🏁 **Phase [N] Complete — WaaPou Design**
+
+      **Status:** ✅ Done / ⚠️ Partial / ❌ Blocked
+      **Build:** clean / errors (paste errors)
+      **Files changed:** [list key files]
+      **Summary:** [2-3 sentence description of what changed]
+      **Violations found:** [any design system violations, or "none"]
+      **Blockers:** [anything needing Claude Code review, or "none"]
+      **Next:** Phase [N+1] ready / needs approval
+
+      Be specific. Claude Code will review and respond with next instructions.

@@ -49,13 +49,13 @@ export default function ToneReference() {
       {/* Keyboard shortcuts — shown when a line is active */}
       {activeLyricIndex >= 0 && (
         <>
-          <div className="border-t border-[#FFFFFF0A] my-3" />
+          <div className="border-t border-border-subtle my-3" />
           <div className="text-[9px] font-mono text-text-muted tracking-[0.2em] uppercase mb-1">
             Keys
           </div>
           {[{ key: "↑↓", label: "Navigate" }, { key: "Esc", label: "Clear" }].map(({ key, label }) => (
             <div key={key} className="flex items-center gap-2 px-2">
-              <span className="font-mono text-[10px] bg-bg-elevated border border-[#FFFFFF0A] rounded px-1.5 py-0.5 text-text-secondary">
+              <span className="font-mono text-[10px] bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5 text-text-secondary">
                 {key}
               </span>
               <span className="text-[10px] text-text-muted">{label}</span>

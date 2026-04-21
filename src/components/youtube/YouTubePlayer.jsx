@@ -108,7 +108,7 @@ export default function YouTubePlayer() {
                 <button
                   key={r.videoId}
                   onClick={() => { setSelectedVideo(r.videoId); setShowAlternatives(false); }}
-                  className="flex-shrink-0 flex items-center gap-2 px-2 py-1 rounded-lg bg-bg-surface border border-[#FFFFFF0A] hover:border-accent/30 text-left group transition-colors"
+                  className="flex-shrink-0 flex items-center gap-2 px-2 py-1 rounded-lg bg-bg-surface border border-border-subtle hover:border-accent/30 text-left group transition-colors"
                 >
                   <img src={r.thumbnail} alt={r.title} className="w-14 h-9 object-cover rounded" />
                   <span className="text-[10px] font-mono text-text-secondary group-hover:text-accent line-clamp-2 max-w-[10rem] transition-colors">

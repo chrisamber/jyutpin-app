@@ -73,7 +73,7 @@ function RecentSongs({ onSelectRecent, onLoadDemo, onSelectCustom }) {
               </span>
             )}
             {song.isCustom && (
-              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-[#FFFFFF0A] ml-auto flex-shrink-0">
+              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-border-subtle ml-auto flex-shrink-0">
                 ✎ custom
               </span>
             )}
@@ -104,10 +104,10 @@ function ArtistCard({ entry, onSelect }) {
           <img
             src={img}
             alt={entry.artist}
-            className="w-14 h-14 rounded-full object-cover ring-1 ring-[#FFFFFF0A] group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200"
+            className="w-14 h-14 rounded-full object-cover ring-1 ring-border-subtle group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200"
           />
         ) : (
-          <div className="w-14 h-14 rounded-full bg-bg-elevated ring-1 ring-[#FFFFFF0A] flex items-center justify-center group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200">
+          <div className="w-14 h-14 rounded-full bg-bg-elevated ring-1 ring-border-subtle flex items-center justify-center group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200">
             <span className="text-lg cjk text-text-secondary">{entry.artist[0]}</span>
           </div>
         )}
@@ -179,7 +179,7 @@ export default function SearchHero() {
         </div>
 
         {/* Floating annotation preview */}
-        <div className="mb-10 px-6 py-5 bg-bg-surface border border-[#FFFFFF0A] rounded-2xl text-center">
+        <div className="mb-10 px-6 py-5 bg-bg-surface border border-border-subtle rounded-2xl text-center">
           <div className="text-[9px] font-mono text-text-muted tracking-[0.2em] uppercase mb-4">
             Preview — 背脊唱情歌
           </div>
@@ -201,12 +201,12 @@ export default function SearchHero() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search a song or artist… or 中文"
-              className="w-full bg-bg-surface border border-[#FFFFFF0A] rounded-xl px-5 py-3.5 text-sm text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:border-accent/30 focus:ring-2 focus:ring-accent/8 transition-all"
+              className="w-full input focus-ring rounded-xl"
             />
             <button
               type="submit"
               disabled={isSearching}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent hover:bg-accent-hover text-[#0A0A0C] font-medium text-xs px-4 py-1.5 rounded-lg transition-colors disabled:opacity-40"
+              className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-sm btn-primary disabled:opacity-40"
             >
               {isSearching ? "…" : "Search"}
             </button>

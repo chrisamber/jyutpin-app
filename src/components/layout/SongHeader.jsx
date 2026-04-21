@@ -58,7 +58,7 @@ function MetaEditor({ song, onSave, onCancel }) {
 
   const set = (key) => (e) => setFields((f) => ({ ...f, [key]: e.target.value }));
 
-  const inputCls = "w-full bg-bg-primary border border-[#FFFFFF0A] rounded-lg px-3 py-1.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors";
+  const inputCls = "w-full bg-bg-primary border border-border-subtle rounded-lg px-3 py-1.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors";
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -67,7 +67,7 @@ function MetaEditor({ song, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSave} className="mt-4 p-4 bg-bg-surface border border-[#FFFFFF0A] rounded-xl space-y-3">
+    <form onSubmit={handleSave} className="mt-4 p-4 bg-bg-surface border border-border-subtle rounded-xl space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-[9px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1">Title</label>
@@ -160,10 +160,10 @@ export default function SongHeader() {
           <img
             src={albumArt}
             alt={song.title}
-            className="w-16 h-16 rounded-xl object-cover shadow-lg ring-1 ring-[#FFFFFF0A] flex-shrink-0 mt-1 print:hidden"
+            className="w-16 h-16 rounded-xl object-cover shadow-lg ring-1 ring-border-subtle flex-shrink-0 mt-1 print:hidden"
           />
         ) : (
-          <div className="w-16 h-16 rounded-xl bg-bg-surface ring-1 ring-[#FFFFFF0A] flex items-center justify-center flex-shrink-0 mt-1 print:hidden">
+          <div className="w-16 h-16 rounded-xl bg-bg-surface ring-1 ring-border-subtle flex items-center justify-center flex-shrink-0 mt-1 print:hidden">
             <span className="text-2xl cjk text-text-muted">{song.title?.[0]}</span>
           </div>
         )}
@@ -223,12 +223,12 @@ export default function SongHeader() {
               </>
             )}
             {song.isDemo && (
-              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-[#FFFFFF0A]">
+              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-border-subtle">
                 demo
               </span>
             )}
             {song.isCustom && (
-              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-[#FFFFFF0A]">
+              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-border-subtle">
                 custom
               </span>
             )}

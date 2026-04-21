@@ -56,7 +56,7 @@ function ArtistBanner({ artist, artistEn, wikipedia }) {
             className="w-20 h-20 rounded-xl object-cover shadow-2xl ring-1 ring-[#FFFFFF12] flex-shrink-0"
           />
         ) : (
-          <div className="w-20 h-20 rounded-xl bg-bg-elevated flex items-center justify-center flex-shrink-0 ring-1 ring-[#FFFFFF0A]">
+          <div className="w-20 h-20 rounded-xl bg-bg-elevated flex items-center justify-center flex-shrink-0 ring-1 ring-border-subtle">
             <span className="text-3xl cjk text-text-secondary">{artist[0]}</span>
           </div>
         )}

@@ -9,7 +9,7 @@ export default function Header() {
   const { clearSong } = useSongAnalysis();
 
   return (
-    <header className="border-b border-[#FFFFFF0A] bg-bg-primary/95 backdrop-blur-sm sticky top-0 z-50 print:hidden">
+    <header className="border-b border-border-subtle bg-bg-primary/95 backdrop-blur-sm sticky top-0 z-50 print:hidden">
       <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Wordmark */}

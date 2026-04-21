@@ -56,8 +56,8 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
         }
       >
         <rb
-          className={`text-xl leading-tight ${stressed ? "font-semibold" : "font-normal"}`}
-          style={color ? { color } : { color: "#1e293b" }}
+          className={`text-xl leading-tight ${stressed ? "font-semibold" : "font-normal"}${!color ? " text-text-primary" : ""}`}
+          style={color ? { color } : undefined}
         >
           {char}
         </rb>
@@ -65,8 +65,8 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
           <>
             <rp>(</rp>
             <rt
-              className="font-mono font-normal text-[10px] leading-none"
-              style={color ? { color, opacity: 0.85 } : { color: "#94a3b8" }}
+              className={`font-mono font-normal text-[10px] leading-none${!color ? " text-text-muted" : ""}`}
+              style={color ? { color, opacity: 0.85 } : undefined}
             >
               {displayRomanization}
             </rt>

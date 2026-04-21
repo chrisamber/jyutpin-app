@@ -13,7 +13,7 @@ function DemoToneTraps() {
           className={`flex gap-4 p-4 rounded-xl border ${
             i < 3
               ? "bg-red-50 border-red-200"
-              : "bg-slate-50 border-slate-200"
+              : "bg-slate-50 border-border-default"
           }`}
         >
           <div
@@ -54,7 +54,7 @@ function AutoToneTraps({ notes }) {
   return (
     <div className="space-y-4">
       {notes.map((note, i) => (
-        <div key={i} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <div key={i} className="bg-slate-50 border border-border-default rounded-xl p-4">
           <div className="text-xs font-semibold text-accent/80 mb-2 font-mono uppercase tracking-wider">
             {note.category}
           </div>
@@ -62,7 +62,7 @@ function AutoToneTraps({ notes }) {
             {note.words.map((w, wi) => (
               <span
                 key={wi}
-                className="inline-flex items-center gap-1 text-sm bg-white border border-slate-200 rounded px-2 py-0.5"
+                className="inline-flex items-center gap-1 text-sm bg-bg-base border border-border-default rounded px-2 py-0.5"
               >
                 <span
                   className="font-medium"

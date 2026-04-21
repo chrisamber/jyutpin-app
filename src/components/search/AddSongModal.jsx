@@ -61,7 +61,7 @@ export default function AddSongModal({ onClose }) {
     }
   }, [fields, loadCustomSong, onClose]);
 
-  const inputCls = "w-full bg-bg-primary border border-[#FFFFFF0A] rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors";
+  const inputCls = "w-full bg-bg-primary border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors";
 
   return (
     <div
@@ -75,9 +75,9 @@ export default function AddSongModal({ onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-song-title"
-        className="relative w-full max-w-lg bg-bg-surface border border-[#FFFFFF0A] rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-lg bg-bg-surface border border-border-subtle rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#FFFFFF0A]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle">
           <div>
             <h2 id="add-song-title" className="text-sm font-medium text-text-primary">Add your own song</h2>
             <p className="text-[11px] text-text-secondary font-mono mt-0.5">Paste lyrics to get Jyutping annotations</p>
@@ -174,7 +174,7 @@ export default function AddSongModal({ onClose }) {
           )}
         </form>
 
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#FFFFFF0A]">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-subtle">
           <button
             type="button"
             onClick={onClose}

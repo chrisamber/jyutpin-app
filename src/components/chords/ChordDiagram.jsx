@@ -18,7 +18,7 @@ export default function ChordDiagram({ chord, size = 1 }) {
     // No shape known — render name-only pill
     return (
       <div
-        className="flex items-center justify-center rounded border border-[#FFFFFF0A] bg-bg-elevated text-accent font-mono font-bold text-[11px]"
+        className="flex items-center justify-center rounded border border-border-subtle bg-bg-elevated text-accent font-mono font-bold text-[11px]"
         style={{ width: W * size, height: H * size, fontSize: 11 * size }}
       >
         {label}

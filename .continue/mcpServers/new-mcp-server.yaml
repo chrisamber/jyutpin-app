@@ -1,10 +1,10 @@
-name: New MCP server
-version: 0.0.1
+name: Hermes Agent Bridge
+version: 0.1.0
 schema: v1
 mcpServers:
-  - name: New MCP server
-    command: npx
+  - name: hermes
+    command: hermes
     args:
-      - -y
-      - <your-mcp-server>
+      - mcp
+      - serve
     env: {}
