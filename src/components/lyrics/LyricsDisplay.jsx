@@ -152,13 +152,13 @@ export default function LyricsDisplay() {
 
       {/* Incompleteness banner */}
       {lyricsIncomplete && (
-        <div className="mb-4 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 print:hidden">
+        <div className="mb-6 flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-xl px-6 py-4 print:hidden">
           <span className="text-amber-600 text-sm flex-1">
             Lyrics may be incomplete — fewer than 15 lines detected.
           </span>
           <button
             onClick={() => setShowEditor(true)}
-            className="text-xs font-mono px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors"
+            className="text-sm font-mono px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors"
           >
             Paste full lyrics
           </button>
@@ -166,50 +166,50 @@ export default function LyricsDisplay() {
       )}
 
       {/* Unified toolbar — three groups: Content | View | Output */}
-      <div className="mb-5 print:hidden">
-        <div className="flex items-center justify-between mb-3">
+      <div className="mb-6 print:hidden">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-normal text-accent/80">
             Annotated Lyrics
           </h2>
           {activeLyricIndex >= 0 && (
-            <span className="text-[10px] font-mono text-slate-400 bg-slate-50 border border-slate-200 rounded px-2 py-1">
+            <span className="text-xs font-mono text-text-muted bg-bg-surface border border-border-subtle rounded px-3 py-1.5">
               ↑↓ navigate · Esc clear
             </span>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Group 1 — Content */}
           <button
             onClick={() => setShowEditor(true)}
-            className="text-[11px] font-mono px-2.5 py-1 rounded border transition-all bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-700"
+            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
           >
             ✎ edit lyrics
           </button>
           <button
             onClick={() => setEditSections((s) => !s)}
-            className={`text-[11px] font-mono px-2.5 py-1 rounded border transition-all ${
+            className={`text-xs font-mono px-3 py-1.5 rounded border transition-all ${
               editSections
                 ? "bg-accent/15 border-accent/30 text-accent"
-                : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-700"
+                : "bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
             }`}
           >
             § sections
           </button>
 
           {/* Divider */}
-          <span className="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true" />
+          <span className="w-px h-4 bg-border-subtle mx-1" aria-hidden="true" />
 
           {/* Group 2 — View: romanization + chords + transpose */}
-          <div className="flex border border-slate-200 rounded overflow-hidden">
+          <div className="flex border border-border-subtle rounded-lg overflow-hidden">
             {ROMANIZATION_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => dispatch({ type: "SET_ROMANIZATION", romanization: opt.value })}
-                className={`text-[11px] font-mono px-2.5 py-1 transition-all border-r border-slate-200 last:border-r-0 ${
+                className={`text-xs font-mono px-3 py-1.5 transition-all border-r border-border-subtle last:border-r-0 ${
                   romanization === opt.value
                     ? "bg-accent/15 text-accent"
-                    : "text-slate-500 hover:text-slate-700"
+                    : "text-text-secondary hover:text-text-primary"
                 }`}
               >
                 {opt.label}
@@ -217,13 +217,13 @@ export default function LyricsDisplay() {
             ))}
           </div>
 
-          <div className={`flex items-center border rounded overflow-hidden transition-colors ${chordEditMode ? "border-accent/40" : "border-slate-200"}`}>
+          <div className={`flex items-center border rounded-lg overflow-hidden transition-colors ${chordEditMode ? "border-accent/40" : "border-border-subtle"}`}>
             <button
               onClick={() => dispatch({ type: "TOGGLE_CHORD_EDIT" })}
-              className={`text-[11px] font-mono px-2.5 py-1 transition-all ${
+              className={`text-xs font-mono px-3 py-1.5 transition-all ${
                 chordEditMode
                   ? "bg-accent-dim text-accent font-medium"
-                  : "text-slate-500 hover:text-slate-700"
+                  : "text-text-secondary hover:text-text-primary"
               }`}
               aria-pressed={chordEditMode}
               title={chordEditMode ? "Exit chord edit mode" : "Enter chord edit mode"}
@@ -232,10 +232,10 @@ export default function LyricsDisplay() {
             </button>
             <button
               onClick={() => dispatch({ type: "SET_CHORD_DISPLAY", display: chordDisplay === "above" ? "bars" : "above" })}
-              className={`text-[11px] font-mono px-2 py-1 border-l border-slate-200 transition-all ${
+              className={`text-xs font-mono px-2.5 py-1.5 border-l border-border-subtle transition-all ${
                 chordDisplay === "bars"
                   ? "bg-accent/15 text-accent"
-                  : "text-slate-400 hover:text-slate-600"
+                  : "text-text-muted hover:text-text-secondary"
               }`}
               title={chordDisplay === "above" ? "Switch to bar notation" : "Switch to above-lyrics"}
             >
@@ -244,22 +244,22 @@ export default function LyricsDisplay() {
           </div>
 
           {hasAnyChords && (
-            <div className="flex items-center border border-slate-200 rounded overflow-hidden" title="Transpose chords">
+            <div className="flex items-center border border-border-subtle rounded-lg overflow-hidden" title="Transpose chords">
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose - 1 })}
-                className="text-[11px] font-mono px-1.5 py-1 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-all"
+                className="text-xs font-mono px-2 py-1.5 text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-all"
               >
                 −
               </button>
-              <span className={`text-[11px] font-mono px-1.5 py-1 min-w-[2.5rem] text-center border-x border-slate-200 ${transpose !== 0 ? "text-accent bg-accent/10" : "text-slate-400"}`}>
+              <span className={`text-xs font-mono px-2 py-1.5 min-w-[2.5rem] text-center border-x border-border-subtle ${transpose !== 0 ? "text-accent bg-accent/10" : "text-text-muted"}`}>
                 {transposeLabel(transpose)}
                 {transpose !== 0 && capoFret(transpose) > 0 && (
-                  <span className="block text-[8px] leading-none text-accent/70">capo {capoFret(transpose)}</span>
+                  <span className="block text-xs leading-none text-accent/70">capo {capoFret(transpose)}</span>
                 )}
               </span>
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose + 1 })}
-                className="text-[11px] font-mono px-1.5 py-1 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-all"
+                className="text-xs font-mono px-2 py-1.5 text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-all"
               >
                 +
               </button>
@@ -267,12 +267,12 @@ export default function LyricsDisplay() {
           )}
 
           {/* Divider */}
-          <span className="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true" />
+          <span className="w-px h-4 bg-border-subtle mx-1" aria-hidden="true" />
 
           {/* Group 3 — Output */}
           <button
             onClick={() => dispatch({ type: "SET_VIEW", view: "teleprompter" })}
-            className="text-[11px] font-mono px-2.5 py-1 rounded border transition-all bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-700"
+            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
             title="Teleprompter mode"
           >
             ⛶ stage

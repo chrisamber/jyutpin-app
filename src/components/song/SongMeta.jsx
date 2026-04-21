@@ -63,7 +63,7 @@ export default function SongMeta() {
   const hasData = meta.bpm || meta.key || meta.capo || meta.genre || meta.beatsPerBar;
 
   return (
-    <div className="mb-5 print:mb-3">
+    <div className="mb-6 print:mb-4">
       {/* Summary bar (always visible) */}
       <div className="flex items-center gap-3 flex-wrap">
         {meta.bpm && (
@@ -96,12 +96,12 @@ export default function SongMeta() {
 
       {/* Expandable editor */}
       {open && (
-        <div className="mt-3 bg-bg-surface border border-slate-200 rounded-xl p-4 print:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 mb-3">
+        <div className="mt-4 bg-bg-surface border border-border-subtle rounded-xl p-6 print:hidden">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4">
             {/* BPM + tap tempo */}
             <div>
-              <label htmlFor="bpm" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">BPM</label>
-              <div className="flex gap-1">
+              <label htmlFor="bpm" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">BPM</label>
+              <div className="flex gap-2">
                 <input
                   id="bpm"
                   type="number"
@@ -109,12 +109,12 @@ export default function SongMeta() {
                   value={meta.bpm}
                   onChange={(e) => update("bpm", e.target.value)}
                   placeholder="—"
-                  className="w-16 bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                  className="w-16 bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40"
                 />
                 <button
                   onClick={handleTap}
                   aria-label="Tap to detect BPM"
-                  className="px-2 py-1 text-[10px] font-mono bg-accent/10 hover:bg-accent/20 border border-accent/20 rounded text-accent/70 transition-colors select-none"
+                  className="px-3 py-2 text-xs font-mono bg-accent/10 hover:bg-accent/20 border border-accent/20 rounded text-accent/70 transition-colors select-none"
                 >
                   tap
                 </button>
@@ -123,12 +123,12 @@ export default function SongMeta() {
 
             {/* Key */}
             <div>
-              <label htmlFor="key" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Key</label>
+              <label htmlFor="key" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Key</label>
               <select
                 id="key"
                 value={meta.key}
                 onChange={(e) => update("key", e.target.value)}
-                className="bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {KEYS.map((k) => <option key={k} value={k}>{k}</option>)}
@@ -138,12 +138,12 @@ export default function SongMeta() {
 
             {/* Capo */}
             <div>
-              <label htmlFor="capo" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Capo</label>
+              <label htmlFor="capo" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Capo</label>
               <select
                 id="capo"
                 value={meta.capo}
                 onChange={(e) => update("capo", e.target.value)}
-                className="bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {CAPOS.map((c) => <option key={c} value={c}>{c === 0 ? "Open" : c}</option>)}
@@ -152,28 +152,28 @@ export default function SongMeta() {
 
             {/* Genre */}
             <div>
-              <label htmlFor="genre" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Genre</label>
+              <label htmlFor="genre" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Genre</label>
               <input
                 id="genre"
                 type="text"
                 value={meta.genre}
                 onChange={(e) => update("genre", e.target.value)}
                 placeholder="Cantopop…"
-                className="w-full bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                className="w-full bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1">Description</label>
+            <label htmlFor="description" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Description</label>
             <textarea
               id="description"
               value={meta.description}
               onChange={(e) => update("description", e.target.value)}
               placeholder="Notes about the song…"
               rows={2}
-              className="w-full bg-bg-primary border border-slate-200 rounded px-3 py-2 text-sm text-text-primary placeholder:text-slate-400 focus:outline-none focus:border-accent/40 resize-none"
+              className="w-full bg-bg-primary border border-border-subtle rounded px-4 py-3 text-base text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 resize-none"
             />
           </div>
         </div>
