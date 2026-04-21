@@ -1,0 +1,110 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm 12mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Noto Serif SC', 'Songti SC', Georgia, serif !important;
+    font-size: 11pt !important;
+    -webkit-font-smoothing: auto;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide everything except the main content */
+  header, nav, footer,
+  .print\\:hidden,
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* Compact main layout for print */
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Ruby text sizing for print */
+  ruby {
+    font-family: 'Noto Serif SC', 'Songti SC', Georgia, serif !important;
+  }
+
+  rt {
+    font-family: 'Inter', system-ui, sans-serif !important;
+    font-size: 7pt !important;
+  }
+
+  /* Avoid page breaks inside lyric lines */
+  [class*="border-b"] {
+    page-break-inside: avoid;
+  }
+}
+
+
+  /* Chord bar row (PDF export) */
+  .chord-row {
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 11px;
+    color: #D97706;
+    margin-bottom: 2px;
+    padding-left: 28px;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  .chord-bar {
+    display: inline;
+  }
+
+  .chord-bar-bracket {
+    color: rgba(217, 119, 6, 0.3);
+  }
+
+  .chord-beat {
+    display: inline-block;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  /* Chord sheet always starts on a fresh page */
+  .page-break-before {
+    page-break-before: always;
+  
+  /* Chord bar row (PDF export) */
+  .chord-row {
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 11px;
+    color: #D97706;
+    margin-bottom: 2px;
+    padding-left: 28px;
+    line-height: 1.2;
+  }
+
+
+  .chord-bar {
+    display: inline;
+  }
+
+  .chord-bar-bracket {
+    color: rgba(217, 119, 6, 0.3);
+  }
+
+  .chord-beat {
+    display: inline-block;
+    min-width: 18px;
+    text-align: center;
+  }
+
+
+  /* Chord sheet always starts on a fresh page */
+  .page-break-before {
+    page-break-before: always;
+  }
+}

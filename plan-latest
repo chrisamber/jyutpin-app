@@ -1,0 +1,99 @@
+# plan-latest — Docs & Repo Hygiene
+
+*Updated: 2026-04-19 · Owner: Chris*
+
+This file tracks outstanding documentation and repo-hygiene work. Not a product roadmap — see [product-roadmap.md](product-roadmap.md) for features.
+
+---
+
+## ✅ Resolved (prior audit + Apr 2026 cleanup)
+
+- **Design system tokens** — light-theme hex values now correct in [docs/claude-context/design-system.md](docs/claude-context/design-system.md)
+- **Missing tokens** — `bg-hover`, `accent-hover`, `border`, `border-accent` all documented
+- **Key Pattern JSX examples** — light-theme correct; escaped `\"` bug fixed
+- **`transpose.js`** — documented in [architecture.md](docs/claude-context/architecture.md) services list
+- **`chordShapes.js`** — documented in architecture.md `src/data/`
+- **`ChordDiagram.jsx` / `ChordSheet.jsx`** — documented in [dependencies.md](docs/claude-context/dependencies.md)
+- **`transpose` state on AppContext** — documented in architecture.md
+- **CLAUDE.md wayfinding** — role-based table added; quickstart expanded with context
+- **CLAUDE.md deployment note** — references `vercel.json` + Node ≥20 requirement
+- **`package.json`** — `engines` (node ≥20, npm ≥10) + `packageManager` pinned
+- **Root-level scratch files** — disarmed via "files to ignore" section in CLAUDE.md
+- **`product-roadmap.md`** — surfaced in CLAUDE.md wayfinding (was previously hidden)
+
+---
+
+## 🟡 Outstanding — ranked by leverage
+
+### P1 — Repo hygiene
+
+1. ~~**Delete stale/scratch files**~~ ✅ Done Apr 19, 2026: removed `test-pinyin.js`, `TASKS.md`, `dashboard.html`, `cantopop-study.jsx`. Dependencies.md legacy-file paragraph removed. CLAUDE.md root-files section slimmed.
+
+2. **Chord format migration exit plan** — architecture.md says old character-index format is "being phased out" but gives no timeline, owner, or criteria. Decide: freeze old writes? Migration script? Document the cutoff.
+
+### P2 — Missing docs
+
+3. ~~**Test / QA strategy**~~ ✅ Done Apr 19: [qa-checklist.md](docs/claude-context/qa-checklist.md) written — 9-section manual checklist covering search, lyrics, chords, PDF, PWA, and a11y.
+
+4. ~~**`domain-glossary.md` expansion**~~ ✅ Done Apr 19: [domain-glossary.md](docs/claude-context/domain-glossary.md) expanded — Danger Zones data shape + user behavior + 望/忘 example; tone-to-colour table with hex values and AA status; PWA section cross-links to pwa-support.md.
+
+5. ~~**Chord system architecture doc**~~ ⚠ Skipped: `docs/amber-chords/` already contains a 13-file RAG corpus covering the chord data format, schema, and pipeline. Consolidating would duplicate that effort. Chord docs remain in amber-chords.
+
+### P3 — Nice to have
+
+6. ~~**Accessibility notes**~~ ✅ Done Apr 19: [docs/accessibility-audit-2026-04-16.md](docs/accessibility-audit-2026-04-16.md) exists — 31-issue audit with Sprint 1/2/3 fix plan, contrast ratios, keyboard nav, ARIA, and focus management. T2/T3/T4 colours already fixed in Sprint 2. Remaining items are the sprint backlog.
+
+7. ~~**Performance budget**~~ ✅ Done Apr 19: [performance-budget.md](docs/claude-context/performance-budget.md) written — asset size table, first-analysis latency targets, bundle budget strategy, PWA precache behavior.
+
+8. ~~**CI/CD documentation**~~ ✅ Done Apr 19: [cicd.md](docs/claude-context/cicd.md) written — Vercel preview/prod flow, local pre-deploy checklist, annotated ci.yml skeleton for when GitHub Actions is added.
+
+9. ~~**Browser/PWA support matrix**~~ ✅ Done Apr 19: [pwa-support.md](docs/claude-context/pwa-support.md) written — supported browsers, iOS install quirks, service-worker update behavior, offline scope, manifest keys.
+
+---
+
+## 🐛 Code bugs & perf — filtered from Apr 2026 audit
+
+Original audit flagged 10 items. After review, most are premature optimization or mis-diagnosed. **Fix 4, verify 0, profile 1, ignore 5.** (YouTube player + global handler were already fixed before this audit)
+
+### Fix now (real bugs, user-impacting)
+
+1. ~~**YouTube player never destroyed**~~ ✅ Already fixed: cleanup effect present in `useYouTubePlayer.js`
+   Player instance + polling interval aren't cleaned up on unmount. Each remount adds an iframe + timer. Add a cleanup effect that calls `player.destroy()` and `clearInterval()`.
+
+2. ~~**`window.onYouTubeIframeAPIReady` global overwrite**~~ ✅ Already fixed: `apiReadyListeners` set + shared promise in `useYouTubePlayer.js`
+   Multiple `loadYTApi()` calls race on the global handler; last write wins. Replace with a module-level promise that resolves once, shared by all callers.
+
+3. ~~**`useTTS` recreates `play` on every state change**~~ ✅ Fixed Apr 19: `playingKey` moved to `useRef`, removed from `play` deps. `stop` is stable, `play` no longer cascades.
+   `playingKey` in `useCallback` deps causes `play` to be recreated every state change → effect re-runs cascade. Fix: track current key in a `useRef`, drop `playingKey` from deps, read the ref synchronously inside `play`. Preserves toggle-to-stop semantics without closure surprises.
+
+### Verify first, then fix if confirmed
+
+4. ~~**`loadDemoSong` adds to recents on failure**~~ ✅ Fixed Apr 19: `addRecentSong` already inside success branch; comment added for clarity.
+   Claim: `addRecentSong(DEFAULT_SONG)` fires unconditionally. Confirm placement; if it runs before/regardless of success, move it into the success branch.
+
+### Profile before touching
+
+5. ~~**Sequential line analysis in `jyutping.js`**~~ ✅ Verified Apr 19: benchmarked 50-line song. Cold: 46 ms (dominated by dict fetch). Warm: 0.9 ms. `Promise.all` is correct — the module-level `ToJyutping` singleton prevents dict thrashing. No change needed.
+
+### Ignore — premature or wrong
+
+- ~~**Tone color fallback `#334155`**~~ — audit claimed "low contrast on white." Wrong direction: slate-700 on white is ~10:1, well above WCAG AA.
+- ~~**`void` statements in `pdfExport.js`**~~ — intentional unused-param markers, not dead code. If params truly unused, delete them; otherwise leave.
+- ~~**`Math.max(...Object.keys())` in `chordStorage.js`**~~ — bars per line <20, nanoseconds. Micro-optimization.
+- ~~**Triple-nested loop in `LyricsDisplay.jsx`**~~ — ~50 lines × small counts. Fast. If re-running too often, fix the memoization, not the loop.
+- ~~**Reverse iteration in `lrcParser.js`**~~ — ~200 items at 5 Hz = 1000 ops/sec. Binary search is premature.
+
+### Diagnosis quality note
+
+The source audit mixed severities (memory leaks alongside `void` statements) and contained at least one factually backwards claim (#9 contrast). Treat future audit outputs as hypotheses to triage, not a checklist to execute.
+
+---
+
+## Verification checklist (after any CLAUDE.md change)
+
+- [ ] `npm run build` exits cleanly
+- [ ] `npm run lint` passes
+- [ ] Word count of CLAUDE.md ≤ 400 (soft ceiling; ~260 now)
+- [ ] No duplication between CLAUDE.md and `docs/claude-context/*.md`
+- [ ] All referenced files exist (`ls` check)
+- [ ] Every aux doc has at least one entry in the CLAUDE.md wayfinding table
