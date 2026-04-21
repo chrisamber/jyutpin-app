@@ -1,0 +1,150 @@
+name: WaaPou Dev
+version: 0.1.0
+
+models:
+  # MiniMax M2.7 — chat, edit, agent (all cloud reasoning)
+  - name: MiniMax M2.7
+    provider: openrouter
+    model: minimax/minimax-m2.7
+    apiKey: ${OPENROUTER_API_KEY}
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 200000
+      maxTokens: 8192
+
+  # Qwen Coder 3B — local FIM autocomplete only (zero latency, zero cost)
+  - name: Qwen Coder 3B (FIM)
+    provider: lmstudio
+    model: qwen2.5-coder-3b-instruct-mlx
+    apiBase: http://localhost:1234/v1/
+    roles:
+      - autocomplete
+    promptTemplates:
+      autocomplete: "<|fim_prefix|>{{{prefix}}}<|fim_suffix|>{{{suffix}}}<|fim_middle|>"
+    defaultCompletionOptions:
+      maxTokens: 256
+      temperature: 0.2
+      stop:
+        - "<|fim_prefix|>"
+        - "<|fim_suffix|>"
+        - "<|fim_middle|>"
+        - "<|endoftext|>"
+        - "<|im_end|>"
+
+tabAutocompleteOptions:
+  disableInFiles:
+    - "*.min.js"
+    - "package-lock.json"
+    - "dist/**"
+    - "*.json"
+
+context:
+  - provider: file
+  - provider: codebase
+  - provider: diff
+  - provider: open
+  - provider: terminal
+  - provider: problems
+
+rules:
+  - name: design-system-discipline
+    rule: |
+      When editing UI code in this repo:
+      - Always use CSS custom properties from /src/index.css — never inline hex colors
+      - Primary accent is #C08A4D (amber-500), referenced as var(--color-accent)
+      - Dark mode swaps at :root via .dark class, NOT per-component dark: prefix
+      - Typography: Inter Variable for body, Noto Serif SC for CJK only
+      - Spacing: use 8pt grid tokens (--space-2, --space-4, --space-6, --space-8, --space-16)
+      - Reference the plan: /Users/chrisamber/.claude/plans/claude-design-tools-for-woolly-mochi.md
+  - name: preserve-functionality
+    rule: |
+      Do not break: LRCLIB search, to-jyutping rendering, SongContext state, PDF export, TTS integration.
+      Test npm run build after every significant change.
+
+prompts:
+  - name: /phase1
+    description: Execute Phase 1 — Foundation Tokens
+    prompt: |
+      Read /Users/chrisamber/.claude/plans/claude-design-tools-for-woolly-mochi.md in full.
+      Execute §4 Phase 1 — Foundation Tokens.
+      Modify only /src/index.css.
+      Add all tokens from §1 (Color, Typography, Spacing, Radius, Shadow, Motion).
+      Use semantic tokens that swap at .dark class root.
+      Verify with `npm run build`. Report any WCAG contrast concerns.
+
+  - name: /phase2
+    description: Execute Phase 2 — Typography
+    prompt: |
+      Read /Users/chrisamber/.claude/plans/claude-design-tools-for-woolly-mochi.md §4 Phase 2.
+      Install @fontsource-variable/inter.
+      Replace Georgia body stack with Inter Variable in /src/index.css.
+      Keep Noto Serif SC for CJK via .cjk class.
+      Update type scale (§1.3) across all components.
+
+  - name: /phase3
+    description: Execute Phase 3 — Layout & Spacing
+    prompt: |
+      Read the plan §4 Phase 3.
+      Apply 8pt grid tokens across: AppShell.jsx, Header.jsx, SearchHero.jsx.
+      Replace ad-hoc p-4/p-5 with --space-* semantic values.
+      Screenshot hero before + after.
+
+  - name: /phase4
+    description: Execute Phase 4 — Component Library
+    prompt: |
+      Read plan §2 Components and §4 Phase 4.
+      Migrate each component to token-based styles with proper variants × sizes × states:
+      Button, Input, Card, ToneBadge, SectionLabel, LyricsLine, JyutpingAnnotation.
+      Replace all hardcoded colors with var(--color-*).
+
+  - name: /phase5
+    description: Execute Phase 5 — Dark Mode + ThemeToggle
+    prompt: |
+      Read plan §2.7 and §4 Phase 5.
+      Create /src/components/layout/ThemeToggle.jsx.
+      Integrate in Header.jsx.
+      Implement theme provider with localStorage + prefers-color-scheme fallback.
+      Verify: all screens work in both modes without regression.
+
+  - name: /phase6
+    description: Execute Phase 6 — Motion & Polish
+    prompt: |
+      Apply motion tokens from plan §1.7 to all transitions.
+      Add focus rings (2-layer shadow).
+      Define empty/loading/error states.
+      Respect prefers-reduced-motion.
+
+  - name: /phase7
+    description: Execute Phase 7 — QA & Verification
+    prompt: |
+      Run §6 verification checklist.
+      Capture 8 screenshots (light + dark).
+      Run WCAG contrast check.
+      Test print preview.
+      Test at 375/768/1280px breakpoints.
+      Reply with findings + screenshot grid.
+
+  - name: /audit-diff
+    description: Audit a phase's diff against the plan
+    prompt: |
+      Review the git diff in this feature branch against the plan file.
+      Flag any violations:
+      - Hardcoded colors instead of tokens
+      - Use of dark: prefix (should be .dark class swap instead)
+      - Georgia instead of Inter
+      - Tailwind spacing not from 8pt grid
+      Report findings with file:line references.
+
+  - name: /audit-tokens
+    description: Scan all components for design system violations
+    prompt: |
+      Scan all src/components/**/*.jsx for violations:
+      1. Hardcoded hex colors (#xxxxxx or rgb/rgba literals in className)
+      2. Tailwind slate-* / gray-* / zinc-* color classes (should use semantic tokens)
+      3. bg-white or bg-black (should use bg-bg-base or bg-neutral-950)
+      4. dark: prefix classes (should be .dark root swap instead)
+      5. Inline style={{ color: '...' }} with non-token values
+      Report as table: file | line | violation | recommended fix

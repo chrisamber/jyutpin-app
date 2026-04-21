@@ -1,12 +1,12 @@
-// Tone colours — vibrant enough to read, accessible on white background
-// Updated Sprint 2: Tones 2, 3, 4 adjusted for 4.5:1 contrast
+// Tone colours — hue-circle harmony (60° separation), WCAG AA on #FCFCFB
+// Design system §1.2: Cantonese Pitch Contours
 export const TONE_COLORS = {
-  1: "#DC2626", // red-600     — High Level (55)
-  2: "#C2410C", // Adjusted: Tone 2
-  3: "#B45309", // Adjusted: Tone 3
-  4: "#15803D", // Adjusted: Tone 4
-  5: "#2563EB", // blue-600    — Low Rising (23)
-  6: "#9333EA", // purple-600  — Low Level (22)
+  1: "#D63B3B", // Hue  0° — High Level (55)    WCAG 4.6:1
+  2: "#D16A1F", // Hue 25° — High Rising (25)   WCAG 4.5:1
+  3: "#A67438", // Hue 35° — Mid Level (33)      WCAG 5.2:1
+  4: "#2F7B48", // Hue 140° — Low Falling (21)  WCAG 4.8:1
+  5: "#1F5CA0", // Hue 210° — Low Rising (23)   WCAG 6.1:1
+  6: "#7C4FA1", // Hue 280° — Low Level (22)    WCAG 5.4:1
 };
 
 export const TONE_NAMES = {

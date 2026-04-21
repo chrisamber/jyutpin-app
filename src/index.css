@@ -61,12 +61,11 @@
   --color-accent-bg:       var(--amber-50);
   --color-accent-bg-hover: var(--amber-100);
 
-  /* Legacy tokens (kept for backwards compatibility) */
-  --color-bg-primary: var(--neutral-0);
-  --color-bg-hover: var(--neutral-200);
-  --color-border: var(--neutral-300);
-  --color-border-accent: var(--amber-400);
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  /* Legacy compat aliases — map old names to new semantic tokens */
+  --color-bg-primary:   var(--neutral-50);   /* → bg-base */
+  --color-bg-hover:     var(--neutral-200);   /* → bg-elevated */
+  --color-border:       var(--neutral-300);   /* → border-default */
+  --color-accent-dim:   var(--amber-50);      /* used in ChordPopover bg-accent-dim */
   --color-gray-fallback: var(--neutral-500);
   --color-text-fallback: var(--neutral-600);
 

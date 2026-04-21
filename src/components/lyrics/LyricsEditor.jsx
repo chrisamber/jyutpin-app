@@ -31,18 +31,18 @@ export default function LyricsEditor({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm print:hidden">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl mx-4 flex flex-col max-h-[85vh]">
+      <div className="bg-bg-elevated rounded-2xl shadow-md w-full max-w-xl mx-4 flex flex-col max-h-[85vh] border border-border-subtle">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
           <div>
             <h2 className="text-base font-semibold text-text-primary">Edit Lyrics</h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-text-muted mt-0.5">
               One line per row · Chinese characters only · Jyutping auto-generated on save
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-xl leading-none px-2 transition-colors"
+            className="text-text-muted hover:text-text-secondary text-xl leading-none px-2 transition-colors"
           >
             ×
           </button>
@@ -53,19 +53,19 @@ export default function LyricsEditor({ onClose }) {
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full h-full min-h-[320px] bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base text-text-primary leading-relaxed resize-none focus:outline-none focus:border-accent/40 font-sans"
+            className="w-full h-full min-h-[320px] bg-bg-sunken border border-border-default rounded-xl px-4 py-3 text-base text-text-primary leading-relaxed resize-none focus:outline-none focus:border-accent/40 font-sans"
             placeholder={"麻煩各位都不望我\n我怎麼敢去唱情歌\n..."}
             spellCheck={false}
           />
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-5 py-3 border-t border-slate-200">
-          <span className="text-xs text-slate-400 font-mono">{lineCount} lines</span>
+        <div className="flex items-center justify-between px-5 py-3 border-t border-border-subtle">
+          <span className="text-xs text-text-muted font-mono">{lineCount} lines</span>
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="text-sm px-4 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors"
+              className="text-sm px-4 py-1.5 rounded-lg border border-border-default text-text-secondary hover:bg-bg-surface transition-colors"
             >
               Cancel
             </button>

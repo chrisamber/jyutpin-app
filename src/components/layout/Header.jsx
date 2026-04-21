@@ -1,6 +1,7 @@
 import { useSong } from "../../context/SongContext.jsx";
 import { useApp } from "../../context/AppContext.jsx";
 import { useSongAnalysis } from "../../hooks/useSongAnalysis.js";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 export default function Header() {
   const { song } = useSong();
@@ -23,14 +24,17 @@ export default function Header() {
 
         </div>
 
-        {currentView === "study" && (
-          <button
-            onClick={clearSong}
-            className="text-[11px] font-mono text-text-secondary hover:text-accent transition-colors px-3 py-1.5 rounded-md hover:bg-bg-elevated border border-transparent hover:border-[#FFFFFF0A]"
-          >
-            ← New Song
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {currentView === "study" && (
+            <button
+              onClick={clearSong}
+              className="text-[11px] font-mono text-text-secondary hover:text-accent transition-colors px-3 py-1.5 rounded-md hover:bg-bg-elevated border border-transparent hover:border-border-subtle"
+            >
+              ← New Song
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );

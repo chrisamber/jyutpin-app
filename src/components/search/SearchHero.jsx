@@ -6,7 +6,6 @@ import SearchResults from "./SearchResults.jsx";
 import AddSongModal from "./AddSongModal.jsx";
 import ToneSystem from "../study/ToneSystem.jsx";
 import SingingRules from "../study/SingingRules.jsx";
-import { TONE_COLORS } from "../../data/tones.js";
 import { getRecentSongs } from "../../services/recentSongs.js";
 import { CATALOG } from "../../data/catalog.js";
 import { getArtistImage } from "../../services/iTunesArt.js";
@@ -24,17 +23,16 @@ const PREVIEW_TOKENS = [
 ];
 
 function PreviewAnnotation({ char, jyutping, tone, entering }) {
-  const color = TONE_COLORS[tone] || "#636370";
   return (
     <ruby
       className={`mx-1.5 inline-flex flex-col items-center ${entering ? "rounded px-1 pb-0.5" : ""}`}
-      style={entering ? { backgroundColor: color + "18", borderBottom: `2px solid ${color}` } : undefined}
+      style={entering ? { backgroundColor: `color-mix(in srgb, var(--color-tone-${tone}) 12%, transparent)`, borderBottom: `2px solid var(--color-tone-${tone})` } : undefined}
     >
-      <rb className="text-2xl leading-tight font-light cjk" style={{ color }}>
+      <rb className="text-2xl leading-tight font-light cjk" style={{ color: `var(--color-tone-${tone})` }}>
         {char}
       </rb>
       <rp>(</rp>
-      <rt className="font-mono text-[10px] leading-none tracking-tight" style={{ color, opacity: 0.7 }}>
+      <rt className="font-mono text-[10px] leading-none tracking-tight" style={{ color: `var(--color-tone-${tone})` }}>
         {jyutping}
       </rt>
       <rp>)</rp>

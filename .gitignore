@@ -17,3 +17,4 @@ dist-ssr/
 # Editor
 .vscode/
 .idea/
+.vercel

@@ -1,12 +1,10 @@
-import { TONE_COLORS } from "../../data/tones.js";
-
 export default function ToneBadge({ tone }) {
   const t = parseInt(tone);
-  if (!TONE_COLORS[t]) return null;
+  if (!t || t < 1 || t > 6) return null;
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full font-mono text-[10px] font-bold w-5 h-5"
-      style={{ backgroundColor: TONE_COLORS[t] + "22", color: TONE_COLORS[t] }}
+      className="inline-flex items-center justify-center rounded font-mono text-[10px] font-bold w-5 h-5"
+      style={{ backgroundColor: `color-mix(in srgb, var(--color-tone-${t}) 15%, transparent)`, color: `var(--color-tone-${t})`, borderColor: `color-mix(in srgb, var(--color-tone-${t}) 25%, transparent)` }}
     >
       {t}
     </span>
