@@ -6,6 +6,7 @@ import AppShell from "./components/layout/AppShell.jsx";
 import SearchHero from "./components/search/SearchHero.jsx";
 import SongHeader from "./components/layout/SongHeader.jsx";
 import SongMeta from "./components/song/SongMeta.jsx";
+import TabNav from "./components/layout/TabNav.jsx";
 import LyricsDisplay from "./components/lyrics/LyricsDisplay.jsx";
 import SongBreakdown from "./components/song/SongBreakdown.jsx";
 import DangerZones from "./components/song/DangerZones.jsx";
@@ -45,10 +46,43 @@ function StudyView() {
     <>
       <SongHeader />
       <SongMeta />
-      {activeSection === "lyrics" && <LyricsDisplay />}
-      {activeSection === "songBreakdown" && <SongBreakdown />}
-      {activeSection === "dangerZones" && <DangerZones />}
-      {activeSection === "drills" && <Drills />}
+      <TabNav />
+      <div
+        id="lyrics-panel"
+        role="tabpanel"
+        aria-labelledby="lyrics-tab"
+        tabIndex={0}
+        hidden={activeSection !== "lyrics"}
+      >
+        <LyricsDisplay />
+      </div>
+      <div
+        id="songBreakdown-panel"
+        role="tabpanel"
+        aria-labelledby="songBreakdown-tab"
+        tabIndex={0}
+        hidden={activeSection !== "songBreakdown"}
+      >
+        <SongBreakdown />
+      </div>
+      <div
+        id="dangerZones-panel"
+        role="tabpanel"
+        aria-labelledby="dangerZones-tab"
+        tabIndex={0}
+        hidden={activeSection !== "dangerZones"}
+      >
+        <DangerZones />
+      </div>
+      <div
+        id="drills-panel"
+        role="tabpanel"
+        aria-labelledby="drills-tab"
+        tabIndex={0}
+        hidden={activeSection !== "drills"}
+      >
+        <Drills />
+      </div>
     </>
   );
 }

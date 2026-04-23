@@ -1,5 +1,4 @@
 import Header from "./Header.jsx";
-import TabNav from "./TabNav.jsx";
 import { useApp } from "../../context/AppContext.jsx";
 import { useSong } from "../../context/SongContext.jsx";
 
