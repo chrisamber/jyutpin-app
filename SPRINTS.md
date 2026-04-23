@@ -401,8 +401,11 @@ Format:
 
 ### 2026-04-24 · S1.5 — Lyrics View Symmetry (P1.1 baseline)
 - Model: Sonnet
-- Outcome: in-progress
-- Gate passed: P1.1
+- Outcome: shipped
+- Gate passed: all (P1.1–P1.4)
+- Commits: da52e49 (P1.1), 9faa6e9 (P1.2), 06a629e (P1.3), 1a8ab97 (P1.4)
+- Follow-ups: none
+- Notes: Rail settled at 216px (minimum that fits "Dominant: T1 — High Level (55)" line1 without mid-phrase wrap). Tone color inline styles deliberately kept out of scope — dark-mode fork lives in index.css:225-230. text-2xs = 11px maps all former 8/9/10/11px micro labels to one token. h2 "Annotated Lyrics" removed; .section-label inside grid left column gives 0px delta alignment with TONES label.
 
 #### P1.1 — Baseline measurements (1280px viewport, demo song 背脊唱情歌)
 
