@@ -10,19 +10,52 @@ import { getRecentSongs } from "../../services/recentSongs.js";
 import { CATALOG } from "../../data/catalog.js";
 import { getArtistImage } from "../../services/iTunesArt.js";
 
-// Static preview tokens for 麻煩各位都不望我
-const PREVIEW_TOKENS = [
-  { char: "麻", jyutping: "maa4", tone: 4 },
-  { char: "煩", jyutping: "faan4", tone: 4 },
-  { char: "各", jyutping: "gok3", tone: 3 },
-  { char: "位", jyutping: "wai6", tone: 6 },
-  { char: "都", jyutping: "dou1", tone: 1 },
-  { char: "不", jyutping: "bat1", tone: 1, entering: true },
-  { char: "望", jyutping: "mong6", tone: 6 },
-  { char: "我", jyutping: "ngo5", tone: 5 },
+const SLIDES = [
+  {
+    label: "背脊唱情歌",
+    subtitle: "Cantonese · Jyutping",
+    text: "麻煩各位都不望我",
+    tokens: [
+      { char: "麻", roman: "maa4", tone: 4 },
+      { char: "煩", roman: "faan4", tone: 4 },
+      { char: "各", roman: "gok3", tone: 3 },
+      { char: "位", roman: "wai6", tone: 6 },
+      { char: "都", roman: "dou1", tone: 1 },
+      { char: "不", roman: "bat1", tone: 1, entering: true },
+      { char: "望", roman: "mong6", tone: 6 },
+      { char: "我", roman: "ngo5", tone: 5 },
+    ],
+  },
+  {
+    label: "月亮代表我的心",
+    subtitle: "Mandarin · Pinyin",
+    text: "你问我爱你有多深",
+    tokens: [
+      { char: "你", roman: "nǐ", tone: 3 },
+      { char: "问", roman: "wèn", tone: 4 },
+      { char: "我", roman: "wǒ", tone: 3 },
+      { char: "爱", roman: "ài", tone: 4 },
+      { char: "你", roman: "nǐ", tone: 3 },
+      { char: "有", roman: "yǒu", tone: 3 },
+      { char: "多", roman: "duō", tone: 1 },
+      { char: "深", roman: "shēn", tone: 1 },
+    ],
+  },
+  {
+    label: "愛拼才會贏",
+    subtitle: "Hokkien · POJ",
+    text: "愛拼才會贏",
+    tokens: [
+      { char: "愛", roman: "ài",    tone: 2 },
+      { char: "拼", roman: "piàⁿ", tone: 2 },
+      { char: "才", roman: "chiah", tone: 4, entering: true },
+      { char: "會", roman: "ē",    tone: 3 },
+      { char: "贏", roman: "iâⁿ",  tone: 5 },
+    ],
+  },
 ];
 
-function PreviewAnnotation({ char, jyutping, tone, entering }) {
+function PreviewAnnotation({ char, roman, tone, entering }) {
   return (
     <ruby
       className={`mx-1.5 inline-flex flex-col-reverse items-center ${entering ? "rounded px-1 pb-0.5" : ""}`}
@@ -37,7 +70,7 @@ function PreviewAnnotation({ char, jyutping, tone, entering }) {
       </rb>
       <rp>(</rp>
       <rt className="font-mono text-[11px] leading-none tracking-tight mb-0.5" style={{ color: `var(--color-tone-${tone})` }}>
-        {jyutping}
+        {roman}
       </rt>
       <rp>)</rp>
     </ruby>
@@ -141,6 +174,20 @@ function ArtistGrid({ onSelectArtist }) {
 export default function SearchHero() {
   const [query, setQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [slideIdx, setSlideIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setFading(true);
+      const swap = setTimeout(() => {
+        setSlideIdx(i => (i + 1) % SLIDES.length);
+        setFading(false);
+      }, 350);
+      return () => clearTimeout(swap);
+    }, 4000);
+    return () => clearInterval(tick);
+  }, []);
   const { results, isSearching, searchError, search, clearResults } = useLyricsFetch();
   const { loadDemoSong, loadFromSearch, loadCustomSong } = useSongAnalysis();
   const dispatch = useAppDispatch();
@@ -182,18 +229,39 @@ export default function SearchHero() {
           </p>
         </div>
 
-        {/* Floating annotation preview */}
-        <div className="mb-10 px-6 py-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-center w-full max-w-xl">
+        {/* Floating annotation preview — auto-slides between Cantonese / Mandarin / Hokkien */}
+        <div
+          className="mb-10 px-6 py-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-center w-full max-w-xl"
+          style={{ transition: "opacity 350ms ease", opacity: fading ? 0 : 1 }}
+        >
           <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-4">
-            Preview — 背脊唱情歌
+            Preview — {SLIDES[slideIdx].label}
+            <span className="ml-2 opacity-50 normal-case">{SLIDES[slideIdx].subtitle}</span>
           </div>
           <div className="flex flex-wrap justify-center items-end leading-loose gap-0.5">
-            {PREVIEW_TOKENS.map((t, i) => (
+            {SLIDES[slideIdx].tokens.map((t, i) => (
               <PreviewAnnotation key={i} {...t} />
             ))}
           </div>
-          <div className="mt-3 text-[11px] text-[var(--color-text-secondary)] font-mono tracking-wide">
-            麻煩各位都不望我
+          <div className="mt-3 text-[11px] text-[var(--color-text-secondary)] font-mono tracking-wide cjk">
+            {SLIDES[slideIdx].text}
+          </div>
+          <div className="flex gap-1.5 justify-center mt-4">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setFading(true);
+                  setTimeout(() => { setSlideIdx(i); setFading(false); }, 350);
+                }}
+                className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                  i === slideIdx
+                    ? "bg-[var(--color-accent)]"
+                    : "bg-[var(--color-text-muted)]/30 hover:bg-[var(--color-text-muted)]/60"
+                }`}
+                aria-label={SLIDES[i].label}
+              />
+            ))}
           </div>
         </div>
 
