@@ -55,12 +55,14 @@ export default function JyutpingAnnotation({ char, jyutping, roman, tone, pinyin
   } else {
     content = (
       <ruby
-        className={`mx-1 inline-flex flex-col-reverse items-center ${stressed ? "rounded px-1 pb-0.5" : ""}`}
+        className={`mx-1 inline-flex flex-col-reverse items-center ${stressed ? "rounded px-1 pb-0.5 underline" : ""}`}
         style={
           stressed
             ? {
                 backgroundColor: color ? color + "12" : "rgba(0,0,0,0.04)",
-                borderBottom: `2px solid ${color || "rgba(0,0,0,0.15)"}`,
+                textDecorationColor: color || "rgba(0,0,0,0.15)",
+                textDecorationThickness: "2px",
+                textUnderlineOffset: "2px",
               }
             : undefined
         }
