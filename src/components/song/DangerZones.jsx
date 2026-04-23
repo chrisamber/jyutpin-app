@@ -12,13 +12,13 @@ function DemoToneTraps() {
           key={i}
           className={`flex gap-4 p-4 rounded-xl border ${
             i < 3
-              ? "bg-red-50 border-red-200"
-              : "bg-slate-50 border-[var(--color-border-default)]"
+              ? "bg-red-500/8 border-red-500/25"
+              : "bg-[var(--color-bg-surface)] border-[var(--color-border-default)]"
           }`}
         >
           <div
             className={`text-2xl font-bold font-mono min-w-8 ${
-              i < 3 ? "text-red-300" : "text-slate-300"
+              i < 3 ? "text-red-400" : "text-[var(--color-text-muted)]"
             }`}
           >
             {item.rank}
@@ -32,7 +32,7 @@ function DemoToneTraps() {
                 {item.jp}
               </span>
             </div>
-            <div className="text-[13px] leading-relaxed text-slate-600">
+            <div className="text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
               {item.why}
             </div>
           </div>
@@ -45,7 +45,7 @@ function DemoToneTraps() {
 function AutoToneTraps({ notes }) {
   if (notes.length === 0) {
     return (
-      <div className="bg-slate-100 rounded-xl p-6 text-center text-slate-400 text-sm">
+      <div className="bg-[var(--color-bg-surface)] rounded-xl p-6 text-center text-[var(--color-text-muted)] text-sm">
         No significant tone traps detected in this song.
       </div>
     );
@@ -54,7 +54,7 @@ function AutoToneTraps({ notes }) {
   return (
     <div className="space-y-4">
       {notes.map((note, i) => (
-        <div key={i} className="bg-slate-50 border border-[var(--color-border-default)] rounded-xl p-4">
+        <div key={i} className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-xl p-4">
           <div className="text-xs font-semibold text-accent/80 mb-2 font-mono uppercase tracking-wider">
             {note.category}
           </div>
@@ -74,13 +74,13 @@ function AutoToneTraps({ notes }) {
                 >
                   {w.char}
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">
+                <span className="text-[10px] font-mono text-[var(--color-text-muted)]">
                   {w.jyutping}
                 </span>
               </span>
             ))}
           </div>
-          <p className="text-[12px] leading-relaxed text-slate-500">{note.tip}</p>
+          <p className="text-[12px] leading-relaxed text-[var(--color-text-secondary)]">{note.tip}</p>
         </div>
       ))}
     </div>
@@ -100,7 +100,7 @@ export default function DangerZones() {
       <h2 className="text-xl font-normal mb-2 text-accent/80">
         Tone Traps
       </h2>
-      <p className="text-[13px] leading-relaxed text-slate-500 mb-6">
+      <p className="text-[13px] leading-relaxed text-[var(--color-text-secondary)] mb-6">
         {song?.isDemo
           ? "The highest-stakes words in this song. Get these right and native listeners will believe you."
           : "Auto-detected pronunciation challenges in this song based on tone analysis."}

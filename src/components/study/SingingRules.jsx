@@ -11,7 +11,7 @@ export default function SingingRules() {
         {SINGING_RULES.map((rule, i) => (
           <div
             key={i}
-            className="bg-slate-50 rounded-xl p-5"
+            className="bg-[var(--color-bg-surface)] rounded-xl p-5"
             style={{ borderLeft: `3px solid ${rule.color}` }}
           >
             <div
@@ -20,7 +20,7 @@ export default function SingingRules() {
             >
               {rule.title}
             </div>
-            <div className="text-[13px] leading-relaxed text-slate-600">
+            <div className="text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
               {rule.body}
             </div>
           </div>

@@ -16,7 +16,7 @@ export default function ToneSystem() {
       <h2 className="text-xl font-normal mb-2 text-accent/80">
         The Six Tones for Singers
       </h2>
-      <p className="text-[13px] leading-relaxed text-slate-500 mb-6">
+      <p className="text-[13px] leading-relaxed text-[var(--color-text-secondary)] mb-6">
         Forget the "nine tones" debate. For singing, you need six pitch contours
         plus awareness that entering tones (-p, -t, -k finals) are shortened
         versions of tones 1, 3, and 6. The mnemonic: 風水到時我哋 (fung1 seoi2
@@ -27,7 +27,7 @@ export default function ToneSystem() {
         {[1, 2, 3, 4, 5, 6].map((t) => (
           <div
             key={t}
-            className="flex items-center gap-4 bg-slate-50 rounded-xl px-4 py-3.5"
+            className="flex items-center gap-4 bg-[var(--color-bg-surface)] rounded-xl px-4 py-3.5"
             style={{ border: `1px solid ${TONE_COLORS[t]}22` }}
           >
             <ToneVisual tone={t} size={56} />
@@ -38,7 +38,7 @@ export default function ToneSystem() {
               >
                 Tone {t} — {TONE_NAMES[t]}
               </div>
-              <div className="text-xs text-slate-500 mt-1 leading-relaxed">
+              <div className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
                 {TONE_DESCRIPTIONS[t]}
               </div>
             </div>
@@ -46,11 +46,11 @@ export default function ToneSystem() {
         ))}
       </div>
 
-      <div className="bg-blue-500/4 border border-blue-500/15 rounded-xl p-5 mt-6">
-        <div className="text-xs font-mono text-blue-400/70 tracking-widest mb-3">
+      <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl p-5 mt-6">
+        <div className="text-xs font-mono text-[var(--color-text-muted)] tracking-widest mb-3">
           ENTERING TONES IN SINGING
         </div>
-        <div className="text-[13px] leading-relaxed text-slate-600">
+        <div className="text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
           Syllables ending in -p, -t, -k carry "entering tones" — they share
           the pitch of tones 1, 3, or 6 but are{" "}
           <strong className="text-[var(--color-text-primary)]">cut short</strong> by the
