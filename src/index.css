@@ -44,7 +44,7 @@
   /* Text */
   --color-text-primary:   var(--neutral-950);
   --color-text-secondary: var(--neutral-500);
-  --color-text-muted:     var(--neutral-400);
+  --color-text-muted:     var(--neutral-500);
   --color-text-accent:    var(--amber-700);
   --color-text-inverse:   var(--neutral-50);
 
