@@ -15,9 +15,10 @@ export default function ChordDiagram({ chord, size = 1 }) {
   const label = chord.split("/")[0]; // strip bass for display
 
   if (!shape) {
-    // No shape known — render name-only pill
     return (
       <div
+        role="img"
+        aria-label={`${label} chord (no diagram available)`}
         className="flex items-center justify-center rounded border border-[var(--color-border-subtle)] bg-[var(--color-bg-elevated)] text-accent font-mono font-bold text-[11px]"
         style={{ width: W * size, height: H * size, fontSize: 11 * size }}
       >
@@ -37,7 +38,7 @@ export default function ChordDiagram({ chord, size = 1 }) {
   const nutH = 3 * size;
   const isOpenPosition = baseFret === 1;
 
-  const ariaLabel = `${chord} chord diagram: frets [${frets.map(f => f === -1 ? 'x' : f).join(', ')}]`;
+  const ariaLabel = `${chord} chord diagram: ${frets.map(f => f === -1 ? 'muted' : f === 0 ? 'open' : `fret ${f}`).join(', ')} from low to high`;
 
   return (
     <div className="flex flex-col items-center gap-0.5">
