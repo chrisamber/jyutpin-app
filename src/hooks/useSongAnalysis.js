@@ -9,6 +9,31 @@ import { demoNan } from "../data/demos/nan-aimai.js";
 import { addRecentSong } from "../services/recentSongs.js";
 import { getCustomSongLyrics } from "../services/customSongs.js";
 import { initializeCuratedSongData } from "../data/songs/index.js";
+import { fetchTranslations } from "../services/translation.js";
+
+/**
+ * Kick off background translation for lines missing an English gloss.
+ * Dispatches UPDATE_TRANSLATIONS when results arrive. Fires and forgets —
+ * callers don't await this.
+ */
+function backgroundTranslate(lines, dialectCode, song, dispatch) {
+  const missing = lines
+    .map((l, i) => ({ i, chinese: l.chinese }))
+    .filter(({ i, chinese }) => lines[i].translation == null && chinese && chinese.trim());
+  if (missing.length === 0) return;
+
+  const songKey = `${song.title}|${song.artist}|${dialectCode}`;
+  const texts = missing.map((m) => m.chinese);
+  fetchTranslations(texts, dialectCode).then((results) => {
+    const map = {};
+    missing.forEach((m, j) => {
+      if (results[j]) map[m.i] = results[j];
+    });
+    if (Object.keys(map).length > 0) {
+      dispatch({ type: "UPDATE_TRANSLATIONS", translations: map, songKey });
+    }
+  }).catch(() => { /* non-blocking */ });
+}
 
 // Default romanization toggle per dialect. cmn songs show Pinyin natively, so
 // the toggle should reflect that on load rather than stay on "jyutping".
@@ -89,6 +114,7 @@ export function useSongAnalysis() {
           dialectCode: "yue",
         });
         addRecentSong(songObj);
+        backgroundTranslate(lines, "yue", songObj, songDispatch);
       } else {
         // New multi-dialect demo path: cmn/nan demos are self-contained (no LRCLIB).
         const demo = dialectCode === "cmn" ? demoCmn : demoNan;
@@ -116,6 +142,7 @@ export function useSongAnalysis() {
           dialectCode,
         });
         addRecentSong(songObj);
+        backgroundTranslate(lines, dialectCode, songObj, songDispatch);
       }
 
       setDefaultRomanization(dialectCode);
@@ -163,6 +190,7 @@ export function useSongAnalysis() {
           dialectCode,
         });
         addRecentSong(songObj);
+        backgroundTranslate(lines, dialectCode, songObj, songDispatch);
 
         // Initialize curated song data (chords, annotations, etc.)
         if (searchResult.title === "緊急聯絡人" && searchResult.artist === "Gareth.T") {
@@ -203,6 +231,7 @@ export function useSongAnalysis() {
           dialectCode,
         });
         addRecentSong(song);
+        backgroundTranslate(lines, dialectCode, song, songDispatch);
         setDefaultRomanization(dialectCode);
         appDispatch({ type: "SET_VIEW", view: "study" });
         appDispatch({ type: "SET_SECTION", section: "lyrics" });
@@ -218,7 +247,7 @@ export function useSongAnalysis() {
     appDispatch({ type: "SET_VIEW", view: "search" });
   }, [songDispatch, appDispatch]);
 
-  const updateLyrics = useCallback(async (rawText, storageId, dialectCode = "yue") => {
+  const updateLyrics = useCallback(async (rawText, storageId, dialectCode = "yue", song = null) => {
     try {
       const analyzed = await analyzeFullLyrics(rawText, dialectCode);
       const lines = analyzed.map((line) => ({ ...line, translation: null, dangers: [] }));
@@ -226,6 +255,7 @@ export function useSongAnalysis() {
       if (storageId) {
         try { localStorage.setItem(`editedlyrics:${storageId}`, rawText); } catch {}
       }
+      if (song) backgroundTranslate(lines, dialectCode, song, songDispatch);
     } catch (err) {
       console.error("Failed to re-analyze lyrics:", err);
     }

@@ -38,6 +38,19 @@ function songReducer(state, action) {
       return { ...state, isLoading: false, error: action.error };
     case "UPDATE_LINES":
       return { ...state, lines: action.lines, lyricsIncomplete: false };
+    case "UPDATE_TRANSLATIONS": {
+      const current = state.song
+        ? `${state.song.title}|${state.song.artist}|${state.dialectCode}`
+        : null;
+      if (action.songKey !== current) return state;
+      const map = action.translations;
+      return {
+        ...state,
+        lines: state.lines.map((line, i) =>
+          map[i] != null && line.translation == null ? { ...line, translation: map[i] } : line
+        ),
+      };
+    }
     case "UPDATE_SONG":
       return { ...state, song: { ...state.song, ...action.updates } };
     case "CLEAR":

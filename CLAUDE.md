@@ -18,6 +18,10 @@ npm run lint     # ESLint
 Optional env vars in `.env.local` (app works without them):
 - `VITE_GOOGLE_TTS_API_KEY` — Cantonese TTS (yue-HK)
 - `VITE_YOUTUBE_API_KEY` — YouTube player integration
+- `ANTHROPIC_API_KEY` — Claude Haiku English translations via `/api/translate` (server-only; use `vercel dev` to exercise the function locally)
+- `KV_REST_API_URL` + `KV_REST_API_TOKEN` — optional Upstash Redis for shared translation cache across users
+
+See [.env.local.example](.env.local.example) for the full list.
 
 **Deployment:** hosted on Vercel. Config lives in [vercel.json](vercel.json) (Vite framework preset, builds to `dist/`). Set `VITE_*` env vars in the Vercel dashboard — never commit them. Requires **Node ≥20** (pinned in `package.json` `engines`).
 
