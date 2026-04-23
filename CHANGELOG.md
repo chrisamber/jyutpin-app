@@ -28,6 +28,11 @@ Commit hashes reference `main`. For pre-`[Unreleased]` history, `git log` is aut
 ---
 
 <!--
+## [1.0.0] — YYYY-MM-DD (target: after S1 Gate closes)
+
+This is the V1 open-source release of the Vite prototype. Tag, publish repo, deploy.
+Future development continues in a new Next.js repo.
+
 ## [0.1.0] — YYYY-MM-DD
 
 Cut the first tagged release when the next sprint Gate closes. Move Unreleased → 0.1.0 with the date and commit-hash range.

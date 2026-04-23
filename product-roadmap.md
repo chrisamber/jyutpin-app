@@ -155,4 +155,18 @@ WaaPou is a solo project (Chris). Rough velocity: ~1 substantial feature per ses
 
 ---
 
+---
+
+## V1 Exit Plan (decided 2026-04-23)
+
+This repo is the **Vite prototype**. Plan:
+
+1. **Complete S1** (Accessibility Critical) — the final sprint on this codebase.
+2. **Tag v1.0.0**, open-source the repo, deploy to production.
+3. **Start a new Next.js repo** — builds on everything learnt here. Beat-grid chords, auth, Supabase, community features, and all H2+ items live there.
+
+Beat-grid (S2), Accessibility Sprint 2 (S3), and all items from "Next" onwards belong to the new repo. This roadmap is now a read-only historical record after V1 ships.
+
+---
+
 *华譜 WaaPou — Sing what you speak. An Amber Audio product. Always free.*

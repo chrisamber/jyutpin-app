@@ -5,32 +5,6 @@ import { toPinyinArray } from "../../services/mandarin.js";
 import { CATALOG_BY_ARTIST } from "../../data/catalog.js";
 import { getAlbumArt } from "../../services/iTunesArt.js";
 import { updateCustomSongMeta } from "../../services/customSongs.js";
-import { TONE_COLORS } from "../../data/tones.js";
-
-function HeroLine({ tokens }) {
-  if (!tokens?.length) return null;
-  const visible = tokens.filter((t) => t.char && t.char.trim());
-  if (!visible.length) return null;
-  return (
-    <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3 mb-1 print:hidden" aria-hidden="true">
-      {visible.map((t, i) => {
-        const color = t.tone ? TONE_COLORS[t.tone] : "#94a3b8";
-        return (
-          <span key={i} className="inline-flex flex-col items-center gap-0.5">
-            <span className="text-base font-light cjk leading-none" style={{ color }}>
-              {t.char}
-            </span>
-            {t.jyutping && (
-              <span className="text-[9px] font-mono leading-none" style={{ color, opacity: 0.65 }}>
-                {t.jyutping}
-              </span>
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
 
 const LANGUAGES = [
   { value: "cantonese", label: "Cantonese" },
