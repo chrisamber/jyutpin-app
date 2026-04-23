@@ -296,7 +296,7 @@ export default function LyricsDisplay() {
 
       {/* Three-column layout: lyrics | right rail (tone/pronunciation) | chord diagrams */}
       {/* md+: right rail appears. xl: chord diagram column added. */}
-      <div className="grid xl:grid-cols-[1fr_220px_200px] md:grid-cols-[1fr_200px] gap-6 print:block">
+      <div className={`grid gap-6 print:block ${isYue ? "xl:grid-cols-[1fr_216px_200px] md:grid-cols-[1fr_216px]" : ""}`}>
 
         {/* Centre: lyrics — first in DOM for mobile/accessibility */}
         <div>
@@ -341,7 +341,7 @@ export default function LyricsDisplay() {
 
         {/* Right rail: tone reference + analytics + pronunciation notes (md+). */}
         {/* Cantonese-specific — hidden for cmn/nan until per-dialect content lands. */}
-        <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start min-w-0">
+        <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start min-w-0 w-full">
           {isYue && <ToneReference />}
           {isYue && <ToneAnalytics />}
           {isYue && <PronunciationNotes />}
