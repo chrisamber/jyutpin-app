@@ -233,8 +233,6 @@ export default function SongHeader() {
               </span>
             )}
           </div>
-          {/* Hero lyric preview — first annotated line, tone-colored */}
-          {lines?.length > 0 && <HeroLine tokens={lines[0].tokens} />}
         </div>
       </div>
 
