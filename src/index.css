@@ -180,6 +180,18 @@
   --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Tone colors must be explicit :root properties — @theme alone is tree-shaken for inline-style var() usage */
+:root {
+  --color-tone-1: #D63B3B;
+  --color-tone-2: #D16A1F;
+  --color-tone-3: #A67438;
+  --color-tone-4: #2F7B48;
+  --color-tone-5: #1F5CA0;
+  --color-tone-6: #7C4FA1;
+  --color-tone-7: #6B3FA1;
+  --color-tone-8: #2F6B9A;
+}
+
 /* ==============================================
    DARK MODE - Semantic Token Swap
    ============================================== */
@@ -505,6 +517,11 @@
 }
 
 /* Reduced motion preference */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
