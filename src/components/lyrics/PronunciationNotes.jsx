@@ -50,7 +50,7 @@ export default function PronunciationNotes() {
       {notes.map((note, i) => (
         <div
           key={i}
-          className="bg-bg-surface border border-border-default rounded-lg p-3.5"
+          className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-3.5"
         >
           <div className="text-xs font-semibold text-accent/80 mb-2">
             {note.category}
@@ -60,7 +60,7 @@ export default function PronunciationNotes() {
             {note.words.map((w, wi) => (
               <span
                 key={wi}
-                className="inline-flex items-center gap-1 text-sm bg-bg-elevated rounded px-2 py-0.5"
+                className="inline-flex items-center gap-1 text-sm bg-[var(--color-bg-elevated)] rounded px-2 py-0.5"
               >
                 <span
                   className="font-medium"
@@ -72,14 +72,14 @@ export default function PronunciationNotes() {
                 >
                   {w.char}
                 </span>
-                <span className="text-[10px] font-mono text-text-muted">
+                <span className="text-[10px] font-mono text-[var(--color-text-muted)]">
                   {w.jyutping}
                 </span>
               </span>
             ))}
           </div>
 
-          <p className="text-[11px] leading-relaxed text-text-secondary">
+          <p className="text-[11px] leading-relaxed text-[var(--color-text-secondary)]">
             {note.tip}
           </p>
         </div>

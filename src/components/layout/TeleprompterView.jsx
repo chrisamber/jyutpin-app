@@ -58,7 +58,7 @@ export default function TeleprompterView() {
   }, [activeLyricIndex]);
 
   return (
-    <div className="fixed inset-0 bg-bg-base z-50 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-[var(--color-bg-base)] z-50 flex flex-col overflow-hidden">
       <div className="flex items-center justify-between p-4 bg-slate-50 border-b border-slate-100 shrink-0">
         <div>
           <h2 className="text-xl font-medium tracking-wider text-slate-800">{song?.title}</h2>

@@ -3,6 +3,16 @@ import { createContext, useContext, useReducer } from "react";
 const AppContext = createContext(null);
 const AppDispatchContext = createContext(null);
 
+const STORAGE_KEY_DIALECT = "waapou:dialect";
+
+function readDialectPreference() {
+  try {
+    const v = localStorage.getItem(STORAGE_KEY_DIALECT);
+    if (v === "yue" || v === "cmn" || v === "nan") return v;
+  } catch {}
+  return "yue";
+}
+
 const initialState = {
   currentView: "search",
   activeSection: "lyrics",
@@ -14,6 +24,7 @@ const initialState = {
   activeLyricIndex: -1,
   currentArtist: null, // { artist, artistEn }
   transpose: 0, // semitones, -6 to +6
+  dialectPreference: readDialectPreference(), // 'yue' | 'cmn' | 'nan'
 };
 
 function appReducer(state, action) {
@@ -44,6 +55,16 @@ function appReducer(state, action) {
       return { ...state, currentView: "artist", currentArtist: action.artist };
     case "SET_TRANSPOSE":
       return { ...state, transpose: Math.max(-6, Math.min(6, action.semitones)) };
+    case "SET_DIALECT": {
+      const code =
+        action.dialectCode === "yue" ||
+        action.dialectCode === "cmn" ||
+        action.dialectCode === "nan"
+          ? action.dialectCode
+          : "yue";
+      try { localStorage.setItem(STORAGE_KEY_DIALECT, code); } catch {}
+      return { ...state, dialectPreference: code };
+    }
     default:
       return state;
   }

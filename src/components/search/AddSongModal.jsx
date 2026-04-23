@@ -61,7 +61,7 @@ export default function AddSongModal({ onClose }) {
     }
   }, [fields, loadCustomSong, onClose]);
 
-  const inputCls = "w-full bg-bg-primary border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors";
+  const inputCls = "w-full bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-accent/40 transition-colors";
 
   return (
     <div
@@ -75,17 +75,17 @@ export default function AddSongModal({ onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-song-title"
-        className="relative w-full max-w-lg bg-bg-surface border border-border-subtle rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border-subtle)]">
           <div>
-            <h2 id="add-song-title" className="text-sm font-medium text-text-primary">Add your own song</h2>
-            <p className="text-[11px] text-text-secondary font-mono mt-0.5">Paste lyrics to get Jyutping annotations</p>
+            <h2 id="add-song-title" className="text-sm font-medium text-[var(--color-text-primary)]">Add your own song</h2>
+            <p className="text-[11px] text-[var(--color-text-secondary)] font-mono mt-0.5">Paste lyrics to get Jyutping annotations</p>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-text-muted hover:text-text-primary transition-colors w-7 h-7 flex items-center justify-center rounded-lg hover:bg-bg-elevated"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--color-bg-elevated)]"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M2 2 L12 12 M12 2 L2 12" />
@@ -96,7 +96,7 @@ export default function AddSongModal({ onClose }) {
         <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="title-input" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">
+              <label htmlFor="title-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">
                 Title <span className="text-accent">*</span>
               </label>
               <input
@@ -110,7 +110,7 @@ export default function AddSongModal({ onClose }) {
               />
             </div>
             <div>
-              <label htmlFor="artist-input" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">Artist</label>
+              <label htmlFor="artist-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">Artist</label>
               <input
                 id="artist-input"
                 type="text"
@@ -124,7 +124,7 @@ export default function AddSongModal({ onClose }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="album-input" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">Album</label>
+              <label htmlFor="album-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">Album</label>
               <input
                 id="album-input"
                 type="text"
@@ -135,7 +135,7 @@ export default function AddSongModal({ onClose }) {
               />
             </div>
             <div>
-              <label htmlFor="lang-select" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">Language</label>
+              <label htmlFor="lang-select" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">Language</label>
               <select id="lang-select" value={fields.language} onChange={set("language")} className={inputCls}>
                 {LANGUAGES.map((l) => (
                   <option key={l.value} value={l.value}>{l.label}</option>
@@ -145,7 +145,7 @@ export default function AddSongModal({ onClose }) {
           </div>
 
           <div>
-            <label htmlFor="yt-input" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">YouTube URL</label>
+            <label htmlFor="yt-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">YouTube URL</label>
             <input
               id="yt-input"
               type="url"
@@ -157,7 +157,7 @@ export default function AddSongModal({ onClose }) {
           </div>
 
           <div>
-            <label htmlFor="lyrics-input" className="text-[10px] font-mono text-text-muted tracking-[0.15em] uppercase block mb-1.5">
+            <label htmlFor="lyrics-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">
               Lyrics <span className="text-accent">*</span>
             </label>
             <textarea
@@ -174,11 +174,11 @@ export default function AddSongModal({ onClose }) {
           )}
         </form>
 
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-subtle">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border-subtle)]">
           <button
             type="button"
             onClick={onClose}
-            className="text-xs font-mono text-text-secondary hover:text-text-primary transition-colors px-4 py-2 rounded-lg hover:bg-bg-elevated"
+            className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors px-4 py-2 rounded-lg hover:bg-[var(--color-bg-elevated)]"
           >
             Cancel
           </button>
@@ -186,7 +186,7 @@ export default function AddSongModal({ onClose }) {
             type="submit"
             onClick={handleSubmit}
             disabled={loading}
-            className="text-xs font-mono bg-accent hover:bg-accent/90 text-bg-primary font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50"
+            className="text-xs font-mono bg-accent hover:bg-accent/90 text-[var(--color-bg-base)] font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50"
           >
             {loading ? "Analysing…" : "Add song"}
           </button>

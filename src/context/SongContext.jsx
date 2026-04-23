@@ -11,12 +11,18 @@ const initialState = {
   error: null,
   lyricsSource: null,
   lyricsIncomplete: false,
+  dialectCode: "yue",
 };
 
 function songReducer(state, action) {
   switch (action.type) {
     case "LOAD_START":
-      return { ...state, isLoading: true, error: null };
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+        dialectCode: action.dialectCode ?? state.dialectCode,
+      };
     case "LOAD_SUCCESS":
       return {
         ...state,
@@ -26,6 +32,7 @@ function songReducer(state, action) {
         isLoading: false,
         lyricsSource: action.source,
         lyricsIncomplete: action.lyricsIncomplete || false,
+        dialectCode: action.dialectCode ?? state.dialectCode,
       };
     case "LOAD_ERROR":
       return { ...state, isLoading: false, error: action.error };

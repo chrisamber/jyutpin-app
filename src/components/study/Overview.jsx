@@ -10,7 +10,7 @@ export default function Overview() {
         <em>follows</em> the tones. Research shows that modern Cantopop
         achieves near-perfect tone-melody matching, with mismatches appearing in
         fewer than 2% of lyrics across sampled songs. This means:{" "}
-        <strong className="text-text-primary">
+        <strong className="text-[var(--color-text-primary)]">
           if you get the tone wrong, you're not just mispronouncing — you're
           singing the wrong melody.
         </strong>

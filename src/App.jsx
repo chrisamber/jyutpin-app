@@ -21,8 +21,8 @@ function StudyView() {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
         <div className="text-center">
-          <div className="text-accent/60 text-lg mb-2">Analyzing...</div>
-          <div className="text-text-secondary text-sm">
+          <div className="text-[var(--color-accent)]/60 text-lg mb-2">Analyzing...</div>
+          <div className="text-[var(--color-text-secondary)] text-sm">
             Converting lyrics to Jyutping
           </div>
         </div>

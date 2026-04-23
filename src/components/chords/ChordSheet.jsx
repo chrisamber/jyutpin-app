@@ -5,7 +5,7 @@ export default function ChordSheet({ usedChords }) {
 
   return (
     <div className="mt-4 print:hidden">
-      <div className="text-[9px] font-mono text-text-muted tracking-[0.2em] uppercase mb-3">
+      <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-3">
         Chords Used
       </div>
       <div className="flex flex-wrap gap-4">

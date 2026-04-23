@@ -9,7 +9,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
       className={`mb-3 rounded-xl overflow-hidden transition-all border ${
         expanded
           ? "bg-slate-50 border-accent/20"
-          : "bg-bg-base border-border-default hover:border-border-strong"
+          : "bg-[var(--color-bg-base)] border-[var(--color-border-default)] hover:border-[var(--color-border-strong)]"
       }`}
     >
       <button
@@ -21,7 +21,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
           {String(index + 1).padStart(2, "0")}
         </span>
         <div className="flex-1">
-          <div className="text-lg tracking-wider text-text-primary font-medium leading-relaxed">
+          <div className="text-lg tracking-wider text-[var(--color-text-primary)] font-medium leading-relaxed">
             {line.chinese}
           </div>
           <div className="text-xs text-accent/50 font-mono mt-1 leading-relaxed break-all">
@@ -60,7 +60,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
               }}
             >
               <div className="flex items-center gap-3 mb-2.5">
-                <span className="text-[28px] font-bold text-text-primary">
+                <span className="text-[28px] font-bold text-[var(--color-text-primary)]">
                   {d.word}
                 </span>
                 <span className="font-mono text-[13px] text-accent/70 bg-accent/8 px-2.5 py-0.5 rounded-md">

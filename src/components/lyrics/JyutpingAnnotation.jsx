@@ -4,9 +4,13 @@ import { useApp } from "../../context/AppContext.jsx";
 import { jyutpingToYale } from "../../services/yale.js";
 import ChordPopover from "./ChordPopover.jsx";
 
-export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord, hasDanger, chordEditMode, onChordEdit, usedChords, isTrailing, barIndex, beatIndex, beatsPerBar, barChords }) {
+export default function JyutpingAnnotation({ char, jyutping, roman, tone, pinyin, alternates, chord, hasDanger, chordEditMode, onChordEdit, usedChords, isTrailing, barIndex, beatIndex, beatsPerBar, barChords }) {
   const { romanization } = useApp();
   const [editing, setEditing] = useState(false);
+
+  // Non-yue dialects (cmn/nan) pass `roman` instead of `jyutping`. Use it as
+  // the fallback display string so existing rendering stays unchanged.
+  const primaryRoman = jyutping ?? roman ?? null;
 
   const color = useMemo(() => tone ? TONE_COLORS[tone] : undefined, [tone]);
   const isEnteringTone = useMemo(() => jyutping && /[ptk]\d$/.test(jyutping), [jyutping]);
@@ -14,10 +18,16 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
   const stressed = hasDanger || isEnteringTone || isNgInitial;
 
   const displayRomanization = useMemo(() => {
-    if (romanization === "yale") return jyutpingToYale(jyutping) || jyutping;
-    if (romanization === "pinyin") return pinyin;
-    return jyutping;
-  }, [romanization, jyutping, pinyin]);
+    if (romanization === "yale") {
+      // Jyutping→Yale only applies to yue. For cmn/nan, use the engine's
+      // alternate (zhuyin / tailo) if present, else fall back to primary.
+      if (jyutping) return jyutpingToYale(jyutping) || jyutping;
+      const alt = alternates ? Object.values(alternates).find(Boolean) : null;
+      return alt || primaryRoman;
+    }
+    if (romanization === "pinyin") return pinyin ?? primaryRoman;
+    return primaryRoman;
+  }, [romanization, jyutping, pinyin, primaryRoman, alternates]);
 
   const isClickable = chordEditMode && !isTrailing;
 
@@ -31,7 +41,7 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
 
   if (isTrailing) {
     content = <span className="inline-block min-w-[1rem]" />;
-  } else if (!(jyutping || pinyin) || char.trim() === "") {
+  } else if (!(jyutping || pinyin || roman) || char.trim() === "") {
     // Whitespace / punctuation: in chord edit mode use an invisible clickable spacer
     if (chordEditMode && char.trim() === "") {
       content = <span className="mx-0.5 inline-block w-4 h-6" />;
@@ -45,7 +55,7 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
   } else {
     content = (
       <ruby
-        className={`mx-1 inline-flex flex-col items-center ${stressed ? "rounded px-1 pb-0.5" : ""}`}
+        className={`mx-1 inline-flex flex-col-reverse items-center ${stressed ? "rounded px-1 pb-0.5" : ""}`}
         style={
           stressed
             ? {
@@ -56,7 +66,7 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
         }
       >
         <rb
-          className={`text-xl leading-tight ${stressed ? "font-semibold" : "font-normal"}${!color ? " text-text-primary" : ""}`}
+          className={`text-xl leading-tight ${stressed ? "font-semibold" : "font-normal"}${!color ? " text-[var(--color-text-primary)]" : ""}`}
           style={color ? { color } : undefined}
         >
           {char}
@@ -65,7 +75,7 @@ export default function JyutpingAnnotation({ char, jyutping, tone, pinyin, chord
           <>
             <rp>(</rp>
             <rt
-              className={`font-mono font-normal text-[10px] leading-none${!color ? " text-text-muted" : ""}`}
+              className={`font-mono font-normal text-[11px] leading-none mb-0.5${!color ? " text-[var(--color-text-muted)]" : ""}`}
               style={color ? { color, opacity: 0.85 } : undefined}
             >
               {displayRomanization}

@@ -4,14 +4,14 @@
     {
       "name": "Vite Dev Server",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "5173"],
-      "port": 5173
+      "runtimeArgs": ["vite", "--port", "5180", "--strictPort"],
+      "port": 5180
     },
     {
       "name": "Vite Preview (Production Build)",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "preview", "--port", "4173"],
-      "port": 4173
+      "runtimeArgs": ["vite", "preview", "--port", "4180", "--strictPort"],
+      "port": 4180
     }
   ]
 }

@@ -57,10 +57,10 @@ export default function ChordPopover({
       role="dialog"
       aria-label="Edit chord"
     >
-      <div className="bg-bg-surface border border-border rounded-lg shadow-lg p-2 flex flex-col gap-1.5 min-w-[11rem]">
+      <div className="bg-[var(--color-bg-surface)] border border-border rounded-lg shadow-lg p-2 flex flex-col gap-1.5 min-w-[11rem]">
         {/* Bar/beat context */}
         {showBarContext && (
-          <div className="flex items-center gap-1 text-[9px] font-mono text-text-muted uppercase tracking-wider">
+          <div className="flex items-center gap-1 text-[9px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider">
             <span>Bar {barIndex + 1}</span>
             <span className="opacity-40">·</span>
             <span>Beat {beatIndex + 1}/{beatsPerBar}</span>
@@ -76,7 +76,7 @@ export default function ChordPopover({
           onKeyDown={handleKeyDown}
           placeholder="Chord (e.g. Am, G7)"
           aria-label="Chord name"
-          className="w-full font-mono text-accent text-sm bg-transparent border-b border-border outline-none px-1 py-1 placeholder:text-text-muted focus-visible:border-accent"
+          className="w-full font-mono text-accent text-sm bg-transparent border-b border-border outline-none px-1 py-1 placeholder:text-[var(--color-text-muted)] focus-visible:border-accent"
         />
 
         {/* Diagram preview + beat-grid quick actions */}
@@ -89,7 +89,7 @@ export default function ChordPopover({
                 onMouseDown={(e) => { e.preventDefault(); confirm("."); }}
                 title="Sustain (hold previous chord)"
                 aria-label="Sustain"
-                className="flex-1 text-[11px] font-mono px-2 py-1 rounded bg-bg-elevated text-text-secondary hover:bg-accent-dim hover:text-accent transition-colors"
+                className="flex-1 text-[11px] font-mono px-2 py-1 rounded bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:bg-accent-dim hover:text-accent transition-colors"
               >
                 · sustain
               </button>
@@ -98,7 +98,7 @@ export default function ChordPopover({
                 onMouseDown={(e) => { e.preventDefault(); confirm("-"); }}
                 title="Rest / no chord"
                 aria-label="Rest"
-                className="flex-1 text-[11px] font-mono px-2 py-1 rounded bg-bg-elevated text-text-secondary hover:bg-accent-dim hover:text-accent transition-colors"
+                className="flex-1 text-[11px] font-mono px-2 py-1 rounded bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:bg-accent-dim hover:text-accent transition-colors"
               >
                 – rest
               </button>
@@ -107,7 +107,7 @@ export default function ChordPopover({
               type="button"
               onMouseDown={(e) => { e.preventDefault(); onConfirm(null); }}
               aria-label="Clear chord"
-              className="text-[10px] font-mono px-2 py-1 rounded border border-border text-text-muted hover:text-accent hover:border-accent transition-colors"
+              className="text-[10px] font-mono px-2 py-1 rounded border border-border text-[var(--color-text-muted)] hover:text-accent hover:border-accent transition-colors"
             >
               ✕ clear
             </button>
@@ -115,7 +115,7 @@ export default function ChordPopover({
 
           {/* Live diagram preview */}
           {previewShape && (
-            <div className="shrink-0 border border-border rounded p-1 bg-bg-primary">
+            <div className="shrink-0 border border-border rounded p-1 bg-[var(--color-bg-base)]">
               <ChordDiagram chord={value} size={1} />
             </div>
           )}
@@ -124,7 +124,7 @@ export default function ChordPopover({
         {/* Quick-pick pills */}
         {usedChords.length > 0 && (
           <div className="pt-1 border-t border-border">
-            <div className="text-[9px] font-mono text-text-muted uppercase tracking-wider mb-1">Used</div>
+            <div className="text-[9px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider mb-1">Used</div>
             <div className="flex flex-wrap gap-1">
               {usedChords.slice(0, 8).map((c) => (
                 <button
@@ -143,7 +143,7 @@ export default function ChordPopover({
         {/* Current bar mini-map (visual orientation only; not interactive) */}
         {showBarContext && barChords && (
           <div className="pt-1 border-t border-border">
-            <div className="text-[9px] font-mono text-text-muted uppercase tracking-wider mb-1">Bar {barIndex + 1}</div>
+            <div className="text-[9px] font-mono text-[var(--color-text-muted)] uppercase tracking-wider mb-1">Bar {barIndex + 1}</div>
             <div className="flex gap-0.5 font-mono text-[10px]">
               {Array.from({ length: beatsPerBar }).map((_, i) => {
                 const v = barChords[String(i)];
@@ -153,10 +153,10 @@ export default function ChordPopover({
                     key={i}
                     className={`flex-1 text-center px-1 py-0.5 rounded ${
                       isCurrent
-                        ? "bg-accent text-bg-primary font-bold"
+                        ? "bg-accent text-[var(--color-bg-base)] font-bold"
                         : v && v !== "." && v !== "-"
                         ? "bg-accent-dim text-accent"
-                        : "bg-bg-elevated text-text-muted"
+                        : "bg-[var(--color-bg-elevated)] text-[var(--color-text-muted)]"
                     }`}
                   >
                     {v && v !== "." && v !== "-" ? v : v || "·"}
@@ -172,21 +172,21 @@ export default function ChordPopover({
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); onCancel(); }}
-            className="text-[10px] font-mono px-2 py-0.5 rounded text-text-muted hover:text-text-primary transition-colors"
+            className="text-[10px] font-mono px-2 py-0.5 rounded text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
           >
             cancel
           </button>
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); confirm(); }}
-            className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent text-bg-primary hover:bg-accent-hover transition-colors"
+            className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent text-[var(--color-bg-base)] hover:bg-accent-hover transition-colors"
           >
             save
           </button>
         </div>
       </div>
       {/* Caret */}
-      <div className="w-2 h-2 bg-bg-surface border-r border-b border-border rotate-45 -mt-[5px]" />
+      <div className="w-2 h-2 bg-[var(--color-bg-surface)] border-r border-b border-border rotate-45 -mt-[5px]" />
     </div>
   );
 }

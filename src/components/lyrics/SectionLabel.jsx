@@ -11,7 +11,7 @@ export default function SectionLabel({ label, editing, options, onChange }) {
         <select
           value={label || ""}
           onChange={(e) => onChange(e.target.value)}
-          className="text-[10px] font-mono bg-bg-surface border border-border-default rounded px-2 py-0.5 text-text-secondary focus:outline-none focus:border-accent/40 hover:border-border-strong transition-colors"
+          className="text-[10px] font-mono bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded px-2 py-0.5 text-[var(--color-text-secondary)] focus:outline-none focus:border-accent/40 hover:border-[var(--color-border-strong)] transition-colors"
         >
           <option value="">— no section —</option>
           {options.map((o) => (

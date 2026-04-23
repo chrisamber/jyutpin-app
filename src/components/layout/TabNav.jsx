@@ -68,23 +68,23 @@ export default function SongMeta() {
       {/* Summary bar (always visible) */}
       <div className="flex items-center gap-3 flex-wrap">
         {meta.bpm && (
-          <span className="text-xs font-mono text-text-secondary">
-            BPM <span className="text-text-primary">{meta.bpm}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            BPM <span className="text-[var(--color-text-primary)]">{meta.bpm}</span>
           </span>
         )}
         {meta.key && (
-          <span className="text-xs font-mono text-text-secondary">
-            Key: <span className="text-text-primary">{normalizeKey(meta.key)}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            Key: <span className="text-[var(--color-text-primary)]">{normalizeKey(meta.key)}</span>
           </span>
         )}
         {meta.capo !== "" && meta.capo !== "0" && meta.capo !== 0 && (
-          <span className="text-xs font-mono text-text-secondary">
-            Capo <span className="text-text-primary">{meta.capo}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            Capo <span className="text-[var(--color-text-primary)]">{meta.capo}</span>
           </span>
         )}
         {meta.genre && (
-          <span className="text-xs font-mono text-text-secondary">
-            <span className="text-text-primary">{meta.genre}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            <span className="text-[var(--color-text-primary)]">{meta.genre}</span>
           </span>
         )}
         <button
@@ -97,7 +97,7 @@ export default function SongMeta() {
 
       {/* Expandable editor */}
       {open && (
-        <div className="mt-3 bg-bg-surface border border-slate-200 rounded-xl p-4 print:hidden">
+        <div className="mt-3 bg-[var(--color-bg-surface)] border border-slate-200 rounded-xl p-4 print:hidden">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 mb-3">
             {/* BPM + tap tempo */}
             <div>
@@ -110,7 +110,7 @@ export default function SongMeta() {
                   value={meta.bpm}
                   onChange={(e) => update("bpm", e.target.value)}
                   placeholder="—"
-                  className="w-16 bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                  className="w-16 bg-[var(--color-bg-base)] border border-slate-200 rounded px-2 py-1 text-sm font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40"
                 />
                 <button
                   onClick={handleTap}
@@ -129,7 +129,7 @@ export default function SongMeta() {
                 id="key"
                 value={meta.key}
                 onChange={(e) => update("key", e.target.value)}
-                className="bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-[var(--color-bg-base)] border border-slate-200 rounded px-2 py-1 text-sm font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {KEYS.map((k) => <option key={k} value={k}>{k}</option>)}
@@ -144,7 +144,7 @@ export default function SongMeta() {
                 id="capo"
                 value={meta.capo}
                 onChange={(e) => update("capo", e.target.value)}
-                className="bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-[var(--color-bg-base)] border border-slate-200 rounded px-2 py-1 text-sm font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {CAPOS.map((c) => <option key={c} value={c}>{c === 0 ? "Open" : c}</option>)}
@@ -160,7 +160,7 @@ export default function SongMeta() {
                 value={meta.genre}
                 onChange={(e) => update("genre", e.target.value)}
                 placeholder="Cantopop…"
-                className="w-full bg-bg-primary border border-slate-200 rounded px-2 py-1 text-sm font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                className="w-full bg-[var(--color-bg-base)] border border-slate-200 rounded px-2 py-1 text-sm font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40"
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function SongMeta() {
               onChange={(e) => update("description", e.target.value)}
               placeholder="Notes about the song…"
               rows={2}
-              className="w-full bg-bg-primary border border-slate-200 rounded px-3 py-2 text-sm text-text-primary placeholder:text-slate-400 focus:outline-none focus:border-accent/40 resize-none"
+              className="w-full bg-[var(--color-bg-base)] border border-slate-200 rounded px-3 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-slate-400 focus:outline-none focus:border-accent/40 resize-none"
             />
           </div>
         </div>

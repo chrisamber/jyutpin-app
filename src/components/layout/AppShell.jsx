@@ -12,10 +12,15 @@ export default function AppShell({ searchView, studyView, artistView, teleprompt
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
+    <div className="min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
       <Header />
-      {currentView === "study" && song && <TabNav />}
-      <main className="max-w-6xl mx-auto px-5 py-6 pb-16">
+      
+      {/* Main content wrapper with consistent padding using design system tokens */}
+      <main 
+        className={`max-w-6xl mx-auto px-[var(--space-6)] pb-[var(--space-16)] ${
+          currentView === "study" ? "" : "py-[var(--space-6)]"
+        }`}
+      >
         {currentView === "search" && searchView}
         {currentView === "study" && studyView}
         {currentView === "artist" && artistView}

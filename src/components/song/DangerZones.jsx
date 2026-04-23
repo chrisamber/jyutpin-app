@@ -13,7 +13,7 @@ function DemoToneTraps() {
           className={`flex gap-4 p-4 rounded-xl border ${
             i < 3
               ? "bg-red-50 border-red-200"
-              : "bg-slate-50 border-border-default"
+              : "bg-slate-50 border-[var(--color-border-default)]"
           }`}
         >
           <div
@@ -25,7 +25,7 @@ function DemoToneTraps() {
           </div>
           <div>
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-[22px] font-semibold text-text-primary">
+              <span className="text-[22px] font-semibold text-[var(--color-text-primary)]">
                 {item.word}
               </span>
               <span className="font-mono text-xs text-accent/70">
@@ -54,7 +54,7 @@ function AutoToneTraps({ notes }) {
   return (
     <div className="space-y-4">
       {notes.map((note, i) => (
-        <div key={i} className="bg-slate-50 border border-border-default rounded-xl p-4">
+        <div key={i} className="bg-slate-50 border border-[var(--color-border-default)] rounded-xl p-4">
           <div className="text-xs font-semibold text-accent/80 mb-2 font-mono uppercase tracking-wider">
             {note.category}
           </div>
@@ -62,7 +62,7 @@ function AutoToneTraps({ notes }) {
             {note.words.map((w, wi) => (
               <span
                 key={wi}
-                className="inline-flex items-center gap-1 text-sm bg-bg-base border border-border-default rounded px-2 py-0.5"
+                className="inline-flex items-center gap-1 text-sm bg-[var(--color-bg-base)] border border-[var(--color-border-default)] rounded px-2 py-0.5"
               >
                 <span
                   className="font-medium"

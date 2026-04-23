@@ -53,7 +53,7 @@ export default function ToneSystem() {
         <div className="text-[13px] leading-relaxed text-slate-600">
           Syllables ending in -p, -t, -k carry "entering tones" — they share
           the pitch of tones 1, 3, or 6 but are{" "}
-          <strong className="text-text-primary">cut short</strong> by the
+          <strong className="text-[var(--color-text-primary)]">cut short</strong> by the
           unreleased stop. In singing, this creates staccato moments within
           legato phrases. Words like 畢 (bat1), 失 (sat1), 脊 (zek3), 戳
           (coek3) are rhythmic punctuation marks. The stop consonant must close

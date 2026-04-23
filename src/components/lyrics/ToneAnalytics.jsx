@@ -49,7 +49,7 @@ export default function ToneAnalytics() {
               >
                 T{t}
               </span>
-              <div className="flex-1 h-4 bg-bg-surface rounded-sm overflow-hidden">
+              <div className="flex-1 h-4 bg-[var(--color-bg-surface)] rounded-sm overflow-hidden">
                 <div
                   className="h-full rounded-sm transition-all duration-500"
                   style={{
@@ -60,7 +60,7 @@ export default function ToneAnalytics() {
                   }}
                 />
               </div>
-              <span className="text-[10px] font-mono text-text-muted w-10 text-right">
+              <span className="text-[10px] font-mono text-[var(--color-text-muted)] w-10 text-right">
                 {count > 0 ? `${Math.round(pct)}%` : "—"}
               </span>
             </div>
@@ -70,27 +70,27 @@ export default function ToneAnalytics() {
 
       {/* Key stats */}
       <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="bg-bg-surface rounded-lg py-2 px-1">
-          <div className="text-lg font-light text-text-primary leading-none">
+        <div className="bg-[var(--color-bg-surface)] rounded-lg py-2 px-1">
+          <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.total}
           </div>
-          <div className="text-[9px] font-mono text-text-muted mt-1">
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
             syllables
           </div>
         </div>
-        <div className="bg-bg-surface rounded-lg py-2 px-1">
-          <div className="text-lg font-light text-text-primary leading-none">
+        <div className="bg-[var(--color-bg-surface)] rounded-lg py-2 px-1">
+          <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.entering}
           </div>
-          <div className="text-[9px] font-mono text-text-muted mt-1">
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
             entering
           </div>
         </div>
-        <div className="bg-bg-surface rounded-lg py-2 px-1">
-          <div className="text-lg font-light text-text-primary leading-none">
+        <div className="bg-[var(--color-bg-surface)] rounded-lg py-2 px-1">
+          <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.ngInitial}
           </div>
-          <div className="text-[9px] font-mono text-text-muted mt-1">
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
             ng-initial
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function ToneAnalytics() {
           }}
         >
           Dominant: T{stats.dominant[0]} — {TONE_NAMES[stats.dominant[0]]}
-          <span className="text-text-muted ml-1">
+          <span className="text-[var(--color-text-muted)] ml-1">
             ({Math.round((stats.dominant[1] / stats.total) * 100)}% of syllables)
           </span>
         </div>

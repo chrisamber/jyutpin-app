@@ -25,14 +25,18 @@ const PREVIEW_TOKENS = [
 function PreviewAnnotation({ char, jyutping, tone, entering }) {
   return (
     <ruby
-      className={`mx-1.5 inline-flex flex-col items-center ${entering ? "rounded px-1 pb-0.5" : ""}`}
-      style={entering ? { backgroundColor: `color-mix(in srgb, var(--color-tone-${tone}) 12%, transparent)`, borderBottom: `2px solid var(--color-tone-${tone})` } : undefined}
+      className={`mx-1.5 inline-flex flex-col-reverse items-center ${entering ? "rounded px-1 pb-0.5" : ""}`}
+      style={
+        entering
+          ? { backgroundColor: `color-mix(in srgb, var(--color-tone-${tone}) 12%, transparent)`, borderBottom: `2px solid var(--color-tone-${tone})` }
+          : undefined
+      }
     >
       <rb className="text-2xl leading-tight font-light cjk" style={{ color: `var(--color-tone-${tone})` }}>
         {char}
       </rb>
       <rp>(</rp>
-      <rt className="font-mono text-[10px] leading-none tracking-tight" style={{ color: `var(--color-tone-${tone})` }}>
+      <rt className="font-mono text-[11px] leading-none tracking-tight mb-0.5" style={{ color: `var(--color-tone-${tone})` }}>
         {jyutping}
       </rt>
       <rp>)</rp>
@@ -46,34 +50,34 @@ function RecentSongs({ onSelectRecent, onLoadDemo, onSelectCustom }) {
   if (recent.length === 0) return null;
 
   return (
-    <div className="w-full max-w-lg mt-8">
-      <div className="text-[10px] font-mono text-text-muted tracking-[0.2em] uppercase mb-3">
+    <div className="w-full max-w-lg mt-[var(--space-8)]">
+      <div className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-[var(--space-3)]">
         Recent
       </div>
-      <div className="space-y-0.5">
+      <div className="space-y-[var(--space-0.5)]">
         {recent.map((song, i) => (
           <button
-            key={song.isDemo ? "demo" : song.id || i}
+            key={song.isDemo ? `demo:${song.dialectCode ?? "yue"}` : song.id || i}
             onClick={() => {
-              if (song.isDemo) onLoadDemo();
+              if (song.isDemo) onLoadDemo(song.dialectCode ?? "yue");
               else if (song.isCustom) onSelectCustom(song);
               else onSelectRecent(song);
             }}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-bg-elevated transition-colors group"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[var(--color-bg-elevated)] transition-colors group"
           >
-            <span className="text-sm cjk text-text-primary group-hover:text-accent transition-colors leading-none">
+            <span className="text-sm cjk text-[var(--color-text-primary)] group-hover:text-[var(--color-accent)] transition-colors leading-none">
               {song.title}
             </span>
-            <span className="text-xs text-text-secondary font-mono truncate">
+            <span className="text-xs text-[var(--color-text-secondary)] font-mono truncate">
               {song.artist}
             </span>
             {song.isDemo && (
-              <span className="text-[9px] font-mono text-accent/40 bg-accent-dim px-1.5 py-0.5 rounded border border-accent/10 ml-auto flex-shrink-0">
+              <span className="text-[9px] font-mono text-[var(--color-accent)]/40 bg-[var(--color-bg-sunken)] px-1.5 py-0.5 rounded border border-[var(--color-accent)]/10 ml-auto flex-shrink-0">
                 demo
               </span>
             )}
             {song.isCustom && (
-              <span className="text-[9px] font-mono text-text-muted bg-bg-elevated px-1.5 py-0.5 rounded border border-border-subtle ml-auto flex-shrink-0">
+              <span className="text-[9px] font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-elevated)] px-1.5 py-0.5 rounded border border-[var(--color-border-subtle)] ml-auto flex-shrink-0">
                 ✎ custom
               </span>
             )}
@@ -104,15 +108,15 @@ function ArtistCard({ entry, onSelect }) {
           <img
             src={img}
             alt={entry.artist}
-            className="w-14 h-14 rounded-full object-cover ring-1 ring-border-subtle group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200"
+            className="w-14 h-14 rounded-full object-cover ring-[var(--color-border-subtle)]/1 group-hover:ring-[var(--color-accent)]/30 group-hover:scale-105 transition-all duration-200"
           />
         ) : (
-          <div className="w-14 h-14 rounded-full bg-bg-elevated ring-1 ring-border-subtle flex items-center justify-center group-hover:ring-accent/30 group-hover:scale-105 transition-all duration-200">
-            <span className="text-lg cjk text-text-secondary">{entry.artist[0]}</span>
+          <div className="w-14 h-14 rounded-full bg-[var(--color-bg-elevated)] ring-[var(--color-border-subtle)] flex items-center justify-center group-hover:ring-[var(--color-accent)]/30 group-hover:scale-105 transition-all duration-200">
+            <span className="text-lg cjk text-[var(--color-text-secondary)]">{entry.artist[0]}</span>
           </div>
         )}
       </div>
-      <span className="text-[11px] cjk text-text-secondary group-hover:text-text-primary transition-colors text-center leading-tight">
+      <span className="text-[11px] cjk text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors text-center leading-tight">
         {entry.artist}
       </span>
     </button>
@@ -121,8 +125,8 @@ function ArtistCard({ entry, onSelect }) {
 
 function ArtistGrid({ onSelectArtist }) {
   return (
-    <div className="w-full max-w-lg mt-10">
-      <div className="text-[10px] font-mono text-text-muted tracking-[0.2em] uppercase mb-5">
+    <div className="w-full max-w-lg mt-[var(--space-10)]">
+      <div className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-5">
         Artists
       </div>
       <div className="grid grid-cols-6 gap-x-4 gap-y-6">
@@ -164,23 +168,23 @@ export default function SearchHero() {
   };
 
   return (
-    <div>
-      {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col items-center justify-center min-h-[52vh] pt-8">
+    <div className="space-y-12">
+      {/* ── Hero section – centered, full‑screen friendly ─────────────── */}
+      <section className="flex flex-col items-center justify-center min-h-[52vh] pt-[var(--space-8)] pb-[var(--space-6)]">
         {/* Heading */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 max-w-xl mx-auto">
           <h2 className="text-5xl font-light tracking-tight mb-4 leading-[1.1]">
             Sing what you{" "}
             <span className="text-[var(--color-accent)] font-normal italic">speak.</span>
           </h2>
-          <p className="text-text-secondary text-sm max-w-xs mx-auto leading-relaxed font-light">
+          <p className="text-[var(--color-text-secondary)] text-sm max-w-md mx-auto leading-relaxed font-light">
             Search any Chinese song — instant Jyutping annotations, tone colours, PDF export.
           </p>
         </div>
 
         {/* Floating annotation preview */}
-        <div className="mb-10 px-6 py-5 bg-bg-surface border border-border-subtle rounded-2xl text-center">
-          <div className="text-[9px] font-mono text-text-muted tracking-[0.2em] uppercase mb-4">
+        <div className="mb-10 px-6 py-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-center w-full max-w-xl">
+          <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-4">
             Preview — 背脊唱情歌
           </div>
           <div className="flex flex-wrap justify-center items-end leading-loose gap-0.5">
@@ -188,12 +192,12 @@ export default function SearchHero() {
               <PreviewAnnotation key={i} {...t} />
             ))}
           </div>
-          <div className="mt-3 text-[11px] text-text-secondary font-mono tracking-wide">
+          <div className="mt-3 text-[11px] text-[var(--color-text-secondary)] font-mono tracking-wide">
             麻煩各位都不望我
           </div>
         </div>
 
-        {/* Search */}
+        {/* Search form */}
         <form onSubmit={handleSearch} className="w-full max-w-lg mb-3">
           <div className="relative">
             <input
@@ -201,7 +205,7 @@ export default function SearchHero() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search a song or artist… or 中文"
-              className="w-full input focus-ring rounded-xl"
+              className="w-full input focus-ring rounded-xl text-base py-3.5 px-4"
             />
             <button
               type="submit"
@@ -221,18 +225,36 @@ export default function SearchHero() {
           <SearchResults results={results} onSelect={handleSelect} />
         )}
 
-        <div className="mt-3 flex items-center gap-3 text-center">
-          <span className="text-text-muted text-xs font-mono">or</span>
+        {/* Helper links */}
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
+          <span className="text-[var(--color-text-muted)] text-xs font-mono">demos</span>
           <button
-            onClick={loadDemoSong}
-            className="text-xs font-mono text-accent/60 hover:text-accent transition-colors underline underline-offset-4 decoration-accent/20 hover:decoration-accent/50"
+            onClick={() => loadDemoSong("yue")}
+            className="text-xs font-mono text-[var(--color-accent)]/60 hover:text-[var(--color-accent)] transition-colors underline underline-offset-4 decoration-[var(--color-accent)]/20 hover:decoration-[var(--color-accent)]/50"
           >
-            Try the demo: 背脊唱情歌
+            <span className="text-[9px] tracking-[0.15em] mr-1 text-[var(--color-text-muted)]">yue</span>
+            背脊唱情歌
           </button>
-          <span className="text-text-muted text-xs font-mono">·</span>
+          <span className="text-[var(--color-text-muted)] text-xs font-mono">·</span>
+          <button
+            onClick={() => loadDemoSong("cmn")}
+            className="text-xs font-mono text-[var(--color-accent)]/60 hover:text-[var(--color-accent)] transition-colors underline underline-offset-4 decoration-[var(--color-accent)]/20 hover:decoration-[var(--color-accent)]/50"
+          >
+            <span className="text-[9px] tracking-[0.15em] mr-1 text-[var(--color-text-muted)]">cmn</span>
+            月亮代表我的心
+          </button>
+          <span className="text-[var(--color-text-muted)] text-xs font-mono">·</span>
+          <button
+            onClick={() => loadDemoSong("nan")}
+            className="text-xs font-mono text-[var(--color-accent)]/60 hover:text-[var(--color-accent)] transition-colors underline underline-offset-4 decoration-[var(--color-accent)]/20 hover:decoration-[var(--color-accent)]/50"
+          >
+            <span className="text-[9px] tracking-[0.15em] mr-1 text-[var(--color-text-muted)]">nan</span>
+            愛拼才會贏
+          </button>
+          <span className="text-[var(--color-text-muted)] text-xs font-mono">·</span>
           <button
             onClick={() => setShowAddModal(true)}
-            className="text-xs font-mono text-text-secondary hover:text-accent transition-colors flex items-center gap-1"
+            className="text-xs font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
           >
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
               <path d="M5.5 1 V10 M1 5.5 H10" />
@@ -241,19 +263,21 @@ export default function SearchHero() {
           </button>
         </div>
 
+        {/* Recent songs list */}
         <RecentSongs
           onSelectRecent={handleSelectRecent}
           onLoadDemo={loadDemoSong}
           onSelectCustom={handleSelectCustom}
         />
+        {/* Artist grid */}
         <ArtistGrid onSelectArtist={handleSelectArtist} />
-      </div>
+      </section>
 
-      {/* ── Reference below fold ──────────────────────────────────────── */}
-      <div className="mt-24 space-y-16 max-w-2xl mx-auto">
+      {/* ── Reference section – full width but constrained max-width ───── */}
+      <section className="mt-24 space-y-16 max-w-3xl mx-auto px-6">
         <ToneSystem />
         <SingingRules />
-      </div>
+      </section>
 
       {showAddModal && <AddSongModal onClose={() => setShowAddModal(false)} />}
     </div>

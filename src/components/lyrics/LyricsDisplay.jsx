@@ -17,12 +17,24 @@ import { DEFAULT_SECTIONS } from "../../data/defaultSong.js";
 import { transposeChord, transposeLabel, capoFret } from "../../services/transpose.js";
 import ChordSheet from "../chords/ChordSheet.jsx";
 
-const ROMANIZATION_OPTIONS = [
-  { value: "jyutping", label: "Jyutping" },
-  { value: "yale", label: "Yale" },
-  { value: "pinyin", label: "Pinyin" },
-  { value: "none", label: "None" },
-];
+const ROMANIZATION_OPTIONS_BY_DIALECT = {
+  yue: [
+    { value: "jyutping", label: "Jyutping" },
+    { value: "yale", label: "Yale" },
+    { value: "pinyin", label: "Pinyin" },
+    { value: "none", label: "None" },
+  ],
+  cmn: [
+    { value: "pinyin", label: "Pinyin" },
+    { value: "yale", label: "Zhuyin" }, // 'yale' slot renders alternates.zhuyin via JyutpingAnnotation fallback
+    { value: "none", label: "None" },
+  ],
+  nan: [
+    { value: "pinyin", label: "POJ" }, // 'pinyin' slot falls through to primary roman (POJ)
+    { value: "yale", label: "Tâi-lô" }, // 'yale' slot renders alternates.tailo
+    { value: "none", label: "None" },
+  ],
+};
 
 const SECTION_LABELS = ["Intro", "Verse", "Pre-Chorus", "Chorus", "Music Break", "Bridge", "Outro"];
 const SECTIONS_KEY = (id) => `sections:${id}`;
@@ -39,8 +51,9 @@ function saveSections(storageId, map) {
 }
 
 export default function LyricsDisplay() {
-  const { song, lines, lyricsIncomplete, storageId } = useSong();
+  const { song, lines, lyricsIncomplete, storageId, dialectCode } = useSong();
   const { romanization, activeLyricIndex, chordEditMode, chordDisplay, transpose } = useApp();
+  const isYue = (dialectCode ?? "yue") === "yue";
   const dispatch = useAppDispatch();
   const { play, playingKey, loadingKey } = useTTS();
   const [editSections, setEditSections] = useState(false);
@@ -172,7 +185,7 @@ export default function LyricsDisplay() {
             Annotated Lyrics
           </h2>
           {activeLyricIndex >= 0 && (
-            <span className="text-xs font-mono text-text-muted bg-bg-surface border border-border-subtle rounded px-3 py-1.5">
+            <span className="text-xs font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded px-3 py-1.5">
               ↑↓ navigate · Esc clear
             </span>
           )}
@@ -182,7 +195,7 @@ export default function LyricsDisplay() {
           {/* Group 1 — Content */}
           <button
             onClick={() => setShowEditor(true)}
-            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
+            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
           >
             ✎ edit lyrics
           </button>
@@ -191,25 +204,25 @@ export default function LyricsDisplay() {
             className={`text-xs font-mono px-3 py-1.5 rounded border transition-all ${
               editSections
                 ? "bg-accent/15 border-accent/30 text-accent"
-                : "bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
+                : "bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
             }`}
           >
             § sections
           </button>
 
           {/* Divider */}
-          <span className="w-px h-4 bg-border-subtle mx-1" aria-hidden="true" />
+          <span className="w-px h-4 bg-[var(--color-border-subtle)] mx-1" aria-hidden="true" />
 
           {/* Group 2 — View: romanization + chords + transpose */}
-          <div className="flex border border-border-subtle rounded-lg overflow-hidden">
-            {ROMANIZATION_OPTIONS.map((opt) => (
+          <div className="flex border border-[var(--color-border-subtle)] rounded-lg overflow-hidden">
+            {(ROMANIZATION_OPTIONS_BY_DIALECT[dialectCode ?? "yue"] ?? ROMANIZATION_OPTIONS_BY_DIALECT.yue).map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => dispatch({ type: "SET_ROMANIZATION", romanization: opt.value })}
-                className={`text-xs font-mono px-3 py-1.5 transition-all border-r border-border-subtle last:border-r-0 ${
+                className={`text-xs font-mono px-3 py-1.5 transition-all border-r border-[var(--color-border-subtle)] last:border-r-0 ${
                   romanization === opt.value
                     ? "bg-accent/15 text-accent"
-                    : "text-text-secondary hover:text-text-primary"
+                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                 }`}
               >
                 {opt.label}
@@ -217,13 +230,13 @@ export default function LyricsDisplay() {
             ))}
           </div>
 
-          <div className={`flex items-center border rounded-lg overflow-hidden transition-colors ${chordEditMode ? "border-accent/40" : "border-border-subtle"}`}>
+          <div className={`flex items-center border rounded-lg overflow-hidden transition-colors ${chordEditMode ? "border-accent/40" : "border-[var(--color-border-subtle)]"}`}>
             <button
               onClick={() => dispatch({ type: "TOGGLE_CHORD_EDIT" })}
               className={`text-xs font-mono px-3 py-1.5 transition-all ${
                 chordEditMode
                   ? "bg-accent-dim text-accent font-medium"
-                  : "text-text-secondary hover:text-text-primary"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
               }`}
               aria-pressed={chordEditMode}
               title={chordEditMode ? "Exit chord edit mode" : "Enter chord edit mode"}
@@ -232,10 +245,10 @@ export default function LyricsDisplay() {
             </button>
             <button
               onClick={() => dispatch({ type: "SET_CHORD_DISPLAY", display: chordDisplay === "above" ? "bars" : "above" })}
-              className={`text-xs font-mono px-2.5 py-1.5 border-l border-border-subtle transition-all ${
+              className={`text-xs font-mono px-2.5 py-1.5 border-l border-[var(--color-border-subtle)] transition-all ${
                 chordDisplay === "bars"
                   ? "bg-accent/15 text-accent"
-                  : "text-text-muted hover:text-text-secondary"
+                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)]"
               }`}
               title={chordDisplay === "above" ? "Switch to bar notation" : "Switch to above-lyrics"}
             >
@@ -244,14 +257,14 @@ export default function LyricsDisplay() {
           </div>
 
           {hasAnyChords && (
-            <div className="flex items-center border border-border-subtle rounded-lg overflow-hidden" title="Transpose chords">
+            <div className="flex items-center border border-[var(--color-border-subtle)] rounded-lg overflow-hidden" title="Transpose chords">
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose - 1 })}
-                className="text-xs font-mono px-2 py-1.5 text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-all"
+                className="text-xs font-mono px-2 py-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 −
               </button>
-              <span className={`text-xs font-mono px-2 py-1.5 min-w-[2.5rem] text-center border-x border-border-subtle ${transpose !== 0 ? "text-accent bg-accent/10" : "text-text-muted"}`}>
+              <span className={`text-xs font-mono px-2 py-1.5 min-w-[2.5rem] text-center border-x border-[var(--color-border-subtle)] ${transpose !== 0 ? "text-accent bg-accent/10" : "text-[var(--color-text-muted)]"}`}>
                 {transposeLabel(transpose)}
                 {transpose !== 0 && capoFret(transpose) > 0 && (
                   <span className="block text-xs leading-none text-accent/70">capo {capoFret(transpose)}</span>
@@ -259,7 +272,7 @@ export default function LyricsDisplay() {
               </span>
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose + 1 })}
-                className="text-xs font-mono px-2 py-1.5 text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-all"
+                className="text-xs font-mono px-2 py-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 +
               </button>
@@ -267,12 +280,12 @@ export default function LyricsDisplay() {
           )}
 
           {/* Divider */}
-          <span className="w-px h-4 bg-border-subtle mx-1" aria-hidden="true" />
+          <span className="w-px h-4 bg-[var(--color-border-subtle)] mx-1" aria-hidden="true" />
 
           {/* Group 3 — Output */}
           <button
             onClick={() => dispatch({ type: "SET_VIEW", view: "teleprompter" })}
-            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-bg-surface border-border-subtle text-text-secondary hover:text-text-primary"
+            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
             title="Teleprompter mode"
           >
             ⛶ stage
@@ -285,11 +298,13 @@ export default function LyricsDisplay() {
       {/* md+: left rail appears. xl: wider left rail. */}
       <div className="grid xl:grid-cols-[220px_1fr_200px] md:grid-cols-[180px_1fr] gap-6 print:block">
 
-        {/* Left rail: tone reference + pronunciation notes (md+) */}
+        {/* Left rail: tone reference + pronunciation notes (md+). */}
+        {/* All three panels are Cantonese-specific today (tone system, entering */}
+        {/* tones, ng- onsets). Hide for cmn/nan until per-dialect content lands. */}
         <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start">
-          <ToneReference />
-          <ToneAnalytics />
-          <PronunciationNotes />
+          {isYue && <ToneReference />}
+          {isYue && <ToneAnalytics />}
+          {isYue && <PronunciationNotes />}
         </div>
 
         {/* Centre: lyrics */}
@@ -325,10 +340,12 @@ export default function LyricsDisplay() {
           })}
 
           {/* Tone tools fallback: shown below lyrics on small screens (<md) */}
-          <div className="md:hidden mt-6 pt-5 border-t border-border-subtle space-y-4">
-            <ToneAnalytics />
-            <PronunciationNotes />
-          </div>
+          {isYue && (
+            <div className="md:hidden mt-6 pt-5 border-t border-[var(--color-border-subtle)] space-y-4">
+              <ToneAnalytics />
+              <PronunciationNotes />
+            </div>
+          )}
         </div>
 
         {/* Right: chord diagrams — xl only (third column) */}
@@ -338,7 +355,7 @@ export default function LyricsDisplay() {
       </div>
 
       {/* Print-only footer for leadsheet */}
-      <div className="hidden print:block mt-12 pt-6 border-t border-border-default text-center text-xs text-slate-500 font-mono">
+      <div className="hidden print:block mt-12 pt-6 border-t border-[var(--color-border-default)] text-center text-xs text-slate-500 font-mono">
         華譜 WaaPou — waapou.app. An Amber Audio product.
       </div>
     </div>

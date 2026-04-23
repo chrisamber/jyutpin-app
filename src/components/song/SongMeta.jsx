@@ -67,23 +67,23 @@ export default function SongMeta() {
       {/* Summary bar (always visible) */}
       <div className="flex items-center gap-3 flex-wrap">
         {meta.bpm && (
-          <span className="text-xs font-mono text-text-secondary">
-            BPM <span className="text-text-primary">{meta.bpm}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            BPM <span className="text-[var(--color-text-primary)]">{meta.bpm}</span>
           </span>
         )}
         {meta.key && (
-          <span className="text-xs font-mono text-text-secondary">
-            Key: <span className="text-text-primary">{normalizeKey(meta.key)}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            Key: <span className="text-[var(--color-text-primary)]">{normalizeKey(meta.key)}</span>
           </span>
         )}
         {meta.capo !== "" && meta.capo !== "0" && meta.capo !== 0 && (
-          <span className="text-xs font-mono text-text-secondary">
-            Capo <span className="text-text-primary">{meta.capo}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            Capo <span className="text-[var(--color-text-primary)]">{meta.capo}</span>
           </span>
         )}
         {meta.genre && (
-          <span className="text-xs font-mono text-text-secondary">
-            <span className="text-text-primary">{meta.genre}</span>
+          <span className="text-xs font-mono text-[var(--color-text-secondary)]">
+            <span className="text-[var(--color-text-primary)]">{meta.genre}</span>
           </span>
         )}
         <button
@@ -96,11 +96,11 @@ export default function SongMeta() {
 
       {/* Expandable editor */}
       {open && (
-        <div className="mt-4 bg-bg-surface border border-border-subtle rounded-xl p-6 print:hidden">
+        <div className="mt-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl p-6 print:hidden">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4">
             {/* BPM + tap tempo */}
             <div>
-              <label htmlFor="bpm" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">BPM</label>
+              <label htmlFor="bpm" className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-2">BPM</label>
               <div className="flex gap-2">
                 <input
                   id="bpm"
@@ -109,7 +109,7 @@ export default function SongMeta() {
                   value={meta.bpm}
                   onChange={(e) => update("bpm", e.target.value)}
                   placeholder="—"
-                  className="w-16 bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                  className="w-16 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded px-3 py-2 text-base font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40"
                 />
                 <button
                   onClick={handleTap}
@@ -123,12 +123,12 @@ export default function SongMeta() {
 
             {/* Key */}
             <div>
-              <label htmlFor="key" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Key</label>
+              <label htmlFor="key" className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-2">Key</label>
               <select
                 id="key"
                 value={meta.key}
                 onChange={(e) => update("key", e.target.value)}
-                className="bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded px-3 py-2 text-base font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {KEYS.map((k) => <option key={k} value={k}>{k}</option>)}
@@ -138,12 +138,12 @@ export default function SongMeta() {
 
             {/* Capo */}
             <div>
-              <label htmlFor="capo" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Capo</label>
+              <label htmlFor="capo" className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-2">Capo</label>
               <select
                 id="capo"
                 value={meta.capo}
                 onChange={(e) => update("capo", e.target.value)}
-                className="bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40 w-full"
+                className="bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded px-3 py-2 text-base font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40 w-full"
               >
                 <option value="">—</option>
                 {CAPOS.map((c) => <option key={c} value={c}>{c === 0 ? "Open" : c}</option>)}
@@ -152,28 +152,28 @@ export default function SongMeta() {
 
             {/* Genre */}
             <div>
-              <label htmlFor="genre" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Genre</label>
+              <label htmlFor="genre" className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-2">Genre</label>
               <input
                 id="genre"
                 type="text"
                 value={meta.genre}
                 onChange={(e) => update("genre", e.target.value)}
                 placeholder="Cantopop…"
-                className="w-full bg-bg-primary border border-border-subtle rounded px-3 py-2 text-base font-mono text-text-primary focus:outline-none focus:border-accent/40"
+                className="w-full bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded px-3 py-2 text-base font-mono text-[var(--color-text-primary)] focus:outline-none focus:border-accent/40"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="text-xs font-mono text-text-muted uppercase tracking-wider block mb-2">Description</label>
+            <label htmlFor="description" className="text-xs font-mono text-[var(--color-text-muted)] uppercase tracking-wider block mb-2">Description</label>
             <textarea
               id="description"
               value={meta.description}
               onChange={(e) => update("description", e.target.value)}
               placeholder="Notes about the song…"
               rows={2}
-              className="w-full bg-bg-primary border border-border-subtle rounded px-4 py-3 text-base text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 resize-none"
+              className="w-full bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded px-4 py-3 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-accent/40 resize-none"
             />
           </div>
         </div>

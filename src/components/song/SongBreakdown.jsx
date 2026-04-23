@@ -38,7 +38,7 @@ export default function SongBreakdown() {
           onClick={() => dispatch({ type: "SET_TONE_FILTER", tone: null })}
           className={`text-[11px] font-mono px-3 py-1.5 rounded-full border transition-all ${
             toneFilter === null
-              ? "bg-accent/15 border-accent/30 text-text-primary"
+              ? "bg-accent/15 border-accent/30 text-[var(--color-text-primary)]"
               : "bg-slate-50 border-slate-200 text-slate-500"
           }`}
         >

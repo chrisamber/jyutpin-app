@@ -159,7 +159,7 @@ export default function LeadsheetView() {
       {/* Screen-only chord-sheet reference panel */}
       {transposedChords.length > 0 && (
         <div className="mt-8 pt-6 border-t border-slate-100 print:hidden">
-          <div className="text-[10px] font-mono text-text-muted tracking-[0.2em] uppercase mb-4">
+          <div className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-4">
             Chord Sheet
           </div>
           <div className="flex flex-wrap gap-6">

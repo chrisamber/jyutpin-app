@@ -14,7 +14,7 @@ export default function SearchResults({ results, onSelect }) {
 
   return (
     <div className="w-full max-w-lg space-y-2">
-      <div className="text-xs font-mono text-text-secondary mb-2">
+      <div className="text-xs font-mono text-[var(--color-text-secondary)] mb-2">
         {results.length} result{results.length !== 1 && "s"} found
       </div>
       {results.slice(0, 15).map((r) => (
@@ -22,14 +22,14 @@ export default function SearchResults({ results, onSelect }) {
           key={r.id}
           onClick={() => onSelect(r)}
           disabled={!r.hasLyrics}
-          className="w-full text-left bg-bg-surface hover:bg-bg-hover border border-slate-200 hover:border-accent/20 rounded-lg px-4 py-3 transition-all group disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full text-left bg-[var(--color-bg-surface)] hover:bg-[var(--color-bg-elevated)] border border-slate-200 hover:border-accent/20 rounded-lg px-4 py-3 transition-all group disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <div className="text-sm font-medium text-text-primary group-hover:text-accent transition-colors truncate">
+              <div className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-accent transition-colors truncate">
                 {r.title}
               </div>
-              <div className="text-xs text-text-secondary mt-0.5 flex items-center gap-1.5 flex-wrap">
+              <div className="text-xs text-[var(--color-text-secondary)] mt-0.5 flex items-center gap-1.5 flex-wrap">
                 <span>{r.artist}</span>
                 {r.album && (
                   <span className="text-slate-400">({r.album})</span>

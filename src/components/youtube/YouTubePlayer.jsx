@@ -65,7 +65,7 @@ export default function YouTubePlayer() {
   return (
     <div className="mb-6 print:hidden">
       {searching && (
-        <div className="h-10 flex items-center gap-2 text-xs font-mono text-text-muted">
+        <div className="h-10 flex items-center gap-2 text-xs font-mono text-[var(--color-text-muted)]">
           <svg className="animate-spin w-3 h-3" viewBox="0 0 12 12" fill="none">
             <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.5" strokeDasharray="14 8" strokeLinecap="round" />
           </svg>
@@ -74,7 +74,7 @@ export default function YouTubePlayer() {
       )}
 
       {!searching && error && (
-        <div className="text-xs font-mono text-text-muted mb-3">YouTube: {error}</div>
+        <div className="text-xs font-mono text-[var(--color-text-muted)] mb-3">YouTube: {error}</div>
       )}
 
       {selectedVideo && (
@@ -98,7 +98,7 @@ export default function YouTubePlayer() {
         <div className="flex items-center gap-2 mt-2">
           <button
             onClick={() => setShowAlternatives((s) => !s)}
-            className="text-[10px] font-mono text-text-muted hover:text-accent transition-colors"
+            className="text-[10px] font-mono text-[var(--color-text-muted)] hover:text-accent transition-colors"
           >
             {showAlternatives ? "▲ hide" : "▼ other videos"}
           </button>
@@ -108,10 +108,10 @@ export default function YouTubePlayer() {
                 <button
                   key={r.videoId}
                   onClick={() => { setSelectedVideo(r.videoId); setShowAlternatives(false); }}
-                  className="flex-shrink-0 flex items-center gap-2 px-2 py-1 rounded-lg bg-bg-surface border border-border-subtle hover:border-accent/30 text-left group transition-colors"
+                  className="flex-shrink-0 flex items-center gap-2 px-2 py-1 rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-accent/30 text-left group transition-colors"
                 >
                   <img src={r.thumbnail} alt={r.title} className="w-14 h-9 object-cover rounded" />
-                  <span className="text-[10px] font-mono text-text-secondary group-hover:text-accent line-clamp-2 max-w-[10rem] transition-colors">
+                  <span className="text-[10px] font-mono text-[var(--color-text-secondary)] group-hover:text-accent line-clamp-2 max-w-[10rem] transition-colors">
                     {r.title}
                   </span>
                 </button>
