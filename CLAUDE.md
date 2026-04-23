@@ -13,6 +13,7 @@ npm run dev      # Vite on :5173 — opens to search; click the demo song to see
 npm run build    # Production build to dist/ — must exit cleanly before shipping
 npm run preview  # Serve dist/ — use this for PDF/print testing
 npm run lint     # ESLint
+npm test         # Vitest (jsdom) — must exit cleanly before shipping
 ```
 
 Optional env vars in `.env.local` (app works without them):
@@ -39,10 +40,13 @@ Pick the doc that matches what you're doing — don't read them all up front.
 | Checking PWA install quirks, offline scope, SW update behavior | [pwa-support.md](docs/claude-context/pwa-support.md) |
 | Checking CI/CD pipeline and local pre-deploy steps | [cicd.md](docs/claude-context/cicd.md) |
 | Checking performance budgets and asset sizes | [performance-budget.md](docs/claude-context/performance-budget.md) |
-| Running a manual QA pass before release | [qa-checklist.md](docs/claude-context/qa-checklist.md) |
+| Running a manual QA pass before release | [QA-CHECKLIST.md](QA-CHECKLIST.md) — working tick-list; [docs/claude-context/qa-checklist.md](docs/claude-context/qa-checklist.md) for the *why* behind each item |
+| Starting a sprint, or needing to know what's open | [SPRINTS.md](SPRINTS.md) — operator runbook: one sprint at a time, paste-ready prompts, Gates, Sprint log |
+| Parking an idea, logging a risk, or finding the next sprint candidate | [BACKLOG.md](BACKLOG.md) — Polish, Phase 2, Horizon 3, risk register, stuck items |
+| Writing a release note or seeing what landed recently | [CHANGELOG.md](CHANGELOG.md) — Keep a Changelog format |
 
 Note: `storageId` (`"demo"` | `"lrclib:{id}"` | `"custom:{id}"`) namespaces every localStorage key — see architecture.md before touching persistence.
 
 ## Root-level files
 
-Everything at the repo root is either app code or live docs. The one exception: `plan-latest` — a working punch list for docs/repo hygiene (not product features; see [product-roadmap.md](product-roadmap.md) for those).
+Everything at the repo root is either app code or live docs. PM runbook files live at the root for operator visibility: [SPRINTS.md](SPRINTS.md), [BACKLOG.md](BACKLOG.md), [QA-CHECKLIST.md](QA-CHECKLIST.md), [CHANGELOG.md](CHANGELOG.md), [product-roadmap.md](product-roadmap.md). Deep reference docs live in `docs/claude-context/`.

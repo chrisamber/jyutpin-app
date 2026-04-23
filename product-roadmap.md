@@ -36,6 +36,8 @@ Chord overlay system shipped Apr 13. Beat-grid data model is the live WIP. A ful
 
 ## 🔨 Now — Current Sprint (Apr 2026)
 
+> Active execution tracked in [SPRINTS.md](SPRINTS.md). This section is the strategic view; SPRINTS.md is where paste-ready prompts, Gates, and the Sprint log live.
+
 Two parallel themes this sprint: **beat-grid chord system** (the live WIP from Apr 13 handover) and the **accessibility sprint 1** (critical blockers from today's audit).
 
 ### Theme A — Beat-Grid Chord System

@@ -1,6 +1,8 @@
-# Manual QA Checklist
+# Manual QA Checklist (reference)
 
-No automated test suite yet. Run this checklist before any release or significant change. Approximate time: 10–15 minutes.
+> For the *working* checklist you tick before each release, see [/QA-CHECKLIST.md](../../QA-CHECKLIST.md) at the repo root. This file explains *why* each area matters and what to look for.
+
+A growing vitest suite covers pure utilities (see `src/**/*.test.js`). Run `npm test` as part of every release gate. Everything below is the UI/UX/device pass the tests don't cover. Approximate time: 10–15 minutes.
 
 ## 1. Search → Demo Load
 
