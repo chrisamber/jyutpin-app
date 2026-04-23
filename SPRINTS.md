@@ -3,6 +3,8 @@
 > **This file is for you, the human operator — not Claude.** Claude reads [CLAUDE.md](CLAUDE.md) and the `docs/claude-context/` set for spec. You read this file to orchestrate sprints: which one is open, what to paste, how to know it's done.
 >
 > Strategic view lives in [product-roadmap.md](product-roadmap.md). This file is the *execution loop* that drives the roadmap forward one sprint at a time.
+>
+> **V1 strategy (decided 2026-04-23):** S1 is the final sprint on this Vite prototype. When S1 Gate closes, tag v1.0.0, open-source the repo, and deploy. All H2+ features (beat-grid, auth, Supabase, community) move to a new Next.js repo that builds on the learnings from this prototype. S2–S4 below are archived for reference — transplant the paste-ready prompts and scope into the new repo's own SPRINTS.md.
 
 ## Operator rules
 
@@ -114,6 +116,107 @@ After all four items:
 - Leadsheet PDF export visually unchanged.
 - Recent songs list still renders timestamps clearly.
 - No new console warnings on demo load.
+
+---
+
+## S1.5 — Lyrics View Symmetry (Design Polish, final Vite sprint)
+
+**Why this exists:** The Lyrics view (main app surface) is visually asymmetric — the main lyrics column and the right rail (Tones, Tone Profile, Pronunciation Notes) don't share a baseline, the rail children render at inconsistent widths, and the toolbar above uses 4+ different button padding patterns. Users called it out directly. Fixing this is the last polish pass before the Next.js migration freeze, and the changes are migration-safe: CSS token work ports 1:1 to `app/globals.css`, and no new client-only APIs are introduced.
+
+**Budget:** 2–4 hours total. If you're past 8 hours, stop.
+
+**Migration safety rails:**
+- All CSS goes in `src/index.css` → ports unchanged to `app/globals.css`.
+- No new `document.*` / `window.*` calls in render paths.
+- No new dependencies, no new icon packages.
+- Uses existing Tailwind v4 `@theme` tokens — no ad-hoc colors, no ad-hoc sizes.
+
+**Scope (four sub-items, one commit each):**
+
+| ID | What | Files |
+|---|---|---|
+| P1.1 | Measure baseline (no edits) — log actual pixel widths + baselines to Sprint log | none |
+| P1.2 | Lock right-rail width; ensure every rail child is `w-full` | `src/components/lyrics/LyricsDisplay.jsx` |
+| P1.3 | Align left-column and right-column first-label baselines | `src/components/lyrics/LyricsDisplay.jsx` + `ToneAnalytics.jsx` or `ToneReference.jsx` |
+| P1.4 | Replace hardcoded `text-[8px]/[9px]/[10px]` with design tokens (`text-2xs`) in the three rail components | `src/components/lyrics/ToneReference.jsx`, `ToneAnalytics.jsx`, `PronunciationNotes.jsx` |
+
+### Paste-ready prompt
+
+```
+Start S1.5 — Lyrics View Symmetry. Sonnet-grade.
+
+Context you need (read before editing):
+1. CLAUDE.md (routing), docs/claude-context/design-system.md (tokens), src/index.css (tokens + utility classes).
+2. SPRINTS.md §S1.5 — that table IS the spec for this sprint.
+3. Current state:
+   - src/components/lyrics/LyricsDisplay.jsx (grid definition line ~299, right-rail container line ~344, toolbar 182-295)
+   - src/components/lyrics/ToneReference.jsx
+   - src/components/lyrics/ToneAnalytics.jsx
+   - src/components/lyrics/PronunciationNotes.jsx
+
+Plan as a TodoList with exactly 4 items (P1.1–P1.4) before editing. One commit per item.
+Do NOT attempt the button utility refactor — that is explicitly out of scope for this sprint.
+
+P1.1 — Measure first
+- Start dev server (npm run dev).
+- Use the preview_* toolset (preview_start, preview_screenshot, preview_inspect).
+- Load demo song → Lyrics tab. Capture screenshots at widths 768, 1024, 1280.
+- preview_inspect the right-rail container and each of its children — record computed width.
+- preview_inspect the h2 "Annotated Lyrics" and the TONES label in ToneReference — record their y positions.
+- Append findings to SPRINTS.md §Sprint log under a new S1.5 entry.
+- Acceptance: concrete pixel numbers logged — no guessing in later tasks.
+- Commit: "chore(sprint): S1.5 baseline measurements"
+
+P1.2 — Right-rail width lock
+- Using P1.1 numbers, pick the rail width from {200, 216, 240, 256} — whichever cleanly fits "Dominant: T1 — High Level (55) (22% of syllables)" without wrapping. Confirm with preview_inspect.
+- Update grid template in LyricsDisplay.jsx line ~299.
+- Add w-full to the right-rail container (line ~344). Verify each rail child renders at full width — if any child has a narrower root, add w-full to it.
+- Re-screenshot at 768/1024/1280 → confirm rail is a single consistent width at each breakpoint.
+- Acceptance: preview_inspect shows identical widths for ToneReference, ToneAnalytics, PronunciationNotes at each breakpoint.
+- Commit: "fix(lyrics): lock right-rail width and align rail children"
+
+P1.3 — Column header baseline alignment
+- The h2 "Annotated Lyrics" (in the toolbar block above the grid) and the TONES label in ToneReference will never baseline-align because they live in different grid rows.
+- Fix: inside the LEFT column of the grid (line ~302, first child), add <div className="section-label mb-4">Annotated Lyrics</div>. Demote the existing h2 to toolbar-level micro-text (or remove it entirely if the new label makes it redundant).
+- Use the existing .section-label utility in src/index.css:331 — do NOT create a new class.
+- Re-screenshot → ANNOTATED LYRICS and TONES must share a baseline within 2px (verify with preview_inspect top values).
+- Acceptance: both first-row labels visually aligned; no duplicate header text; no console warnings.
+- Commit: "fix(lyrics): align left/right column header baselines"
+
+P1.4 — Replace hardcoded micro font sizes with tokens
+- In ToneReference.jsx, ToneAnalytics.jsx, PronunciationNotes.jsx, search for text-[8px], text-[9px], text-[10px], text-[11px].
+- Map each to the design token: 11px → text-2xs (already defined in @theme, line 91 of src/index.css). For <11px usages, decide whether to keep inline or promote to text-2xs — err toward text-2xs unless it breaks layout.
+- Do NOT touch tone color styling (inline style with TONE_COLORS[t]) this sprint — that's a separate sprint (dark-mode sensitive).
+- Re-screenshot at all 3 widths + dark mode → confirm no visual regressions.
+- Acceptance: Grep for `text-\[[0-9]+px\]` in the three files → only hits that remain are intentional (documented in a comment above the line). Zero new inline sizes introduced.
+- Commit: "refactor(lyrics): replace hardcoded micro sizes with text-2xs token"
+```
+
+### Gate (all must pass before migration freeze)
+
+- [ ] P1.1 — Sprint log has baseline measurements with pixel values
+- [ ] P1.2 — Rail is consistent width at md/lg/xl; all children w-full
+- [ ] P1.3 — Left and right column first labels baseline-align within 2px
+- [ ] P1.4 — Grep `text-\[[0-9]+px\]` in the 3 rail files shows only intentional exceptions
+- [ ] `npm run build` exits 0
+- [ ] `npm run lint` exits 0
+- [ ] `npm test` exits 0
+- [ ] Demo + one LRCLIB song both pass visual check at 768/1024/1280, light + dark mode
+- [ ] Four separate commits, one per sub-item
+
+### Regression check before closing
+
+- Tone bar distribution chart still renders correctly (colors + widths).
+- Pronunciation Notes cards still render at full rail width with readable spacing.
+- Print preview (Export PDF) visually unchanged — only on-screen layout changed.
+- No new console warnings on demo load.
+- Teleprompter mode still works (grid is hidden in that view).
+
+### Explicitly out of scope (defer to post-migration)
+
+- Button utility extraction (`.btn-sm-toolbar`) — high-surface refactor, dark-mode sensitive, safer to do in the Next.js repo where components may already be restructured.
+- Tone bar CSS utility rewrite — dark mode has different tone colors (index.css:225-230); a class-based approach would duplicate the fork. Keep inline styles for now.
+- Full 33-component audit — do this fresh in the Next.js repo once App Router structure lands.
 
 ---
 
@@ -295,3 +398,43 @@ Format:
 ```
 
 <!-- entries start below -->
+
+### 2026-04-24 · S1.5 — Lyrics View Symmetry (P1.1 baseline)
+- Model: Sonnet
+- Outcome: in-progress
+- Gate passed: P1.1
+
+#### P1.1 — Baseline measurements (1280px viewport, demo song 背脊唱情歌)
+
+**Right rail — grid column widths**
+| Viewport | Grid template | Rail width | ToneReference | ToneAnalytics | PronunciationNotes |
+|---|---|---|---|---|---|
+| 768px | `md:grid-cols-[1fr_200px]` | 200px | 200px | 200px | 200px |
+| 1024px | `md:grid-cols-[1fr_200px]` | 200px | 200px | 200px | 200px |
+| 1280px | `xl:grid-cols-[1fr_220px_200px]` | 220px | 220px | 220px | 220px |
+
+All children already inherit rail width (no narrower roots observed). Rail container: `LyricsDisplay.jsx:344`.
+
+**Column header vertical positions (1280px, scroll=0)**
+| Element | Viewport top | File |
+|---|---|---|
+| h2 "Annotated Lyrics" | 101px | LyricsDisplay.jsx (toolbar block, above grid) |
+| "TONES" label (text-[8px]) | 200px | ToneReference.jsx:22 |
+| Delta | **99px** | different grid rows — will never baseline-align as-is |
+
+**Dominant tone callout fit analysis**
+- Full text: `"Dominant: T1 — High Level (55) (22% of syllables)"`
+- Natural width of `line1` ("Dominant: T1 — High Level (55)"): **180px** at 10px JetBrains Mono
+- Line 2 ("(22% of syllables)"): **108px** — always wraps to own line regardless of rail width
+- At 200px rail (text area 177.5px): line1 wraps mid-phrase ❌
+- At 216px rail (text area 193.5px): line1 fits cleanly ✅
+- **Recommended P1.2 rail width: 216px** (smallest candidate that eliminates mid-phrase wrap)
+
+**Hardcoded px sizes in three rail files**
+| File | Sizes found | Lines |
+|---|---|---|
+| ToneReference.jsx | text-[8px] ×2, text-[9px] ×1, text-[10px] ×3, text-[11px] ×1 | 22, 42, 39, 53, 58, 61; 33 |
+| ToneAnalytics.jsx | text-[10px] ×3, text-[9px] ×3 | 47, 63, 102; 77, 85, 93 |
+| PronunciationNotes.jsx | text-[10px] ×1, text-[11px] ×1 | 75, 82 |
+
+`text-2xs` token = 11px (index.css:91). Sizes ≥11px map to `text-2xs`. Sizes <11px to evaluate case-by-case in P1.4.
