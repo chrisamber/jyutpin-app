@@ -294,20 +294,11 @@ export default function LyricsDisplay() {
         </div>
       </div>
 
-      {/* Three-column layout: left rail (tone/pronunciation) | lyrics | chord diagrams */}
-      {/* md+: left rail appears. xl: wider left rail. */}
-      <div className="grid xl:grid-cols-[220px_1fr_200px] md:grid-cols-[180px_1fr] gap-6 print:block">
+      {/* Three-column layout: lyrics | right rail (tone/pronunciation) | chord diagrams */}
+      {/* md+: right rail appears. xl: chord diagram column added. */}
+      <div className="grid xl:grid-cols-[1fr_220px_200px] md:grid-cols-[1fr_200px] gap-6 print:block">
 
-        {/* Left rail: tone reference + pronunciation notes (md+). */}
-        {/* All three panels are Cantonese-specific today (tone system, entering */}
-        {/* tones, ng- onsets). Hide for cmn/nan until per-dialect content lands. */}
-        <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start">
-          {isYue && <ToneReference />}
-          {isYue && <ToneAnalytics />}
-          {isYue && <PronunciationNotes />}
-        </div>
-
-        {/* Centre: lyrics */}
+        {/* Centre: lyrics — first in DOM for mobile/accessibility */}
         <div>
           {linesWithChords.map((line, realIndex) => {
             const sectionLabel = sectionMap[realIndex];
@@ -348,7 +339,15 @@ export default function LyricsDisplay() {
           )}
         </div>
 
-        {/* Right: chord diagrams — xl only (third column) */}
+        {/* Right rail: tone reference + analytics + pronunciation notes (md+). */}
+        {/* Cantonese-specific — hidden for cmn/nan until per-dialect content lands. */}
+        <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start min-w-0">
+          {isYue && <ToneReference />}
+          {isYue && <ToneAnalytics />}
+          {isYue && <PronunciationNotes />}
+        </div>
+
+        {/* Far right: chord diagrams — xl only (third column) */}
         <div className="hidden xl:block xl:sticky xl:top-4 xl:self-start">
           <ChordSheet usedChords={allVisibleChords} />
         </div>

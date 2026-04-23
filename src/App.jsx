@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { SongProvider } from "./context/SongContext.jsx";
 import { AppProvider } from "./context/AppContext.jsx";
 import { useApp } from "./context/AppContext.jsx";
@@ -13,10 +14,21 @@ import DangerZones from "./components/song/DangerZones.jsx";
 import Drills from "./components/study/Drills.jsx";
 import TeleprompterView from "./components/layout/TeleprompterView.jsx";
 import ArtistCatalog from "./components/artist/ArtistCatalog.jsx";
+import { useSongAnalysis } from "./hooks/useSongAnalysis.js";
 
 function StudyView() {
-  const { activeSection } = useApp();
+  const { activeSection, dialectPreference } = useApp();
   const { song, isLoading, error } = useSong();
+  const { loadDemoSong } = useSongAnalysis();
+  const prevDialect = useRef(dialectPreference);
+
+  // When the dialect switcher changes while a demo is loaded, swap to the
+  // matching demo so the button actually does something visible.
+  useEffect(() => {
+    if (prevDialect.current === dialectPreference) return;
+    prevDialect.current = dialectPreference;
+    if (song?.isDemo) loadDemoSong(dialectPreference);
+  }, [dialectPreference, song?.isDemo, loadDemoSong]);
 
   if (isLoading) {
     return (
