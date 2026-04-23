@@ -93,7 +93,7 @@ export default function AddSongModal({ onClose }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
+        <form id="add-song-form" onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-6 py-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="title-input" className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.15em] uppercase block mb-1.5">
@@ -184,7 +184,7 @@ export default function AddSongModal({ onClose }) {
           </button>
           <button
             type="submit"
-            onClick={handleSubmit}
+            form="add-song-form"
             disabled={loading}
             className="text-xs font-mono bg-accent hover:bg-accent/90 text-[var(--color-bg-base)] font-medium px-5 py-2 rounded-lg transition-colors disabled:opacity-50"
           >
