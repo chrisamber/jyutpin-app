@@ -19,7 +19,7 @@ export default function ToneReference() {
 
   return (
     <div className="flex flex-col gap-0.5 select-none opacity-60 hover:opacity-100 transition-opacity">
-      <div className="text-[8px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-1.5">
+      <div className="text-2xs font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-1.5">
         Tones
       </div>
 
@@ -30,16 +30,16 @@ export default function ToneReference() {
             style={{ backgroundColor: TONE_COLORS[t] }}
           />
           <span
-            className="font-mono text-[11px] w-3.5 text-center flex-shrink-0"
+            className="font-mono text-2xs w-3.5 text-center flex-shrink-0"
             style={{ color: TONE_COLORS[t] }}
           >
             {TONE_CONTOURS[t]}
           </span>
           <span className="flex flex-col">
-            <span className="text-[10px] font-mono leading-none" style={{ color: TONE_COLORS[t] }}>
+            <span className="text-2xs font-mono leading-none" style={{ color: TONE_COLORS[t] }}>
               T{t}
             </span>
-            <span className="text-[8px] text-[var(--color-text-muted)] leading-none mt-0.5 whitespace-nowrap">
+            <span className="text-2xs text-[var(--color-text-muted)] leading-none mt-0.5 whitespace-nowrap">
               {TONE_SHORT[t]} · {TONE_NUMBERS[t]}
             </span>
           </span>
@@ -50,15 +50,15 @@ export default function ToneReference() {
       {activeLyricIndex >= 0 && (
         <>
           <div className="border-t border-[var(--color-border-subtle)] my-3" />
-          <div className="text-[9px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-1">
+          <div className="text-2xs font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-1">
             Keys
           </div>
           {[{ key: "↑↓", label: "Navigate" }, { key: "Esc", label: "Clear" }].map(({ key, label }) => (
             <div key={key} className="flex items-center gap-2 px-2">
-              <span className="font-mono text-[10px] bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)] rounded px-1.5 py-0.5 text-[var(--color-text-secondary)]">
+              <span className="font-mono text-2xs bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)] rounded px-1.5 py-0.5 text-[var(--color-text-secondary)]">
                 {key}
               </span>
-              <span className="text-[10px] text-[var(--color-text-muted)]">{label}</span>
+              <span className="text-2xs text-[var(--color-text-muted)]">{label}</span>
             </div>
           ))}
         </>

@@ -72,14 +72,14 @@ export default function PronunciationNotes() {
                 >
                   {w.char}
                 </span>
-                <span className="text-[10px] font-mono text-[var(--color-text-muted)]">
+                <span className="text-2xs font-mono text-[var(--color-text-muted)]">
                   {w.jyutping}
                 </span>
               </span>
             ))}
           </div>
 
-          <p className="text-[11px] leading-relaxed text-[var(--color-text-secondary)]">
+          <p className="text-2xs leading-relaxed text-[var(--color-text-secondary)]">
             {note.tip}
           </p>
         </div>

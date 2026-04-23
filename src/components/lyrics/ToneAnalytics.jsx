@@ -44,7 +44,7 @@ export default function ToneAnalytics() {
           return (
             <div key={t} className="flex items-center gap-2">
               <span
-                className="text-[10px] font-mono w-5 text-right font-medium"
+                className="text-2xs font-mono w-5 text-right font-medium"
                 style={{ color: TONE_COLORS[t] }}
               >
                 T{t}
@@ -60,7 +60,7 @@ export default function ToneAnalytics() {
                   }}
                 />
               </div>
-              <span className="text-[10px] font-mono text-[var(--color-text-muted)] w-10 text-right">
+              <span className="text-2xs font-mono text-[var(--color-text-muted)] w-10 text-right">
                 {count > 0 ? `${Math.round(pct)}%` : "—"}
               </span>
             </div>
@@ -74,7 +74,7 @@ export default function ToneAnalytics() {
           <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.total}
           </div>
-          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
+          <div className="text-2xs font-mono text-[var(--color-text-muted)] mt-1">
             syllables
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function ToneAnalytics() {
           <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.entering}
           </div>
-          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
+          <div className="text-2xs font-mono text-[var(--color-text-muted)] mt-1">
             entering
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function ToneAnalytics() {
           <div className="text-lg font-light text-[var(--color-text-primary)] leading-none">
             {stats.ngInitial}
           </div>
-          <div className="text-[9px] font-mono text-[var(--color-text-muted)] mt-1">
+          <div className="text-2xs font-mono text-[var(--color-text-muted)] mt-1">
             ng-initial
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function ToneAnalytics() {
       {/* Dominant tone callout */}
       {stats.dominant && stats.dominant[1] > 0 && (
         <div
-          className="text-[10px] font-mono leading-relaxed rounded-lg px-3 py-2"
+          className="text-2xs font-mono leading-relaxed rounded-lg px-3 py-2"
           style={{
             color: TONE_COLORS[stats.dominant[0]],
             backgroundColor: TONE_COLORS[stats.dominant[0]] + "0C",
