@@ -180,17 +180,6 @@ export default function LyricsDisplay() {
 
       {/* Unified toolbar — three groups: Content | View | Output */}
       <div className="mb-6 print:hidden">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-normal text-accent/80">
-            Annotated Lyrics
-          </h2>
-          {activeLyricIndex >= 0 && (
-            <span className="text-xs font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded px-3 py-1.5">
-              ↑↓ navigate · Esc clear
-            </span>
-          )}
-        </div>
-
         <div className="flex flex-wrap items-center gap-2">
           {/* Group 1 — Content */}
           <button
@@ -291,6 +280,11 @@ export default function LyricsDisplay() {
             ⛶ stage
           </button>
           <PrintButton />
+          {activeLyricIndex >= 0 && (
+            <span className="ml-auto text-xs font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded px-3 py-1.5">
+              ↑↓ navigate · Esc clear
+            </span>
+          )}
         </div>
       </div>
 
@@ -300,6 +294,7 @@ export default function LyricsDisplay() {
 
         {/* Centre: lyrics — first in DOM for mobile/accessibility */}
         <div>
+          <div className="section-label mb-4">Annotated Lyrics</div>
           {linesWithChords.map((line, realIndex) => {
             const sectionLabel = sectionMap[realIndex];
             return (
