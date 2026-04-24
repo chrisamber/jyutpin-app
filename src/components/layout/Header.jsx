@@ -28,7 +28,7 @@ export default function Header() {
           {currentView === "study" && (
             <button
               onClick={clearSong}
-              className="text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-accent transition-colors px-3 py-1.5 rounded-md hover:bg-[var(--color-bg-elevated)] border border-transparent hover:border-[var(--color-border-subtle)]"
+              className="hidden sm:inline-flex items-center text-[10px] font-mono text-[var(--color-text-secondary)] hover:text-accent transition-colors px-3 py-1.5 rounded-md hover:bg-[var(--color-bg-elevated)] border border-transparent hover:border-[var(--color-border-subtle)]"
             >
               ← New Song
             </button>

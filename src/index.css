@@ -529,3 +529,16 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* V1X-S1.2 — Mobile touch targets (≥40px) for interactive clusters.
+   Scoped via [data-touch-targets] so we don't inflate ruby rubrics,
+   icon fragments, or other non-tappable inline buttons. */
+@media (max-width: 767px) {
+  [data-touch-targets] button,
+  [data-touch-targets] a[role="button"],
+  [data-touch-targets] input,
+  [data-touch-targets] select,
+  [data-touch-targets] textarea {
+    min-height: 40px;
+  }
+}

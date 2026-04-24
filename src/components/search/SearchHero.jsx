@@ -88,7 +88,7 @@ function RecentSongs({ onSelectRecent, onLoadDemo, onSelectCustom }) {
       <div className="text-[10px] font-mono text-[var(--color-text-muted)] tracking-[0.2em] uppercase mb-[var(--space-3)]">
         Recent
       </div>
-      <div className="space-y-[var(--space-0.5)]">
+      <div className="space-y-[var(--space-0.5)]" data-touch-targets>
         {recent.map((song, i) => (
           <button
             key={song.isDemo ? `demo:${song.dialectCode ?? "yue"}` : song.id || i}
@@ -243,24 +243,29 @@ export default function SearchHero() {
               {SLIDES[slideIdx].text}
             </div>
           </div>
-          <div className="flex gap-1.5 justify-center mt-4">
+          <div className="flex gap-0.5 justify-center mt-2">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setSlideIdx(i)}
-                className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                  i === slideIdx
-                    ? "bg-[var(--color-accent)]"
-                    : "bg-[var(--color-text-muted)]/30 hover:bg-[var(--color-text-muted)]/60"
-                }`}
-                aria-label={SLIDES[i].label}
-              />
+                className="inline-flex items-center justify-center w-10 h-10 sm:w-6 sm:h-6"
+                aria-label={`Show ${SLIDES[i].label} preview`}
+              >
+                <span
+                  className={`block w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                    i === slideIdx
+                      ? "bg-[var(--color-accent)]"
+                      : "bg-[var(--color-text-muted)]/30 hover:bg-[var(--color-text-muted)]/60"
+                  }`}
+                  aria-hidden="true"
+                />
+              </button>
             ))}
           </div>
         </div>
 
         {/* Search form */}
-        <form onSubmit={handleSearch} className="w-full max-w-lg mb-3">
+        <form onSubmit={handleSearch} className="w-full max-w-lg mb-3" data-touch-targets>
           <div className="relative">
             <input
               type="text"
@@ -288,7 +293,7 @@ export default function SearchHero() {
         )}
 
         {/* Helper links */}
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center" data-touch-targets>
           <span className="text-[var(--color-text-muted)] text-xs font-mono">demos</span>
           <button
             onClick={() => loadDemoSong("yue")}

@@ -43,6 +43,7 @@ export default function TabNav() {
       role="tablist"
       aria-label="Song sections"
       className="flex gap-1 border-b border-[var(--color-border-subtle)] mb-6 print:hidden"
+      data-touch-targets
     >
       {TABS.map((tab, i) => {
         const active = activeSection === tab.id;

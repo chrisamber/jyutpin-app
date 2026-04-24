@@ -177,7 +177,7 @@ export default function LyricsDisplay() {
       )}
 
       {/* Unified toolbar — three groups: Content | View | Output */}
-      <div className="mb-6 print:hidden">
+      <div className="mb-6 print:hidden" data-touch-targets>
         <div className="flex flex-wrap items-center gap-2">
           {/* Group 1 — Content */}
           <button
@@ -232,7 +232,7 @@ export default function LyricsDisplay() {
             </button>
             <button
               onClick={() => dispatch({ type: "SET_CHORD_DISPLAY", display: chordDisplay === "above" ? "bars" : "above" })}
-              className={`text-xs font-mono px-2.5 py-1.5 border-l border-[var(--color-border-subtle)] transition-all ${
+              className={`text-xs font-mono px-3 py-1.5 min-w-[40px] border-l border-[var(--color-border-subtle)] transition-all ${
                 chordDisplay === "bars"
                   ? "bg-accent/15 text-accent"
                   : "text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)]"
@@ -247,7 +247,7 @@ export default function LyricsDisplay() {
             <div className="flex items-center border border-[var(--color-border-subtle)] rounded-lg overflow-hidden" title="Transpose chords">
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose - 1 })}
-                className="text-xs font-mono px-2 py-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
+                className="text-xs font-mono px-3 py-1.5 min-w-[40px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 −
               </button>
@@ -259,7 +259,7 @@ export default function LyricsDisplay() {
               </span>
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose + 1 })}
-                className="text-xs font-mono px-2 py-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
+                className="text-xs font-mono px-3 py-1.5 min-w-[40px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 +
               </button>
