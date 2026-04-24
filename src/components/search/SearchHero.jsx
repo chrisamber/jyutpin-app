@@ -272,12 +272,12 @@ export default function SearchHero() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search a song or artist… or 中文"
-              className="w-full input focus-ring rounded-xl text-base py-3.5 px-4"
+              className="w-full input focus-ring rounded-xl text-base h-12 pl-4 pr-28"
             />
             <button
               type="submit"
               disabled={isSearching}
-              className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-sm btn-primary disabled:opacity-40"
+              className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-md btn-primary disabled:opacity-40"
             >
               {isSearching ? "…" : "Search"}
             </button>
