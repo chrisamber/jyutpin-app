@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { SongProvider } from "./context/SongContext.jsx";
 import { AppProvider } from "./context/AppContext.jsx";
-import { useApp } from "./context/AppContext.jsx";
+import { useApp, useAppDispatch } from "./context/AppContext.jsx";
 import { useSong } from "./context/SongContext.jsx";
 import AppShell from "./components/layout/AppShell.jsx";
 import SearchHero from "./components/search/SearchHero.jsx";
@@ -21,6 +21,7 @@ function StudyView() {
   const { song, isLoading, error } = useSong();
   const { loadDemoSong } = useSongAnalysis();
   const prevDialect = useRef(dialectPreference);
+  const appDispatch = useAppDispatch();
 
   // When the dialect switcher changes while a demo is loaded, swap to the
   // matching demo so the button actually does something visible.
@@ -29,6 +30,14 @@ function StudyView() {
     prevDialect.current = dialectPreference;
     if (song?.isDemo) loadDemoSong(dialectPreference);
   }, [dialectPreference, song?.isDemo, loadDemoSong]);
+
+  // V1X-S1.3 — if the user had Breakdown open on a demo and then loaded a
+  // non-demo song, fall back to Lyrics so we don't show an empty panel.
+  useEffect(() => {
+    if (activeSection === "songBreakdown" && song && !song.isDemo) {
+      appDispatch({ type: "SET_SECTION", section: "lyrics" });
+    }
+  }, [activeSection, song, appDispatch]);
 
   if (isLoading) {
     return (
@@ -68,15 +77,17 @@ function StudyView() {
       >
         <LyricsDisplay />
       </div>
-      <div
-        id="songBreakdown-panel"
-        role="tabpanel"
-        aria-labelledby="songBreakdown-tab"
-        tabIndex={0}
-        hidden={activeSection !== "songBreakdown"}
-      >
-        <SongBreakdown />
-      </div>
+      {song.isDemo && (
+        <div
+          id="songBreakdown-panel"
+          role="tabpanel"
+          aria-labelledby="songBreakdown-tab"
+          tabIndex={0}
+          hidden={activeSection !== "songBreakdown"}
+        >
+          <SongBreakdown />
+        </div>
+      )}
       <div
         id="dangerZones-panel"
         role="tabpanel"

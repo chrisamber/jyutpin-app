@@ -1,17 +1,24 @@
 import { useRef, useCallback } from "react";
 import { useApp, useAppDispatch } from "../../context/AppContext.jsx";
+import { useSong } from "../../context/SongContext.jsx";
 
-const TABS = [
+const ALL_TABS = [
   { id: "lyrics",        label: "Lyrics" },
-  { id: "songBreakdown", label: "Breakdown" },
+  // V1X-S1.3 — Breakdown is gated to demo songs (requires hand-authored
+  // `line.dangers` metadata). Re-enable for other songs once the danger
+  // annotation pipeline covers LRCLIB/custom tracks.
+  { id: "songBreakdown", label: "Breakdown", demoOnly: true },
   { id: "dangerZones",   label: "Danger Zones" },
   { id: "drills",        label: "Drills" },
 ];
 
 export default function TabNav() {
   const { activeSection } = useApp();
+  const { song } = useSong();
   const dispatch = useAppDispatch();
   const tabRefs = useRef([]);
+
+  const TABS = ALL_TABS.filter((t) => !t.demoOnly || song?.isDemo);
 
   const activate = useCallback((id) => {
     dispatch({ type: "SET_SECTION", section: id });
