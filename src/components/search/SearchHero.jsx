@@ -17,12 +17,12 @@ const PREVIEW_TOKENS = [
 function PreviewAnnotation({ char, roman, tone }) {
   const toneColor = `var(--color-tone-${tone})`;
   return (
-    <ruby className="mx-1 inline-flex flex-col-reverse items-center">
-      <span className="text-2xl leading-tight font-light cjk" style={{ color: toneColor }}>
+    <ruby className="mx-0.5 inline-flex flex-col-reverse items-center">
+      <span className="text-base leading-tight font-light cjk" style={{ color: toneColor }}>
         {char}
       </span>
       <rp>(</rp>
-      <rt className="font-mono text-[11px] leading-none tracking-tight mb-0.5" style={{ color: toneColor }}>
+      <rt className="font-mono text-[9px] leading-none tracking-tight mb-0.5" style={{ color: toneColor }}>
         {roman}
       </rt>
       <rp>)</rp>
@@ -48,11 +48,16 @@ export default function SearchHero() {
   return (
     <div>
       <section className="flex flex-col items-center pt-[var(--space-10)] pb-[var(--space-8)]">
-        {/* Hero headline + tagline */}
-        <h2 className="text-center text-3xl sm:text-4xl font-light tracking-tight leading-[1.15] mb-3">
+        {/* Hero headline + demo + tagline */}
+        <h2 className="text-center text-3xl sm:text-4xl font-light tracking-tight leading-[1.15] mb-4">
           Sing what you{" "}
           <span className="text-[var(--color-accent)] font-normal italic">speak.</span>
         </h2>
+        <div className="mb-4 flex flex-wrap justify-center items-end leading-loose gap-0.5">
+          {PREVIEW_TOKENS.map((t, i) => (
+            <PreviewAnnotation key={i} {...t} />
+          ))}
+        </div>
         <p className="text-center text-[var(--color-text-secondary)] text-base sm:text-lg font-light leading-snug mb-6 max-w-md mx-auto">
           Jyutping lyrics and chords for Cantopop songs.
         </p>
@@ -93,15 +98,6 @@ export default function SearchHero() {
           >
             Try the demo: <span className="cjk">背脊唱情歌</span>
           </button>
-        </div>
-
-        {/* Visual preview — tone-coloured Jyutping over a Cantonese lyric */}
-        <div className="mt-10 px-4 py-5 w-full max-w-xl text-center">
-          <div className="flex flex-wrap justify-center items-end leading-loose gap-0.5">
-            {PREVIEW_TOKENS.map((t, i) => (
-              <PreviewAnnotation key={i} {...t} />
-            ))}
-          </div>
         </div>
       </section>
 
