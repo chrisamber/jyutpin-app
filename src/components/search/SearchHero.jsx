@@ -19,8 +19,8 @@ export default function SearchHero() {
   };
 
   return (
-    <div className="space-y-12">
-      <section className="flex flex-col items-center justify-center min-h-[52vh] pt-[var(--space-8)] pb-[var(--space-6)]">
+    <div>
+      <section className="flex flex-col items-center pt-[var(--space-10)] pb-[var(--space-8)]">
         {/* Tagline — sits directly above search */}
         <p className="text-center text-[var(--color-text-secondary)] text-lg sm:text-xl font-light leading-snug mb-6 max-w-md mx-auto">
           Jyutping lyrics and chords for Cantopop songs.
@@ -67,7 +67,7 @@ export default function SearchHero() {
 
       {/* Below the fold — "What is this?" collapsible */}
       <section className="max-w-xl mx-auto px-[var(--space-4)] pb-[var(--space-12)]">
-        <details className="group border-t border-[var(--color-border-subtle)] pt-4">
+        <details className="group pt-4">
           <summary className="cursor-pointer list-none flex items-center justify-between text-sm font-mono text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors focus-ring rounded">
             <span>What is this?</span>
             <span
