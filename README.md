@@ -7,6 +7,8 @@
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
+> **Status:** v1.0 beta — Vite prototype, usable today. Active future development is moving to a Next.js rewrite (separate repo, link coming). This repo remains the source of the deployed app and will receive bug fixes until v2 is ready.
+
 ---
 
 ## What it does
@@ -105,6 +107,18 @@ vercel --prod   # deploy to production
 ```
 
 Set `VITE_*` env vars in the Vercel dashboard — never commit them.
+
+## Roadmap & migration to Next.js
+
+This repo is the **Vite prototype** (v1.x). It ships the app you see deployed today and will keep getting bug fixes.
+
+**v2 is being rebuilt in Next.js** in a separate repo (link will be added here once it's public). The rewrite is driven by:
+
+- Server-side rendering for better first-load performance and SEO
+- Built-in API routes for the translation / lyrics services (currently a single Vercel function)
+- Easier path to setlists, community annotations, and the DialectEngine abstraction
+
+If you're thinking about contributing a large feature, open an issue first — we may want to land it in the Next.js repo instead.
 
 ## Contributing
 
