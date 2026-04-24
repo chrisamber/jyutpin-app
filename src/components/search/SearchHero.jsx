@@ -3,6 +3,33 @@ import { useLyricsFetch } from "../../hooks/useLyricsFetch.js";
 import { useSongAnalysis } from "../../hooks/useSongAnalysis.js";
 import SearchResults from "./SearchResults.jsx";
 
+const PREVIEW_TOKENS = [
+  { char: "麻", roman: "maa4", tone: 4 },
+  { char: "煩", roman: "faan4", tone: 4 },
+  { char: "各", roman: "gok3", tone: 3 },
+  { char: "位", roman: "wai6", tone: 6 },
+  { char: "都", roman: "dou1", tone: 1 },
+  { char: "不", roman: "bat1", tone: 1 },
+  { char: "望", roman: "mong6", tone: 6 },
+  { char: "我", roman: "ngo5", tone: 5 },
+];
+
+function PreviewAnnotation({ char, roman, tone }) {
+  const toneColor = `var(--color-tone-${tone})`;
+  return (
+    <ruby className="mx-1 inline-flex flex-col-reverse items-center">
+      <span className="text-2xl leading-tight font-light cjk" style={{ color: toneColor }}>
+        {char}
+      </span>
+      <rp>(</rp>
+      <rt className="font-mono text-[11px] leading-none tracking-tight mb-0.5" style={{ color: toneColor }}>
+        {roman}
+      </rt>
+      <rp>)</rp>
+    </ruby>
+  );
+}
+
 export default function SearchHero() {
   const [query, setQuery] = useState("");
   const { results, isSearching, searchError, search, clearResults } = useLyricsFetch();
@@ -66,6 +93,15 @@ export default function SearchHero() {
           >
             Try the demo: <span className="cjk">背脊唱情歌</span>
           </button>
+        </div>
+
+        {/* Visual preview — tone-coloured Jyutping over a Cantonese lyric */}
+        <div className="mt-10 px-4 py-5 w-full max-w-xl text-center">
+          <div className="flex flex-wrap justify-center items-end leading-loose gap-0.5">
+            {PREVIEW_TOKENS.map((t, i) => (
+              <PreviewAnnotation key={i} {...t} />
+            ))}
+          </div>
         </div>
       </section>
 
