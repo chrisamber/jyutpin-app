@@ -21,8 +21,12 @@ export default function SearchHero() {
   return (
     <div>
       <section className="flex flex-col items-center pt-[var(--space-10)] pb-[var(--space-8)]">
-        {/* Tagline — sits directly above search */}
-        <p className="text-center text-[var(--color-text-secondary)] text-lg sm:text-xl font-light leading-snug mb-6 max-w-md mx-auto">
+        {/* Hero headline + tagline */}
+        <h2 className="text-center text-3xl sm:text-4xl font-light tracking-tight leading-[1.15] mb-3">
+          Sing what you{" "}
+          <span className="text-[var(--color-accent)] font-normal italic">speak.</span>
+        </h2>
+        <p className="text-center text-[var(--color-text-secondary)] text-base sm:text-lg font-light leading-snug mb-6 max-w-md mx-auto">
           Jyutping lyrics and chords for Cantopop songs.
         </p>
 
