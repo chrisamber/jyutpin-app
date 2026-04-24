@@ -20,6 +20,22 @@ dist-ssr/
 .vercel
 .env*.local
 
-# Claude Code (local configuration and cache)
+# AI editor configuration (local only)
 .claude/
-.claude/**/*
+.continue/
+
+# Internal planning and AI context docs
+docs/claude-context/
+docs/amber-chords/
+docs/superpowers/
+docs/amber-chords-plan.md
+docs/CHORD_INTEGRATION_GUIDE.md
+docs/chord-input-implementation.md
+docs/fix-the-bug-that-hidden-sedgewick.md
+docs/leadsheet-formatting-research.md
+
+# Internal PM / sprint docs
+BACKLOG.md
+SPRINTS.md
+product-roadmap.md
+QA-CHECKLIST.md
