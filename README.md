@@ -21,6 +21,17 @@ Learning to sing Cantonese songs is hard — the language has six tones, most ly
 
 A curated demo song (背脊唱情歌) ships with hand-verified Jyutping so you can try everything without signing up or searching.
 
+## Language support
+
+| Language | ISO code | Romanisation | Status |
+|---|---|---|---|
+| Cantonese | `yue` | Jyutping | 🚧 **Under active development** — auto-annotation works, tone colours and chord flow shipped; edge cases still being refined |
+| Mandarin | `cmn` | Pinyin | Preview only — UI stub, engine not yet wired |
+| Hokkien / Min Nan | `nan` | POJ / Tâi-lô | 🚧 **Under development** — placeholder UI shipped; romanisation engine planned as first use of the pluggable DialectEngine abstraction |
+| Hakka, Teochew, Shanghainese | — | — | Horizon roadmap |
+
+v1.0 is a Cantonese-first release. The dialect switcher and preview banner exist so you can see where the project is going, but only `yue` produces real romanisation today.
+
 ## Tech stack
 
 - **React 19** + **Vite 7** — fast HMR dev loop, ES-module production build
