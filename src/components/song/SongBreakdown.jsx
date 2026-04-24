@@ -28,7 +28,7 @@ export default function SongBreakdown() {
       <h2 className="text-xl font-normal mb-2 text-accent/80">
         Line-by-Line Breakdown
       </h2>
-      <p className="text-xs text-slate-500 mb-5">
+      <p className="text-xs text-[var(--color-text-muted)] mb-5">
         Tap any line to reveal its pronunciation traps. Words highlighted are
         where non-native delivery is most audible.
       </p>
@@ -39,7 +39,7 @@ export default function SongBreakdown() {
           className={`text-[11px] font-mono px-3 py-1.5 rounded-full border transition-all ${
             toneFilter === null
               ? "bg-accent/15 border-accent/30 text-[var(--color-text-primary)]"
-              : "bg-slate-50 border-slate-200 text-slate-500"
+              : "bg-[var(--color-bg-elevated)] border-[var(--color-border-subtle)] text-[var(--color-text-muted)]"
           }`}
         >
           All
@@ -48,7 +48,11 @@ export default function SongBreakdown() {
           <button
             key={t}
             onClick={() => dispatch({ type: "SET_TONE_FILTER", tone: t })}
-            className="text-[11px] font-mono px-3 py-1.5 rounded-full border transition-all"
+            className={`text-[11px] font-mono px-3 py-1.5 rounded-full border transition-all ${
+              toneFilter === t
+                ? ""
+                : "bg-[var(--color-bg-elevated)] border-[var(--color-border-subtle)] text-[var(--color-text-muted)]"
+            }`}
             style={
               toneFilter === t
                 ? {
@@ -56,11 +60,7 @@ export default function SongBreakdown() {
                     borderColor: TONE_COLORS[t] + "44",
                     color: TONE_COLORS[t],
                   }
-                : {
-                    backgroundColor: "rgba(0,0,0,0.03)",
-                    borderColor: "rgba(0,0,0,0.1)",
-                    color: "rgba(0,0,0,0.4)",
-                  }
+                : undefined
             }
           >
             T{t}

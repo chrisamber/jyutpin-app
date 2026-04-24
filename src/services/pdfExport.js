@@ -14,37 +14,83 @@ function toneColor(tone) {
 }
 
 // Chord-row helper: renders a bar-grid as compact monospace text above a lyric line.
+// Inline styles (not CSS classes) so html2canvas captures them reliably.
 function buildChordRow(barGrid, beatsPerBar, transpose) {
   if (!barGrid || !barGrid.length) return null;
   const row = document.createElement("div");
-  row.className = "chord-row";
+  Object.assign(row.style, {
+    fontFamily: "'JetBrains Mono', 'Courier New', monospace",
+    fontSize: "11px",
+    color: "#d97706",
+    marginBottom: "2px",
+    paddingLeft: "28px",
+    lineHeight: "1.2",
+    whiteSpace: "nowrap",
+  });
+  const mkBracket = () => {
+    const s = document.createElement("span");
+    s.textContent = "|";
+    s.style.color = "rgba(217, 119, 6, 0.3)";
+    return s;
+  };
   for (let bi = 0; bi < barGrid.length; bi++) {
-    const barSpan = document.createElement("span");
-    barSpan.className = "chord-bar";
-    const openBar = document.createElement("span");
-    openBar.className = "chord-bar-bracket";
-    openBar.textContent = "|";
-    barSpan.appendChild(openBar);
+    row.appendChild(mkBracket());
     const beats = barGrid[bi];
     for (let pi = 0; pi < beatsPerBar; pi++) {
       const beat = beats[pi];
       const span = document.createElement("span");
-      span.className = "chord-beat";
+      Object.assign(span.style, {
+        display: "inline-block",
+        minWidth: "18px",
+        textAlign: "center",
+      });
       if (beat === ".") {
         span.textContent = "·";
+        span.style.color = "#cbd5e1";
       } else if (beat === "-") {
         span.textContent = "–";
+        span.style.color = "#cbd5e1";
       } else if (beat) {
         span.textContent = transposeChord(beat, transpose);
+        span.style.fontWeight = "700";
+      } else {
+        span.innerHTML = "&nbsp;";
       }
-      barSpan.appendChild(span);
+      row.appendChild(span);
     }
-    row.appendChild(barSpan);
   }
-  const closeBar = document.createElement("span");
-  closeBar.className = "chord-bar-bracket";
-  closeBar.textContent = "|";
-  row.appendChild(closeBar);
+  row.appendChild(mkBracket());
+  return row;
+}
+
+// Per-token chord row: fallback for lines without a barGrid but with chords
+// attached directly to tokens (non-yue dialects and user edits).
+function buildTokenChordRow(tokens, transpose) {
+  if (!tokens.some((t) => t.chord)) return null;
+  const row = document.createElement("div");
+  Object.assign(row.style, {
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "flex-end",
+    fontFamily: "'JetBrains Mono', 'Courier New', monospace",
+    fontSize: "11px",
+    fontWeight: "700",
+    color: "#d97706",
+    marginBottom: "2px",
+    marginLeft: "28px",
+    lineHeight: "1.2",
+  });
+  for (const t of tokens) {
+    const cell = document.createElement("span");
+    Object.assign(cell.style, {
+      display: "inline-block",
+      minWidth: "20px",
+      textAlign: "center",
+      margin: "0 2px",
+    });
+    cell.textContent = t.chord ? transposeChord(t.chord, transpose) : "\u00a0";
+    row.appendChild(cell);
+  }
   return row;
 }
 
@@ -254,9 +300,10 @@ function buildContainer(song, lines, { beatsPerBar = 4, transpose = 0, chordMap 
   let total = 0, entering = 0;
   for (const line of lines) {
     for (const t of line.tokens) {
-      if (t.jyutping && t.tone) {
+      const rom = t.jyutping || t.roman;
+      if (rom && t.tone) {
         total++;
-        if (/[ptk]\d$/.test(t.jyutping)) entering++;
+        if (/[ptk]\d$/.test(rom)) entering++;
       }
     }
   }
@@ -285,13 +332,26 @@ function buildContainer(song, lines, { beatsPerBar = 4, transpose = 0, chordMap 
   // ── Lines ──
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const isEmpty = line.tokens.every((t) => !t.jyutping || t.char.trim() === "");
+    const isEmpty = line.tokens.every((t) => {
+      const rom = t.jyutping || t.roman;
+      return !rom || t.char.trim() === "";
+    });
 
     if (isEmpty) {
       const gap = document.createElement("div");
       gap.style.height = "10px";
       el.appendChild(gap);
       continue;
+    }
+
+    // Chord row above the lyric line: prefer barGrid (yue curated), fall back
+    // to per-token chords (non-yue dialects and user edits).
+    if (line.barGrid) {
+      const chordRow = buildChordRow(line.barGrid, beatsPerBar, transpose);
+      if (chordRow) el.appendChild(chordRow);
+    } else {
+      const tokenChordRow = buildTokenChordRow(line.tokens, transpose);
+      if (tokenChordRow) el.appendChild(tokenChordRow);
     }
 
     const row = document.createElement("div");
@@ -322,60 +382,65 @@ function buildContainer(song, lines, { beatsPerBar = 4, transpose = 0, chordMap 
       display: "flex",
       flexWrap: "wrap",
       alignItems: "flex-end",
-      lineHeight: "2",
       flex: "1",
     });
 
     for (const t of line.tokens) {
-      if (!t.jyutping || t.char.trim() === "") {
+      const rom = t.jyutping || t.roman;
+      if (!rom || t.char.trim() === "") {
         const sp = document.createElement("span");
         sp.textContent = t.char;
-        Object.assign(sp.style, { color: "#cbd5e1", margin: "0 2px", fontSize: "18px" });
+        Object.assign(sp.style, {
+          color: "#cbd5e1",
+          margin: "0 2px",
+          fontSize: "18px",
+          alignSelf: "flex-end",
+          paddingBottom: "2px",
+        });
         tokenWrap.appendChild(sp);
         continue;
       }
 
       const color = toneColor(t.tone);
-      const isEntering = /[ptk]\d$/.test(t.jyutping);
+      const isEntering = /[ptk]\d$/.test(rom);
 
-      const ruby = document.createElement("ruby");
-      ruby.style.margin = "0 2px";
+      // Stacked column: romanization above, character below.
+      // Avoids <ruby>/<rb>, which html2canvas 1.4.x fails to rasterize
+      // (default display: ruby-base isn't supported by the renderer).
+      const stack = document.createElement("span");
+      Object.assign(stack.style, {
+        display: "inline-flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: "0 2px 6px",
+        lineHeight: "1",
+      });
 
-      const rb = document.createElement("rb");
+      const rt = document.createElement("span");
+      rt.textContent = rom;
+      Object.assign(rt.style, {
+        fontSize: "9px",
+        fontFamily: "'JetBrains Mono', monospace",
+        lineHeight: "1",
+        color,
+        opacity: "0.85",
+        marginBottom: "2px",
+        whiteSpace: "nowrap",
+      });
+
+      const rb = document.createElement("span");
       rb.textContent = t.char;
       Object.assign(rb.style, {
         fontSize: "18px",
-        lineHeight: "1.2",
+        lineHeight: "1.1",
         fontWeight: isEntering ? "600" : "400",
         color,
         fontFamily: "'Noto Serif SC', 'Songti SC', Georgia, serif",
       });
 
-      const rp1 = document.createElement("rp");
-      rp1.textContent = "(";
-      const rt = document.createElement("rt");
-      rt.textContent = t.jyutping;
-      Object.assign(rt.style, {
-        fontSize: "9px",
-        fontFamily: "monospace",
-        lineHeight: "1",
-        color,
-        opacity: "0.75",
-      });
-      const rp2 = document.createElement("rp");
-      rp2.textContent = ")";
-
-      ruby.appendChild(rb);
-      ruby.appendChild(rp1);
-      ruby.appendChild(rt);
-      ruby.appendChild(rp2);
-      tokenWrap.appendChild(ruby);
-    }
-
-    // Chord bar row above lyric line
-    if (line.barGrid) {
-      const chordRow = buildChordRow(line.barGrid, beatsPerBar, transpose);
-      if (chordRow) el.appendChild(chordRow);
+      stack.appendChild(rt);
+      stack.appendChild(rb);
+      tokenWrap.appendChild(stack);
     }
 
     row.appendChild(tokenWrap);

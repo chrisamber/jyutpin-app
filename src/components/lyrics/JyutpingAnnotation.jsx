@@ -100,7 +100,7 @@ export default function JyutpingAnnotation({ char, jyutping, roman, tone, pinyin
 
   return (
     <div
-      className={`relative inline-flex flex-col items-center justify-end min-w-[1rem] group ${
+      className={`relative inline-flex flex-col items-center self-stretch justify-between min-w-[1rem] group ${
         isClickable ? "cursor-pointer hover:ring-1 hover:ring-accent/40 hover:rounded hover:bg-accent/5 transition-all" : ""
       }`}
       onClick={handleClick}

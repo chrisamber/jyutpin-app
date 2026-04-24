@@ -3,6 +3,21 @@ import { createContext, useContext, useReducer } from "react";
 const SongContext = createContext(null);
 const SongDispatchContext = createContext(null);
 
+// Legacy demo keys weren't dialect-namespaced (all three demos shared "demo"),
+// which caused chords/sections to bleed across dialects. The original demo is
+// the yue one, so migrate any legacy keys into the yue slot exactly once.
+(function migrateLegacyDemoKeys() {
+  try {
+    for (const prefix of ["chords:", "sections:", "editedlyrics:"]) {
+      const legacy = localStorage.getItem(prefix + "demo");
+      if (legacy && !localStorage.getItem(prefix + "demo:yue")) {
+        localStorage.setItem(prefix + "demo:yue", legacy);
+      }
+      if (legacy) localStorage.removeItem(prefix + "demo");
+    }
+  } catch {}
+})();
+
 const initialState = {
   song: null,
   lines: [],
@@ -74,7 +89,7 @@ export function SongProvider({ children }) {
 export function useSong() {
   const state = useContext(SongContext);
   const storageId =
-    state.song?.isDemo    ? "demo"
+    state.song?.isDemo    ? `demo:${state.song.dialectCode ?? "yue"}`
     : state.song?.isCustom  ? `custom:${state.song.id}`
     : state.song?.id        ? `lrclib:${state.song.id}`
     : null;

@@ -3,30 +3,6 @@ import JyutpingAnnotation from "./JyutpingAnnotation.jsx";
 import ChordPopover from "./ChordPopover.jsx";
 import { transposeChord } from "../../services/transpose.js";
 
-function PlayButton({ isPlaying, isLoading, onClick }) {
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); onClick(); }}
-      className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity text-[var(--color-text-muted)] hover:text-accent hover:bg-accent/10"
-      aria-label={isPlaying ? "Stop" : "Play line"}
-    >
-      {isLoading ? (
-        <svg className="animate-spin" width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.5" strokeDasharray="14 8" strokeLinecap="round" />
-        </svg>
-      ) : isPlaying ? (
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-          <rect x="1" y="1" width="8" height="8" rx="1.5" />
-        </svg>
-      ) : (
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-          <path d="M2 1.5 L9 5 L2 8.5 Z" />
-        </svg>
-      )}
-    </button>
-  );
-}
-
 function TrailingChordSlot({ chordEditMode, onAdd, usedChords }) {
   const [editing, setEditing] = useState(false);
   if (!chordEditMode) return null;
@@ -110,11 +86,7 @@ function ChordBarsLine({ barGrid, beatsPerBar = 4, transpose = 0, chordEditMode,
   );
 }
 
-export default function LyricsLine({ line, index, isActive, onClick, onPlay, playingKey, loadingKey, chordEditMode, onChordEdit, onChordEditBeat, usedChords, chordDisplay, beatsPerBar = 4, transpose = 0 }) {
-  const lineKey = `line-${index}`;
-  const isPlaying = playingKey === lineKey;
-  const isLoading = loadingKey === lineKey;
-
+export default function LyricsLine({ line, index, isActive, onClick, chordEditMode, onChordEdit, onChordEditBeat, usedChords, chordDisplay, beatsPerBar = 4, transpose = 0 }) {
   const dangerChars = useMemo(() => {
     const set = new Set();
     if (line.dangers) {
@@ -225,15 +197,6 @@ export default function LyricsLine({ line, index, isActive, onClick, onPlay, pla
             </div>
           )}
         </div>
-        {onPlay && (
-          <div className="pt-3">
-            <PlayButton
-              isPlaying={isPlaying}
-              isLoading={isLoading}
-              onClick={() => onPlay(line.chinese, lineKey)}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

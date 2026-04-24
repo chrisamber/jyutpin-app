@@ -198,7 +198,7 @@ export default function SearchHero() {
   };
 
   const handleSelectRecent = (song) => {
-    loadFromSearch({ id: song.id, title: song.title, artist: song.artist, album: song.album });
+    loadFromSearch({ id: song.id, title: song.title, artist: song.artist, album: song.album, dialectCode: song.dialectCode });
   };
 
   const handleSelectCustom = (song) => {

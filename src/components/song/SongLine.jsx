@@ -8,7 +8,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
     <div
       className={`mb-3 rounded-xl overflow-hidden transition-all border ${
         expanded
-          ? "bg-slate-50 border-accent/20"
+          ? "bg-[var(--color-bg-surface)] border-accent/20"
           : "bg-[var(--color-bg-base)] border-[var(--color-border-default)] hover:border-[var(--color-border-strong)]"
       }`}
     >
@@ -28,7 +28,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
             {line.jyutping || line.jyutpingText}
           </div>
           {line.translation && (
-            <div className="text-xs text-slate-400 mt-1 italic">
+            <div className="text-xs text-[var(--color-text-muted)] mt-1 italic">
               {line.translation}
             </div>
           )}
@@ -50,7 +50,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
           {dangers.map((d, di) => (
             <div
               key={di}
-              className="bg-slate-100 rounded-xl p-4"
+              className="bg-[var(--color-bg-elevated)] rounded-xl p-4"
               style={{
                 borderLeft: `3px solid ${
                   typeof d.tone === "number"
@@ -75,7 +75,7 @@ export default function SongLine({ line, index, expanded, onToggle }) {
                   </span>
                 )}
               </div>
-              <div className="text-[13px] text-slate-600 leading-relaxed">
+              <div className="text-[13px] text-[var(--color-text-secondary)] leading-relaxed">
                 {d.note}
               </div>
             </div>

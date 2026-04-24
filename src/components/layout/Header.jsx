@@ -1,53 +1,6 @@
-import { useApp, useAppDispatch } from "../../context/AppContext.jsx";
+import { useApp } from "../../context/AppContext.jsx";
 import { useSongAnalysis } from "../../hooks/useSongAnalysis.js";
-import { DIALECTS } from "../../dialects/index.js";
 import ThemeToggle from "./ThemeToggle.jsx";
-
-function DialectSwitcher() {
-  const { dialectPreference } = useApp();
-  const dispatch = useAppDispatch();
-
-  const handleKeyDown = (e) => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    e.preventDefault();
-    const i = DIALECTS.findIndex((d) => d.code === dialectPreference);
-    const next =
-      e.key === "ArrowRight"
-        ? DIALECTS[(i + 1) % DIALECTS.length]
-        : DIALECTS[(i - 1 + DIALECTS.length) % DIALECTS.length];
-    dispatch({ type: "SET_DIALECT", dialectCode: next.code });
-  };
-
-  return (
-    <div
-      role="tablist"
-      aria-label="Dialect"
-      onKeyDown={handleKeyDown}
-      className="flex items-center rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-bg-elevated)] p-0.5"
-    >
-      {DIALECTS.map((d) => {
-        const active = d.code === dialectPreference;
-        return (
-          <button
-            key={d.code}
-            role="tab"
-            aria-selected={active}
-            tabIndex={active ? 0 : -1}
-            onClick={() => dispatch({ type: "SET_DIALECT", dialectCode: d.code })}
-            title={`${d.displayName} (${d.romanizationName})`}
-            className={`text-[10px] font-mono tracking-[0.12em] uppercase px-2.5 py-1 rounded-sm transition-colors ${
-              active
-                ? "bg-[var(--color-bg-base)] text-[var(--color-accent)] shadow-sm"
-                : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-            }`}
-          >
-            {d.code}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
 
 export default function Header() {
   const { currentView } = useApp();
@@ -71,7 +24,6 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <DialectSwitcher />
           <ThemeToggle />
           {currentView === "study" && (
             <button

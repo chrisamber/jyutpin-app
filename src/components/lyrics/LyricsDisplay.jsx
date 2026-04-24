@@ -10,7 +10,6 @@ import PrintButton from "../print/PrintButton.jsx";
 import YouTubePlayer from "../youtube/YouTubePlayer.jsx";
 import SectionLabel from "./SectionLabel.jsx";
 import ToneReference from "./ToneReference.jsx";
-import { useTTS } from "../../hooks/useTTS.js";
 import { useChordEditor } from "../../hooks/useChordEditor.js";
 import { mergeChords } from "../../services/chordStorage.js";
 import { DEFAULT_SECTIONS } from "../../data/defaultSong.js";
@@ -55,7 +54,6 @@ export default function LyricsDisplay() {
   const { romanization, activeLyricIndex, chordEditMode, chordDisplay, transpose } = useApp();
   const isYue = (dialectCode ?? "yue") === "yue";
   const dispatch = useAppDispatch();
-  const { play, playingKey, loadingKey } = useTTS();
   const [editSections, setEditSections] = useState(false);
   const [sectionMap, setSectionMap] = useState({});
   const [showEditor, setShowEditor] = useState(false);
@@ -310,9 +308,6 @@ export default function LyricsDisplay() {
                   index={realIndex}
                   isActive={activeLyricIndex === realIndex}
                   onClick={() => handleLineClick(realIndex)}
-                  onPlay={play}
-                  playingKey={playingKey}
-                  loadingKey={loadingKey}
                   chordEditMode={chordEditMode}
                   chordDisplay={chordDisplay}
                   onChordEdit={chordEditMode ? handleChordEdit : undefined}

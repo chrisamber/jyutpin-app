@@ -146,6 +146,7 @@ export function useSongAnalysis() {
       }
 
       setDefaultRomanization(dialectCode);
+      appDispatch({ type: "SET_DIALECT", dialectCode });
       appDispatch({ type: "SET_VIEW", view: "study" });
       appDispatch({ type: "SET_SECTION", section: "lyrics" });
     } catch (err) {
@@ -198,6 +199,7 @@ export function useSongAnalysis() {
         }
 
         setDefaultRomanization(dialectCode);
+        appDispatch({ type: "SET_DIALECT", dialectCode });
         appDispatch({ type: "SET_VIEW", view: "study" });
         appDispatch({ type: "SET_SECTION", section: "lyrics" });
       } catch (err) {
@@ -233,6 +235,7 @@ export function useSongAnalysis() {
         addRecentSong(song);
         backgroundTranslate(lines, dialectCode, song, songDispatch);
         setDefaultRomanization(dialectCode);
+        appDispatch({ type: "SET_DIALECT", dialectCode });
         appDispatch({ type: "SET_VIEW", view: "study" });
         appDispatch({ type: "SET_SECTION", section: "lyrics" });
       } catch (err) {
