@@ -58,8 +58,11 @@ export default function SearchHero() {
             <PreviewAnnotation key={i} {...t} />
           ))}
         </div>
-        <p className="text-center text-[var(--color-text-secondary)] text-base sm:text-lg font-light leading-snug mb-6 max-w-md mx-auto">
-          Jyutping lyrics and chords for Cantopop songs.
+        <p className="text-center text-[var(--color-text-secondary)] text-base sm:text-lg font-light leading-snug mb-2 max-w-md mx-auto">
+          Master your favourite Cantopop tunes.
+        </p>
+        <p className="text-center text-[var(--color-text-muted)] text-sm font-light leading-snug mb-6 max-w-md mx-auto">
+          Tone-coloured pronunciation guide for thousands of Cantopop songs.
         </p>
 
         {/* Search form */}

@@ -530,6 +530,22 @@
   }
 }
 
+/* Display preferences — hide Jyutping per user choice (All/Danger/Custom). */
+.lyrics-rt-hidden {
+  display: none;
+}
+
+/* Print: leadsheets always show Jyutping for every syllable, regardless of
+   on-screen visibility prefs, and at the default size. */
+@media print {
+  .lyrics-rt-hidden {
+    display: revert;
+  }
+  [style*="--lyrics-scale"] {
+    --lyrics-scale: 1 !important;
+  }
+}
+
 /* V1X-S1.2 — Mobile touch targets (≥40px) for interactive clusters.
    Scoped via [data-touch-targets] so we don't inflate ruby rubrics,
    icon fragments, or other non-tappable inline buttons. */

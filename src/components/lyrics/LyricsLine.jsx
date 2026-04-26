@@ -39,7 +39,10 @@ function ChordBarsLine({ barGrid, beatsPerBar = 4, transpose = 0, chordEditMode,
   if (!barGrid || !barGrid.length) return null;
 
   return (
-    <div className="font-mono text-[13px] text-accent/80 mb-1 ml-6 select-none flex flex-wrap items-center gap-y-1">
+    <div
+      className="font-mono text-accent/80 mb-1 ml-6 select-none flex flex-wrap items-center gap-y-1"
+      style={{ fontSize: "calc(13px * var(--lyrics-scale, 1))" }}
+    >
       {barGrid.map((bar, bi) => (
         <span key={bi} className="inline-flex items-center">
           <span className="text-accent/30">|</span>
@@ -86,7 +89,7 @@ function ChordBarsLine({ barGrid, beatsPerBar = 4, transpose = 0, chordEditMode,
   );
 }
 
-export default function LyricsLine({ line, index, isActive, onClick, chordEditMode, onChordEdit, onChordEditBeat, usedChords, chordDisplay, beatsPerBar = 4, transpose = 0 }) {
+export default function LyricsLine({ line, index, isActive, onClick, chordEditMode, onChordEdit, onChordEditBeat, usedChords, chordDisplay, beatsPerBar = 4, transpose = 0, isSyllableVisible, customMode = false, onSyllableToggle }) {
   const dangerChars = useMemo(() => {
     const set = new Set();
     if (line.dangers) {
@@ -128,76 +131,74 @@ export default function LyricsLine({ line, index, isActive, onClick, chordEditMo
       onClick={onClick}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
       data-line-index={index}
-      className={`w-full text-left py-3.5 border-b border-[var(--color-border-subtle)] last:border-0 transition-all select-none print:select-auto print:cursor-auto group ${
-        isActive
-          ? "bg-accent/8 border-l-[3px] border-l-accent/50 pl-3 -ml-3 rounded-r-lg"
-          : "hover:bg-slate-50/60"
+      className={`w-full text-left py-2.5 border-b border-[var(--color-border-subtle)] last:border-0 transition-all select-none print:select-auto print:cursor-auto group ${
+        isActive ? "pl-3 -ml-3 border-l-4 border-l-accent" : "hover:bg-accent/4"
       }`}
     >
-      <div className="flex items-start gap-4">
-        <span className="font-mono text-[10px] text-[var(--color-text-muted)] min-w-5 pt-3 select-none leading-none">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <div className="flex-1">
-          {/* Bar grid — shown in bars display mode (read-only or editable) */}
-          {displayBarGrid && (
-            <ChordBarsLine
-              barGrid={displayBarGrid}
-              beatsPerBar={beatsPerBar}
-              transpose={transpose}
-              chordEditMode={chordEditMode}
-              onEditBeat={(barIdx, beatIdx, chord) => onChordEditBeat?.(index, barIdx, beatIdx, chord)}
-              usedChords={usedChords}
-            />
-          )}
+      {/* Bar grid — shown in bars display mode (read-only or editable) */}
+      {displayBarGrid && (
+        <ChordBarsLine
+          barGrid={displayBarGrid}
+          beatsPerBar={beatsPerBar}
+          transpose={transpose}
+          chordEditMode={chordEditMode}
+          onEditBeat={(barIdx, beatIdx, chord) => onChordEditBeat?.(index, barIdx, beatIdx, chord)}
+          usedChords={usedChords}
+        />
+      )}
 
-          <div className={`flex flex-wrap ${charChordEditMode ? "items-start" : "items-end"} leading-loose`}>
-            {line.tokens.map((t, i) => {
-              const barIndex = Math.floor(i / beatsPerBar);
-              const beatIndex = i % beatsPerBar;
-              const barChords = charChordEditMode && line.barGrid
-                ? Object.fromEntries(
-                    (line.barGrid[barIndex] || []).map((beat, pi) => [String(pi), beat])
-                  )
-                : undefined;
-              return (
-                <JyutpingAnnotation
-                  key={i}
-                  char={t.char}
-                  jyutping={t.jyutping}
-                  roman={t.roman}
-                  tone={t.tone}
-                  pinyin={t.pinyin}
-                  alternates={t.alternates}
-                  chord={showBars ? null : transposeChord(t.chord, transpose)}
-                  hasDanger={dangerChars.has(t.char)}
-                  chordEditMode={charChordEditMode}
-                  onChordEdit={charChordEditMode ? (v) => onChordEdit(index, i, v) : undefined}
-                  usedChords={usedChords}
-                  isTrailing={t.isTrailing}
-                  barIndex={barIndex}
-                  beatIndex={beatIndex}
-                  beatsPerBar={beatsPerBar}
-                  barChords={barChords}
-                />
-              );
-            })}
-            {/* Trailing slot only in above-lyrics edit mode */}
-            {!showBars && (
-              <TrailingChordSlot
-                chordEditMode={chordEditMode}
-                usedChords={usedChords}
-                onAdd={(chord) => onChordEdit?.(index, realTokenCount + trailingCount, chord)}
-              />
-            )}
-          </div>
-          {line.translation && (
-            <div className="text-xs text-[var(--color-text-muted)] italic mt-1.5 pl-1">
-              {line.translation}
-            </div>
-          )}
-        </div>
+      <div className={`flex flex-wrap ${charChordEditMode ? "items-start" : "items-end"} leading-relaxed`}>
+        {line.tokens.map((t, i) => {
+          const barIndex = Math.floor(i / beatsPerBar);
+          const beatIndex = i % beatsPerBar;
+          const barChords = charChordEditMode && line.barGrid
+            ? Object.fromEntries(
+                (line.barGrid[barIndex] || []).map((beat, pi) => [String(pi), beat])
+              )
+            : undefined;
+          return (
+            <JyutpingAnnotation
+              key={i}
+              char={t.char}
+              jyutping={t.jyutping}
+              roman={t.roman}
+              tone={t.tone}
+              pinyin={t.pinyin}
+              alternates={t.alternates}
+              chord={showBars ? null : transposeChord(t.chord, transpose)}
+              hasDanger={dangerChars.has(t.char)}
+              chordEditMode={charChordEditMode}
+              onChordEdit={charChordEditMode ? (v) => onChordEdit(index, i, v) : undefined}
+              usedChords={usedChords}
+              isTrailing={t.isTrailing}
+              barIndex={barIndex}
+              beatIndex={beatIndex}
+              beatsPerBar={beatsPerBar}
+              barChords={barChords}
+              showAnnotation={isSyllableVisible ? isSyllableVisible(index, i) : true}
+              customMode={customMode && !charChordEditMode}
+              onSyllableClick={
+                customMode && !charChordEditMode && !t.isTrailing && onSyllableToggle
+                  ? () => onSyllableToggle(index, i)
+                  : undefined
+              }
+            />
+          );
+        })}
+        {/* Trailing slot only in above-lyrics edit mode */}
+        {!showBars && (
+          <TrailingChordSlot
+            chordEditMode={chordEditMode}
+            usedChords={usedChords}
+            onAdd={(chord) => onChordEdit?.(index, realTokenCount + trailingCount, chord)}
+          />
+        )}
       </div>
+      {line.translation && (
+        <div className="text-xs text-[var(--color-text-muted)] italic mt-1.5 pl-1">
+          {line.translation}
+        </div>
+      )}
     </div>
   );
 }

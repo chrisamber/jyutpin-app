@@ -96,22 +96,6 @@ export default function ToneAnalytics() {
         </div>
       </div>
 
-      {/* Dominant tone callout */}
-      {stats.dominant && stats.dominant[1] > 0 && (
-        <div
-          className="text-2xs font-mono leading-relaxed rounded-lg px-3 py-2"
-          style={{
-            color: TONE_COLORS[stats.dominant[0]],
-            backgroundColor: TONE_COLORS[stats.dominant[0]] + "0C",
-            border: `1px solid ${TONE_COLORS[stats.dominant[0]]}22`,
-          }}
-        >
-          Dominant: T{stats.dominant[0]} — {TONE_NAMES[stats.dominant[0]]}
-          <span className="text-[var(--color-text-muted)] ml-1">
-            ({Math.round((stats.dominant[1] / stats.total) * 100)}% of syllables)
-          </span>
-        </div>
-      )}
     </div>
   );
 }

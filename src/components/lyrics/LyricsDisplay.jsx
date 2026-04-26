@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useSong } from "../../context/SongContext.jsx";
 import { useApp, useAppDispatch } from "../../context/AppContext.jsx";
 import LyricsLine from "./LyricsLine.jsx";
@@ -15,6 +15,15 @@ import { mergeChords } from "../../services/chordStorage.js";
 import { DEFAULT_SECTIONS } from "../../data/defaultSong.js";
 import { transposeChord, transposeLabel, capoFret } from "../../services/transpose.js";
 import ChordSheet from "../chords/ChordSheet.jsx";
+import DisplayPrefsPanel from "./DisplayPrefsPanel.jsx";
+import {
+  loadDisplayPrefs,
+  saveDisplayPrefs,
+  buildDangerSet,
+  syllableKey,
+  SIZE_SCALE,
+  DEFAULT_PREFS,
+} from "../../services/displayPrefs.js";
 
 const ROMANIZATION_OPTIONS_BY_DIALECT = {
   yue: [
@@ -38,6 +47,33 @@ const ROMANIZATION_OPTIONS_BY_DIALECT = {
 const SECTION_LABELS = ["Intro", "Verse", "Pre-Chorus", "Chorus", "Music Break", "Bridge", "Outro"];
 const SECTIONS_KEY = (id) => `sections:${id}`;
 
+function Menu({ trigger, children, align = "left" }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => { if (!ref.current?.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const close = () => setOpen(false);
+  return (
+    <div className="relative" ref={ref}>
+      <div onClick={() => setOpen((o) => !o)}>{trigger(open)}</div>
+      {open && (
+        <div className={`absolute z-20 mt-1 min-w-[160px] rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] shadow-lg py-1 ${align === "right" ? "right-0" : "left-0"}`}>
+          {typeof children === "function" ? children({ close }) : children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function loadSections(storageId) {
   try {
     const raw = localStorage.getItem(SECTIONS_KEY(storageId));
@@ -58,6 +94,7 @@ export default function LyricsDisplay() {
   const [sectionMap, setSectionMap] = useState({});
   const [showEditor, setShowEditor] = useState(false);
   const [beatsPerBar, setBeatsPerBar] = useState(4);
+  const [displayPrefs, setDisplayPrefs] = useState(() => ({ ...DEFAULT_PREFS }));
 
   // Load beatsPerBar first so useChordEditor gets the right value
   useEffect(() => {
@@ -65,6 +102,12 @@ export default function LyricsDisplay() {
     setSectionMap(loadSections(storageId));
     const meta = loadMetaForSong(storageId);
     setBeatsPerBar(Number(meta.beatsPerBar) || 4);
+    setDisplayPrefs(loadDisplayPrefs(storageId));
+  }, [storageId]);
+
+  const updateDisplayPrefs = useCallback((next) => {
+    setDisplayPrefs(next);
+    if (storageId) saveDisplayPrefs(storageId, next);
   }, [storageId]);
 
   const { chordMap, usedChords, setChordAtChar, setChordAt } =
@@ -85,6 +128,63 @@ export default function LyricsDisplay() {
 
   // Merge user chords onto analyzed lines
   const linesWithChords = useMemo(() => mergeChords(lines, chordMap, beatsPerBar), [lines, chordMap, beatsPerBar]);
+
+  // Per-syllable danger set: "lineIdx:sylIdx" → true
+  const dangerSet = useMemo(() => buildDangerSet(linesWithChords), [linesWithChords]);
+
+  // If the user picked "danger" but the song has no danger zones, fall through to "all"
+  const effectiveJyutping =
+    displayPrefs.jyutping === "danger" && dangerSet.size === 0 ? "all" : displayPrefs.jyutping;
+
+  const isSyllableVisible = useCallback((li, si) => {
+    if (effectiveJyutping === "all") return true;
+    const key = syllableKey(li, si);
+    if (effectiveJyutping === "danger") return dangerSet.has(key);
+    return Boolean(displayPrefs.customVisible?.[key]);
+  }, [effectiveJyutping, dangerSet, displayPrefs.customVisible]);
+
+  const handleSyllableToggle = useCallback((li, si) => {
+    if (displayPrefs.jyutping !== "custom") return;
+    const key = syllableKey(li, si);
+    const next = { ...(displayPrefs.customVisible || {}) };
+    if (next[key]) delete next[key];
+    else next[key] = true;
+    updateDisplayPrefs({ ...displayPrefs, customVisible: next });
+  }, [displayPrefs, updateDisplayPrefs]);
+
+  // Switching INTO custom seeds the visible set from the current dangers, so
+  // the user starts with the algorithm's opinion and edits from there.
+  const handleDisplayPrefsChange = useCallback((next) => {
+    if (next.jyutping === "custom" && displayPrefs.jyutping !== "custom") {
+      const hasExisting = Object.keys(next.customVisible || {}).length > 0;
+      if (!hasExisting) {
+        const seed = {};
+        for (const key of dangerSet) seed[key] = true;
+        next = { ...next, customVisible: seed };
+      }
+    }
+    updateDisplayPrefs(next);
+  }, [displayPrefs.jyutping, dangerSet, updateDisplayPrefs]);
+
+  const resetCustomToDangers = useCallback(() => {
+    const seed = {};
+    for (const key of dangerSet) seed[key] = true;
+    updateDisplayPrefs({ ...displayPrefs, customVisible: seed });
+  }, [dangerSet, displayPrefs, updateDisplayPrefs]);
+
+  const showAllCustom = useCallback(() => {
+    const all = {};
+    linesWithChords.forEach((line, li) => {
+      line.tokens.forEach((t, si) => {
+        if (!t.isTrailing && (t.jyutping || t.pinyin || t.roman)) all[syllableKey(li, si)] = true;
+      });
+    });
+    updateDisplayPrefs({ ...displayPrefs, customVisible: all });
+  }, [linesWithChords, displayPrefs, updateDisplayPrefs]);
+
+  const hideAllCustom = useCallback(() => {
+    updateDisplayPrefs({ ...displayPrefs, customVisible: {} });
+  }, [displayPrefs, updateDisplayPrefs]);
 
   // True when any chord is visible — either user-stored or inline [chord] notation
   const hasAnyChords = useMemo(
@@ -176,77 +276,147 @@ export default function LyricsDisplay() {
         </div>
       )}
 
-      {/* Unified toolbar — three groups: Content | View | Output */}
+      {/* Toolbar — Display (romanization) | Output (stage, export). Authoring is in the overflow menu. */}
       <div className="mb-6 print:hidden" data-touch-targets>
         <div className="flex flex-wrap items-center gap-2">
-          {/* Group 1 — Content */}
-          <button
-            onClick={() => setShowEditor(true)}
-            className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-          >
-            ✎ edit lyrics
-          </button>
-          <button
-            onClick={() => setEditSections((s) => !s)}
-            className={`text-xs font-mono px-3 py-1.5 rounded border transition-all ${
-              editSections
-                ? "bg-accent/15 border-accent/30 text-accent"
-                : "bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-            }`}
-          >
-            § sections
-          </button>
-
-          {/* Divider */}
-          <span className="w-px h-4 bg-[var(--color-border-subtle)] mx-1" aria-hidden="true" />
-
-          {/* Group 2 — View: romanization + chords + transpose */}
-          <div className="flex border border-[var(--color-border-subtle)] rounded-lg overflow-hidden">
-            {(ROMANIZATION_OPTIONS_BY_DIALECT[dialectCode ?? "yue"] ?? ROMANIZATION_OPTIONS_BY_DIALECT.yue).map((opt) => (
+          {/* Overflow menu: edit lyrics, sections */}
+          <Menu
+            trigger={(open) => (
               <button
-                key={opt.value}
-                onClick={() => dispatch({ type: "SET_ROMANIZATION", romanization: opt.value })}
-                className={`text-xs font-mono px-3 py-1.5 transition-all border-r border-[var(--color-border-subtle)] last:border-r-0 ${
-                  romanization === opt.value
-                    ? "bg-accent/15 text-accent"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                type="button"
+                className={`text-xs font-mono px-3 py-1.5 rounded border transition-all ${
+                  open
+                    ? "bg-accent/15 border-accent/30 text-accent"
+                    : "bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                 }`}
+                aria-haspopup="menu"
+                aria-expanded={open}
+                title="More"
               >
-                {opt.label}
+                ⋯
               </button>
-            ))}
-          </div>
+            )}
+          >
+            {({ close }) => (
+              <div role="menu">
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="block w-full text-left text-xs font-mono px-3 py-2 text-[var(--color-text-secondary)] hover:bg-accent/8 hover:text-[var(--color-text-primary)] transition-colors"
+                  onClick={() => { setShowEditor(true); close(); }}
+                >
+                  ✎ edit lyrics
+                </button>
+                <button
+                  type="button"
+                  role="menuitemcheckbox"
+                  aria-checked={editSections}
+                  className={`block w-full text-left text-xs font-mono px-3 py-2 transition-colors hover:bg-accent/8 ${
+                    editSections ? "text-accent" : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  }`}
+                  onClick={() => { setEditSections((s) => !s); close(); }}
+                >
+                  § sections{editSections ? " ✓" : ""}
+                </button>
+                <div className="my-1 border-t border-[var(--color-border-subtle)]" role="separator" />
+                <button
+                  type="button"
+                  role="menuitemcheckbox"
+                  aria-checked={chordEditMode}
+                  className={`block w-full text-left text-xs font-mono px-3 py-2 transition-colors hover:bg-accent/8 ${
+                    chordEditMode ? "text-accent" : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  }`}
+                  onClick={() => { dispatch({ type: "TOGGLE_CHORD_EDIT" }); close(); }}
+                >
+                  ♫ edit chords{chordEditMode ? " ✓" : ""}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="block w-full text-left text-xs font-mono px-3 py-2 text-[var(--color-text-secondary)] hover:bg-accent/8 hover:text-[var(--color-text-primary)] transition-colors"
+                  onClick={() => { dispatch({ type: "SET_CHORD_DISPLAY", display: chordDisplay === "above" ? "bars" : "above" }); close(); }}
+                >
+                  {chordDisplay === "above" ? "| | switch to bar notation" : "A̲ switch to above-lyrics"}
+                </button>
+              </div>
+            )}
+          </Menu>
 
-          <div className={`flex items-center border rounded-lg overflow-hidden transition-colors ${chordEditMode ? "border-accent/40" : "border-[var(--color-border-subtle)]"}`}>
-            <button
-              onClick={() => dispatch({ type: "TOGGLE_CHORD_EDIT" })}
-              className={`text-xs font-mono px-3 py-1.5 transition-all ${
-                chordEditMode
-                  ? "bg-accent-dim text-accent font-medium"
-                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-              }`}
-              aria-pressed={chordEditMode}
-              title={chordEditMode ? "Exit chord edit mode" : "Enter chord edit mode"}
-            >
-              ♫ chords
-            </button>
-            <button
-              onClick={() => dispatch({ type: "SET_CHORD_DISPLAY", display: chordDisplay === "above" ? "bars" : "above" })}
-              className={`text-xs font-mono px-3 py-1.5 min-w-[40px] border-l border-[var(--color-border-subtle)] transition-all ${
-                chordDisplay === "bars"
-                  ? "bg-accent/15 text-accent"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)]"
-              }`}
-              title={chordDisplay === "above" ? "Switch to bar notation" : "Switch to above-lyrics"}
-            >
-              {chordDisplay === "above" ? "A̲" : "| |"}
-            </button>
-          </div>
+          {/* Display preferences (Jyutping visibility + size) */}
+          <Menu
+            align="right"
+            trigger={(open) => (
+              <button
+                type="button"
+                className={`text-xs font-mono px-3 py-1.5 rounded border transition-all ${
+                  open
+                    ? "bg-accent/15 border-accent/30 text-accent"
+                    : "bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                }`}
+                aria-haspopup="menu"
+                aria-expanded={open}
+                title="Display preferences"
+              >
+                ⚙ display
+              </button>
+            )}
+          >
+            <DisplayPrefsPanel
+              prefs={displayPrefs}
+              onChange={handleDisplayPrefsChange}
+            />
+          </Menu>
+
+          {/* Romanization dropdown */}
+          <Menu
+            trigger={(open) => {
+              const options = ROMANIZATION_OPTIONS_BY_DIALECT[dialectCode ?? "yue"] ?? ROMANIZATION_OPTIONS_BY_DIALECT.yue;
+              const current = options.find((o) => o.value === romanization) ?? options[0];
+              return (
+                <button
+                  type="button"
+                  className={`text-xs font-mono px-3 py-1.5 rounded border transition-all inline-flex items-center gap-1.5 ${
+                    open
+                      ? "bg-accent/15 border-accent/30 text-accent"
+                      : "bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  }`}
+                  aria-haspopup="listbox"
+                  aria-expanded={open}
+                >
+                  {current.label}
+                  <span aria-hidden="true" className="opacity-60">▾</span>
+                </button>
+              );
+            }}
+          >
+            {({ close }) => {
+              const options = ROMANIZATION_OPTIONS_BY_DIALECT[dialectCode ?? "yue"] ?? ROMANIZATION_OPTIONS_BY_DIALECT.yue;
+              return (
+                <div role="listbox">
+                  {options.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      role="option"
+                      aria-selected={romanization === opt.value}
+                      className={`block w-full text-left text-xs font-mono px-3 py-2 transition-colors hover:bg-accent/8 ${
+                        romanization === opt.value ? "text-accent" : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                      }`}
+                      onClick={() => { dispatch({ type: "SET_ROMANIZATION", romanization: opt.value }); close(); }}
+                    >
+                      {opt.label}{romanization === opt.value ? " ✓" : ""}
+                    </button>
+                  ))}
+                </div>
+              );
+            }}
+          </Menu>
 
           {hasAnyChords && (
             <div className="flex items-center border border-[var(--color-border-subtle)] rounded-lg overflow-hidden" title="Transpose chords">
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose - 1 })}
+                aria-label="Transpose down one semitone"
                 className="text-xs font-mono px-3 py-1.5 min-w-[40px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 −
@@ -259,6 +429,7 @@ export default function LyricsDisplay() {
               </span>
               <button
                 onClick={() => dispatch({ type: "SET_TRANSPOSE", semitones: transpose + 1 })}
+                aria-label="Transpose up one semitone"
                 className="text-xs font-mono px-3 py-1.5 min-w-[40px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] transition-all"
               >
                 +
@@ -269,7 +440,7 @@ export default function LyricsDisplay() {
           {/* Divider */}
           <span className="w-px h-4 bg-[var(--color-border-subtle)] mx-1" aria-hidden="true" />
 
-          {/* Group 3 — Output */}
+          {/* Output */}
           <button
             onClick={() => dispatch({ type: "SET_VIEW", view: "teleprompter" })}
             className="text-xs font-mono px-3 py-1.5 rounded border transition-all bg-[var(--color-bg-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
@@ -278,11 +449,6 @@ export default function LyricsDisplay() {
             ⛶ stage
           </button>
           <PrintButton />
-          {activeLyricIndex >= 0 && (
-            <span className="ml-auto text-xs font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded px-3 py-1.5">
-              ↑↓ navigate · Esc clear
-            </span>
-          )}
         </div>
       </div>
 
@@ -291,7 +457,7 @@ export default function LyricsDisplay() {
       <div className={`grid gap-6 print:block ${isYue ? "xl:grid-cols-[1fr_216px_200px] md:grid-cols-[1fr_216px]" : ""}`}>
 
         {/* Centre: lyrics — first in DOM for mobile/accessibility */}
-        <div>
+        <div style={{ "--lyrics-scale": SIZE_SCALE[displayPrefs.size] ?? 1 }}>
           <div className="section-label mb-4">Annotated Lyrics</div>
           {linesWithChords.map((line, realIndex) => {
             const sectionLabel = sectionMap[realIndex];
@@ -315,26 +481,36 @@ export default function LyricsDisplay() {
                   usedChords={usedChords}
                   beatsPerBar={beatsPerBar}
                   transpose={transpose}
+                  isSyllableVisible={isSyllableVisible}
+                  customMode={displayPrefs.jyutping === "custom"}
+                  onSyllableToggle={handleSyllableToggle}
                 />
               </div>
             );
           })}
 
+          {/* Keyboard-nav hint — only while a line is focused */}
+          {activeLyricIndex >= 0 && (
+            <div className="mt-3 text-xs font-mono text-[var(--color-text-muted)] print:hidden">
+              ↑↓ navigate · Esc clear
+            </div>
+          )}
+
           {/* Tone tools fallback: shown below lyrics on small screens (<md) */}
           {isYue && (
             <div className="md:hidden mt-6 pt-5 border-t border-[var(--color-border-subtle)] space-y-4">
-              <ToneAnalytics />
               <PronunciationNotes />
+              <ToneAnalytics />
             </div>
           )}
         </div>
 
-        {/* Right rail: tone reference + analytics + pronunciation notes (md+). */}
+        {/* Right rail: pronunciation notes + tone reference + analytics (md+). */}
         {/* Cantonese-specific — hidden for cmn/nan until per-dialect content lands. */}
         <div className="hidden md:flex flex-col gap-6 sticky top-4 self-start min-w-0 w-full">
+          {isYue && <PronunciationNotes />}
           {isYue && <ToneReference />}
           {isYue && <ToneAnalytics />}
-          {isYue && <PronunciationNotes />}
         </div>
 
         {/* Far right: chord diagrams — xl only (third column) */}

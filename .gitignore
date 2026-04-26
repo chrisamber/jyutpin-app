@@ -24,6 +24,9 @@ dist-ssr/
 .claude/
 .continue/
 
+# Brainstorm session files
+.superpowers/
+
 # Internal planning and AI context docs
 docs/claude-context/
 docs/amber-chords/
