@@ -112,7 +112,7 @@ Set `VITE_*` env vars in the Vercel dashboard — never commit them.
 
 This repo is the **Vite prototype** (v1.x). It ships the app you see deployed today and will keep getting bug fixes.
 
-**v2 is being rebuilt in Next.js** in a separate repo (link will be added here once it's public). The rewrite is driven by:
+**v2 is being rebuilt in Next.js** at [chrisamber/jyutpin-next](https://github.com/chrisamber/jyutpin-next) (preview: <https://jyutpin-next.vercel.app>). The rewrite is driven by:
 
 - Server-side rendering for better first-load performance and SEO
 - Built-in API routes for the translation / lyrics services (currently a single Vercel function)
